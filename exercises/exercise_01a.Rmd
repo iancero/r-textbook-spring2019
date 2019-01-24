@@ -1,0 +1,49 @@
+---
+title: "CSP 518 - Exercises: Intro to R"
+author: "YOUR NAME HERE"
+date: "Due: 2019-02-01 @ 11:59pm"
+output: html_document
+---
+
+```{r global_options, include=FALSE}
+knitr::opts_chunk$set(echo=FALSE, warning=FALSE, message=FALSE, eval=FALSE)
+```
+
+## Instructions
+
+1. Make a .Rmd file to complete these exercises.
+
+  - Title it "CSP 518 - Exercises: Intro to R" (in quotes)
+  - Add your name(s) in the author slot (in quotes)
+  - The output can be either be `pdf_document` or `html_document` (no quotes)
+
+2. Turn in just your .Rmd file on Blackboard. Note, I will need to be able to `knit` it myself, so make sure everything runs the way you intend, before you turn it in.
+
+3. For clarity, write "## Question <number>" befor each question to signal which one you are answering.
+
+## Exercises
+
+1. Create two string (character) variables called `a` and `b`, then concatenate them with `paste()`. The output should be to two strings together.
+
+2. Create a vector called `my_vec` and store three numbers in it. Then, square all of those numbers. That is, if your vector is $1, 2, 3$, then the output should be $1, 4, 9$.
+
+3. Create two vectors of equal length and divide the first by the second.
+
+
+4. Print the first 13 letters of the alphabet, using brackets and a number sequence (hint, use the "`:`" trick)
+
+
+5. Create a vector of 10 numbers, ranging between 1 and 20. Then select all of them that are between 4 and 7.
+
+
+6. With the same vector you used above, select every other number in the vector using `seq()` (starting with the first element).
+
+
+7. Again, with the same vector from #5, select only the even numbers. (Hint: use modulo division, `%%`, to test whether the numbers have a remainder when divided by $2$).
+
+8. Use the `mean()` function to find the mean of the following vector, ignoring the missing value.
+
+```{r, echo=TRUE}
+my_vec <- c(1, 4, 3, 5, 2, NA)
+```
+

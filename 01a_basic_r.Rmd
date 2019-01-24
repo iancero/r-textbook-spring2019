@@ -1,0 +1,102 @@
+---
+title: "Basic R"
+output: html_notebook
+---
+
+# Basic R
+
+## Writing in R and Rmarkdown
+
+### Chatting with R
+
+### Rmarkdown tricks
+
+- Bold/Italics
+
+Text with \*\* will be **bold**
+
+- What if I need special characters?
+- Latex (Math)
+- Code blocks
+    - Keyboard shortcuts
+    - Changing code block output
+
+The assignment operator
+
+## Variable types
+- Numerics
+  - Doubles
+  - Integers
+  - Mathematical operators
+  
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+library(tidyverse)
+
+data.frame(
+  a = rep(10, 7),
+  b = rep(3, 7),
+  operator = c('+', '-', '*', '/', '^', '%/%', '%%')
+  ) %>%
+  mutate(
+    ex = paste(a, operator, b),
+    result = ex %>%
+      map(rlang::parse_expr) %>%
+      map(eval) %>%
+      unlist() %>%
+      round(3) %>%
+      formatC(digits = 3, format = 'f', drop0trailing = T)
+  ) %>%
+  select(-a, -b) %>%
+  knitr::kable(
+    col.names = c('Operator', 'Expression', 'Result'),
+    align = 'c')
+```
+  
+  - Why care about the difference?
+- Characters
+    - `paste()`
+    - `paste0`
+- Booleans
+    - What are they
+    - Nested booles
+- Special types
+    - `NA`
+    - `NaN`
+    - `Inf`
+
+## Commenting code
+
+Use these sparringly to keep code simple, but always err on side of clarity.
+
+## Vectors
+
+- Two ways to make a sequence
+- Sequence math with a constant
+- Sequence math with another sequence
+    - Equal size
+    - Unequal size
+- Accessing sequence elements
+    - Only 1
+    - Sequence
+    - Numeric collection
+    - Booleans
+- Letter sequences
+
+## Dataframes
+
+Construction
+Access
+- `$`
+- Rows with numbers
+- Rows with boolean tests
+- Columns with numbers
+- Columns with names
+- Making new columns
+
+### Basic functions
+- What are functions?
+- Common functions
+    - `mean()`
+    - `sd()`
+    - What about missing data?
+- How can I make my own?
