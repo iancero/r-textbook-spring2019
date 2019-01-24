@@ -12,9 +12,6 @@ output: html_notebook
 ### Rmarkdown tricks
 
 - Bold/Italics
-
-Text with \*\* will be **bold**
-
 - What if I need special characters?
 - Latex (Math)
 - Code blocks
@@ -24,7 +21,14 @@ Text with \*\* will be **bold**
 The assignment operator
 
 ## Variable types
-- Numerics
+  - Numerics
+  
+  Here is an example of a numeric variable
+  
+```{r}
+x <- 2
+```
+  
   - Doubles
   - Integers
   - Mathematical operators
