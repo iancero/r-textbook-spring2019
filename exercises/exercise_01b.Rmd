@@ -1,0 +1,36 @@
+---
+title: "CSP 518 - Exercises: 1b - Plotting"
+author: "YOUR NAME HERE"
+date: "Due: 2019-02-01 @ 11:59pm"
+output: html_document
+---
+
+## Instructions
+
+1. Make a .Rmd file to complete these exercises.
+
+  - Title it "CSP 518 - Exercises: Intro to R" (in quotes)
+  - Add your name(s) in the author slot (in quotes)
+  - The output can be either be `pdf_document` or `html_document` (no quotes)
+
+2. Turn in just your .Rmd file on Blackboard. Note, I will need to be able to `knit` it myself, so make sure everything runs the way you intend, before you turn it in.
+
+3. For clarity, write "## Question <number>" befor each question to signal which one you are answering.
+
+## Exercises
+
+1. Load ggplot2 and the `mpg` dataset.
+
+2. Create a histogram of the `hwy` variable using base R's `hist()` function.
+
+3. Using `ggplot()`, show how you would build up a plot, going from blank canvas to detailed visualization (i.e., depict each of the steps below, as you add to the plot). 
+
+    1. Show me a blank plot.
+    
+    2. Add points to that plot, with any two variables you want (dont forget the `mapping = aes()` part of the process).
+    
+    3. Choose another numeric variable (not a categorical one) and have the points change size, according to that variable. Hint: this is the same as what we did with color, but call `size = <my-variable>` in the `aes()` function, instead of color).
+    
+    4. Change the labels to something more descriptive and publication ready.
+    
+    5. Show me how you would save the output as a .png file. Note, you don't need to actually save it and turn it in, just show me the code you would use.
