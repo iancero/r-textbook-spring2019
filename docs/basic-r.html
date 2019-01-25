@@ -418,6 +418,13 @@ my_other_vec <span class="op">&lt;</span><span class="st"> </span><span class="d
 <p>I can also use functions that return values to access vectors, if I am creative…</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">my_other_vec[<span class="kw">max</span>(my_other_vec) <span class="op">==</span><span class="st"> </span>my_other_vec]</code></pre></div>
 <pre><code>## [1] 9 9</code></pre>
+<p>R also has special vectors that are pre-loaded. The most commonly used are <code>letters</code> and <code>LETTERS</code>, which return the lower-case letters and uppercase letters of the English alphabet, respectively.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">letters</code></pre></div>
+<pre><code>##  [1] &quot;a&quot; &quot;b&quot; &quot;c&quot; &quot;d&quot; &quot;e&quot; &quot;f&quot; &quot;g&quot; &quot;h&quot; &quot;i&quot; &quot;j&quot; &quot;k&quot; &quot;l&quot; &quot;m&quot; &quot;n&quot; &quot;o&quot; &quot;p&quot; &quot;q&quot;
+## [18] &quot;r&quot; &quot;s&quot; &quot;t&quot; &quot;u&quot; &quot;v&quot; &quot;w&quot; &quot;x&quot; &quot;y&quot; &quot;z&quot;</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">LETTERS</code></pre></div>
+<pre><code>##  [1] &quot;A&quot; &quot;B&quot; &quot;C&quot; &quot;D&quot; &quot;E&quot; &quot;F&quot; &quot;G&quot; &quot;H&quot; &quot;I&quot; &quot;J&quot; &quot;K&quot; &quot;L&quot; &quot;M&quot; &quot;N&quot; &quot;O&quot; &quot;P&quot; &quot;Q&quot;
+## [18] &quot;R&quot; &quot;S&quot; &quot;T&quot; &quot;U&quot; &quot;V&quot; &quot;W&quot; &quot;X&quot; &quot;Y&quot; &quot;Z&quot;</code></pre>
 </div>
 <div id="lists" class="section level2">
 <h2><span class="header-section-number">2.4</span> Lists</h2>

@@ -357,6 +357,14 @@ I can also use functions that return values to access vectors, if I am creative.
 my_other_vec[max(my_other_vec) == my_other_vec]
 ```
 
+R also has special vectors that are pre-loaded. The most commonly used are `letters` and `LETTERS`, which return the lower-case letters and uppercase letters of the English alphabet, respectively.
+
+```{r}
+letters
+LETTERS
+```
+
+
 ## Lists
 
 <We'll fill this section in later, when you need it. For now, they are just a fancy kind of vector.>
