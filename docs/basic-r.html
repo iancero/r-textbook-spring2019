@@ -49,6 +49,43 @@
 
 
 
+<style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+</style>
 
 </head>
 
@@ -110,32 +147,64 @@
 <h1><span class="header-section-number">2</span> Basic R</h1>
 <div id="writing-in-r-and-rmarkdown" class="section level2">
 <h2><span class="header-section-number">2.1</span> Writing in R and Rmarkdown</h2>
-<p>This is what I am going to say today.</p>
 <div id="chatting-with-r" class="section level3">
 <h3><span class="header-section-number">2.1.1</span> Chatting with R</h3>
+<p>Using R is just a chat with the computer.</p>
+<p>“Hey, R. What is <span class="math inline">\(1 + 2\)</span>?”</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="dv">1</span> <span class="op">+</span><span class="st"> </span><span class="dv">2</span></code></pre></div>
+<pre><code>## [1] 3</code></pre>
 </div>
 <div id="rmarkdown-tricks" class="section level3">
 <h3><span class="header-section-number">2.1.2</span> Rmarkdown tricks</h3>
 <ul>
-<li>Bold/Italics</li>
-<li>What if I need special characters?</li>
-<li>Latex (Math)</li>
-<li>Code blocks
-<ul>
-<li>Keyboard shortcuts</li>
-<li>Changing code block output</li>
-</ul></li>
+<li>To make text <strong>bold</strong>, we add two **s around it.</li>
+<li>To make text <em>italicized</em>, we add just one * around it.</li>
+<li>If we need special characters (like * or $), then we just add a forward “\” in front of them (but not behind).</li>
+<li><p>Math symbols in your text are process with Latex, just put an “$” before and after your math. Like this, $y = x$ becomes <span class="math inline">\(y = x\)</span>.</p></li>
+<li><p>Code blocks</p></li>
 </ul>
+<p>To make a code block, press CTRL+ALT+I. Remember you can change the output of a code block by modifying some of its options, like below.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">banana &lt;-<span class="st"> </span><span class="dv">5</span>
+
+banana <span class="op">+</span><span class="st"> </span><span class="dv">1</span></code></pre></div>
+<pre><code>## [1] 6</code></pre>
 </div>
 </div>
 <div id="variables" class="section level2">
 <h2><span class="header-section-number">2.2</span> Variables</h2>
 <div id="the-assignment-operator" class="section level3">
 <h3><span class="header-section-number">2.2.1</span> The assignment operator</h3>
+<p>We make variables with the <code>&lt;-</code> operator.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">my_special_var &lt;-<span class="st"> </span><span class="dv">1</span> <span class="op">+</span><span class="st"> </span><span class="dv">2</span>
+
+my_special_var</code></pre></div>
+<pre><code>## [1] 3</code></pre>
+<p>You can TECHNICALLY use <code>=</code> for assignment too. Never do this.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">my_other_var =<span class="st"> </span><span class="dv">12</span>
+
+my_other_var <span class="op">+</span><span class="st"> </span>my_special_var</code></pre></div>
+<pre><code>## [1] 15</code></pre>
 </div>
 <div id="numerics" class="section level3">
 <h3><span class="header-section-number">2.2.2</span> Numerics</h3>
-<p><strong>Doubles</strong> <strong>Integers</strong></p>
+<p><strong>Doubles</strong></p>
+<p>Doubles are decimal numbers, like <span class="math inline">\(1.1, 2.2, 3.0\)</span>. If I make a number variable without doing anything special, R defaults to a double.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">a &lt;-<span class="st"> </span><span class="fl">1.1</span>
+b &lt;-<span class="st"> </span><span class="fl">2.0</span>
+
+<span class="kw">is.double</span>(a)</code></pre></div>
+<pre><code>## [1] TRUE</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">is.double</span>(b)</code></pre></div>
+<pre><code>## [1] TRUE</code></pre>
+<p><strong>Integers</strong></p>
+<p>Integers must have an <code>L</code> after them. That is how R knows that you don’t want a double, but instead want a “long-capable integer”.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">c &lt;-<span class="st"> </span>1L
+d &lt;-<span class="st"> </span><span class="dv">1</span>
+
+<span class="kw">is.integer</span>(c)</code></pre></div>
+<pre><code>## [1] TRUE</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">is.integer</span>(d)</code></pre></div>
+<pre><code>## [1] FALSE</code></pre>
 <p>Here is a useful cheatsheet for the different numeric operators and how they behave.</p>
 <table>
 <thead>
@@ -184,44 +253,171 @@
 </tbody>
 </table>
 <p><strong>Why care about the difference?</strong></p>
+<p>Almost 99% of the time, this wont matter. But, with big data, integers take up must less memory.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">object.size</span>(1L<span class="op">:</span><span class="fl">1e6</span>)</code></pre></div>
+<pre><code>## 4000040 bytes</code></pre>
+<p>XXXX &lt;- Ian, figure out why this isnt work.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">pryr<span class="op">::</span><span class="kw">object_size</span>(1L<span class="op">:</span>1e6L)</code></pre></div>
+<pre><code>## 4 MB</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">pryr<span class="op">::</span><span class="kw">object_size</span>(<span class="kw">seq</span>(<span class="fl">1.0</span>, <span class="fl">1e6</span>))</code></pre></div>
+<pre><code>## 4 MB</code></pre>
 </div>
 <div id="characters" class="section level3">
 <h3><span class="header-section-number">2.2.3</span> Characters</h3>
-<pre><code>- `paste()`
-- `paste0`</code></pre>
+<p>Characters are text symbols and they are made with either &quot;&quot; or '', either works.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">a &lt;-<span class="st"> &#39;here is someone</span><span class="ch">\&#39;</span><span class="st">s text&#39;</span>
+b &lt;-<span class="st"> &quot;here is more text&quot;</span>
+
+a</code></pre></div>
+<pre><code>## [1] &quot;here is someone&#39;s text&quot;</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">b</code></pre></div>
+<pre><code>## [1] &quot;here is more text&quot;</code></pre>
+<p>To combine two strings, I use <code>paste()</code>.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">paste</span>(a, b)</code></pre></div>
+<pre><code>## [1] &quot;here is someone&#39;s text here is more text&quot;</code></pre>
+<p>If I dont want a space, then I used <code>paste0()</code>.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">paste0</span>(a, b)</code></pre></div>
+<pre><code>## [1] &quot;here is someone&#39;s texthere is more text&quot;</code></pre>
 </div>
 <div id="booleans" class="section level3">
 <h3><span class="header-section-number">2.2.4</span> Booleans</h3>
-<pre><code>- What are they?
-- Nested booles
-- `as.numeric`</code></pre>
+<p>These are True and False values. You make them with the symbols <code>T</code> or <code>TRUE</code> and <code>F</code> or <code>FALSE</code>.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">x &lt;-<span class="st"> </span>T
+y &lt;-<span class="st"> </span>F</code></pre></div>
+<p>To compare them, we can use three operators.</p>
+<ul>
+<li><code>&amp;</code> is “and”</li>
+<li><code>|</code> is “or”</li>
+<li><code>!</code> is “not” (just give me the opposite of whatever is after me)</li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">x <span class="op">&amp;</span><span class="st"> </span>y <span class="co"># false</span></code></pre></div>
+<pre><code>## [1] FALSE</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">x <span class="op">|</span><span class="st"> </span>y <span class="co"># true</span></code></pre></div>
+<pre><code>## [1] TRUE</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">x <span class="op">&amp;</span><span class="st"> </span><span class="op">!</span>y <span class="co"># true</span></code></pre></div>
+<pre><code>## [1] TRUE</code></pre>
+<p>We can also have nested equations</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">z &lt;-<span class="st"> </span>F
+
+x <span class="op">&amp;</span><span class="st"> </span><span class="op">!</span>(y <span class="op">|</span><span class="st"> </span>z) <span class="co"># true</span></code></pre></div>
+<pre><code>## [1] TRUE</code></pre>
+<p>We can also compare numbers.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">a &lt;-<span class="st"> </span><span class="dv">1</span>
+b &lt;-<span class="st"> </span><span class="dv">2</span></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">a <span class="op">&lt;</span><span class="st"> </span><span class="dv">1</span></code></pre></div>
+<pre><code>## [1] FALSE</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">a <span class="op">&lt;=</span><span class="st"> </span><span class="dv">1</span></code></pre></div>
+<pre><code>## [1] TRUE</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">a <span class="op">==</span><span class="st"> </span><span class="dv">1</span></code></pre></div>
+<pre><code>## [1] TRUE</code></pre>
+<p>If I want to compare multiple numbers, I need to do it seperately.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">(a <span class="op">&gt;</span><span class="st"> </span><span class="dv">1</span>) <span class="op">|</span><span class="st"> </span>(b <span class="op">&gt;</span><span class="st"> </span><span class="dv">1</span>)</code></pre></div>
+<pre><code>## [1] TRUE</code></pre>
+<p>Remember that booleans are ultimately numeric values underneath.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">d &lt;-<span class="st"> </span>T
+k &lt;-<span class="st"> </span>F
+u &lt;-<span class="st"> </span><span class="dv">5</span>
+
+d<span class="op">*</span>u</code></pre></div>
+<pre><code>## [1] 5</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">d<span class="op">*</span>k</code></pre></div>
+<pre><code>## [1] 0</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">as.numeric</span>(d)</code></pre></div>
+<pre><code>## [1] 1</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">as.numeric</span>(k)</code></pre></div>
+<pre><code>## [1] 0</code></pre>
 </div>
 <div id="special-types" class="section level3">
 <h3><span class="header-section-number">2.2.5</span> Special types</h3>
-<pre><code>- `NA`
-- `NaN`
-- `Inf`</code></pre>
+<p><code>NA</code> - missing</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">is.na</span>(<span class="ot">NA</span>)</code></pre></div>
+<pre><code>## [1] TRUE</code></pre>
+<p><code>NaN</code> - you did math wrong</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="dv">0</span><span class="op">/</span><span class="dv">0</span></code></pre></div>
+<pre><code>## [1] NaN</code></pre>
+<p><code>Inf</code> - infinity</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="op">-</span><span class="dv">5</span><span class="op">/</span><span class="dv">0</span></code></pre></div>
+<pre><code>## [1] -Inf</code></pre>
 </div>
 </div>
 <div id="vectors" class="section level2">
 <h2><span class="header-section-number">2.3</span> Vectors</h2>
-<ul>
-<li>Two ways to make a sequence, <code>:</code> and <code>seq()</code></li>
-<li>Sequence math with a constant</li>
-<li>Sequence math with another sequence
-<ul>
-<li>Equal size</li>
-<li>Unequal size</li>
-</ul></li>
-<li>Accessing sequence elements
-<ul>
-<li>Only 1</li>
-<li>Sequence ofdesired elements</li>
-<li>Numeric collection</li>
-<li>Booleans</li>
-</ul></li>
-<li>Letter sequences</li>
-</ul>
+<p>R is built is on vectors. Vectors are collections of a bunch of values of the same type.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">my_vec &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">5</span>, <span class="dv">3</span>, <span class="dv">7</span>)
+
+my_vec</code></pre></div>
+<pre><code>## [1] 1 5 3 7</code></pre>
+<p>If I try to put different types together, they go to the most primitive type (usually a character string).</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">my_other_vec &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">22</span>, <span class="st">&#39;orange&#39;</span>, T)
+
+my_other_vec</code></pre></div>
+<pre><code>## [1] &quot;22&quot;     &quot;orange&quot; &quot;TRUE&quot;</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">my_third_vec &lt;-<span class="st"> </span><span class="kw">c</span>(T, F, <span class="dv">35</span>)
+
+my_third_vec</code></pre></div>
+<pre><code>## [1]  1  0 35</code></pre>
+<p>We can also missing values.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">my_fourth_vec &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">4</span>, <span class="dv">5</span>, <span class="ot">NA</span>)
+
+my_fourth_vec</code></pre></div>
+<pre><code>## [1]  1  4  5 NA</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">is.na</span>(my_fourth_vec)</code></pre></div>
+<pre><code>## [1] FALSE FALSE FALSE  TRUE</code></pre>
+<p>If I want to combine two vectors…</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">a &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>)
+b &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">3</span>, <span class="dv">5</span>, <span class="dv">7</span>)
+
+<span class="kw">c</span>(a, b)</code></pre></div>
+<pre><code>## [1] 1 2 3 3 5 7</code></pre>
+<p>A brief example of matrices</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">matrix</span>(
+  <span class="dt">data =</span> <span class="kw">c</span>(a, b),
+  <span class="dt">nrow =</span> <span class="dv">2</span>,
+  <span class="dt">byrow =</span> T)</code></pre></div>
+<pre><code>##      [,1] [,2] [,3]
+## [1,]    1    2    3
+## [2,]    3    5    7</code></pre>
+<p>Sometimes I want special vectors, direct sequences of numbers. There are two ways to do this. If all I want is a integer sequence (made of doubles), then I use the “<code>&lt;first number&gt;:&lt;last number&gt;</code>”.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="dv">1</span><span class="op">:</span><span class="dv">5</span></code></pre></div>
+<pre><code>## [1] 1 2 3 4 5</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="dv">5</span><span class="op">:</span><span class="dv">1</span></code></pre></div>
+<pre><code>## [1] 5 4 3 2 1</code></pre>
+<p>Other times, I need to count by something other than one, so I use <code>seq(from = &lt;start&gt;, to = &lt;end&gt;, by = &lt;number to count by&gt;)</code></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">seq</span>(<span class="dt">from =</span> <span class="dv">1</span>, <span class="dt">to =</span> <span class="dv">7</span>, <span class="dt">by =</span> <span class="fl">1.3</span>)</code></pre></div>
+<pre><code>## [1] 1.0 2.3 3.6 4.9 6.2</code></pre>
+<p>Hint: for brevity, I can leave off function parameter names, <strong>as long as I enter them in order</strong></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">seq</span>(<span class="dv">1</span>, <span class="dv">7</span>, <span class="dt">by =</span> <span class="fl">1.3</span>)</code></pre></div>
+<pre><code>## [1] 1.0 2.3 3.6 4.9 6.2</code></pre>
+<p>If I add a constant to a vector, then they all go up by that constant.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="dv">1</span><span class="op">:</span><span class="dv">5</span> <span class="op">/</span><span class="st"> </span><span class="dv">3</span></code></pre></div>
+<pre><code>## [1] 0.3333333 0.6666667 1.0000000 1.3333333 1.6666667</code></pre>
+<p>I can do math with equal-length sequences too.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="dv">1</span><span class="op">:</span><span class="dv">5</span> <span class="op">-</span><span class="st"> </span><span class="kw">seq</span>(<span class="dv">1</span>, <span class="dv">4</span>, <span class="dt">by =</span> .<span class="dv">7</span>)</code></pre></div>
+<pre><code>## [1] 0.0 0.3 0.6 0.9 1.2</code></pre>
+<p>But they <strong>must</strong> be equal lengths.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="dv">1</span><span class="op">:</span><span class="dv">5</span> <span class="op">/</span><span class="st"> </span><span class="dv">1</span><span class="op">:</span><span class="dv">4</span></code></pre></div>
+<pre><code>## Warning in 1:5/1:4: longer object length is not a multiple of shorter
+## object length</code></pre>
+<pre><code>## [1] 1 1 1 1 5</code></pre>
+<p>To access the elements of a vector, I put a number OR booleans in brackets <code>[]</code>.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">my_vec &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&#39;apple&#39;</span>, <span class="st">&#39;orange&#39;</span>, <span class="st">&#39;banana&#39;</span>, <span class="st">&#39;pair&#39;</span>)
+
+my_vec[<span class="dv">2</span>]</code></pre></div>
+<pre><code>## [1] &quot;orange&quot;</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">my_vec[<span class="dv">2</span><span class="op">:</span><span class="dv">4</span>]</code></pre></div>
+<pre><code>## [1] &quot;orange&quot; &quot;banana&quot; &quot;pair&quot;</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">my_vec[<span class="kw">c</span>(<span class="dv">3</span>, <span class="dv">2</span>, <span class="dv">1</span>, <span class="dv">4</span>)]</code></pre></div>
+<pre><code>## [1] &quot;banana&quot; &quot;orange&quot; &quot;apple&quot;  &quot;pair&quot;</code></pre>
+<p>I can also use bools.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">my_other_vec &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">4</span>, <span class="dv">6</span>, <span class="dv">7</span>, <span class="dv">9</span>, <span class="dv">3</span>, <span class="dv">9</span>)
+
+my_other_vec <span class="op">&lt;</span><span class="st"> </span><span class="dv">5</span></code></pre></div>
+<pre><code>## [1]  TRUE  TRUE FALSE FALSE FALSE  TRUE FALSE</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">my_other_vec[my_other_vec <span class="op">&lt;</span><span class="st"> </span><span class="dv">5</span>]</code></pre></div>
+<pre><code>## [1] 1 4 3</code></pre>
+<p>I can also use functions that return values to access vectors, if I am creative…</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">my_other_vec[<span class="kw">max</span>(my_other_vec) <span class="op">==</span><span class="st"> </span>my_other_vec]</code></pre></div>
+<pre><code>## [1] 9 9</code></pre>
 </div>
 <div id="lists" class="section level2">
 <h2><span class="header-section-number">2.4</span> Lists</h2>
@@ -295,6 +491,19 @@ gitbook.start({
 });
 </script>
 
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:" && /^https?:/.test(src))
+      src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
 </body>
 
 </html>

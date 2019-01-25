@@ -1,33 +1,87 @@
 ---
 title: "Basic R"
-output: html_notebook
+output:
+  html_document:
+    df_print: paged
 ---
 
 # Basic R
 
 ## Writing in R and Rmarkdown
 
-This is what I am going to say today.
-
 ### Chatting with R
+
+Using R is just a chat with the computer.
+
+"Hey, R. What is $1 + 2$?"
+
+```{r}
+1 + 2
+```
 
 ### Rmarkdown tricks
 
-- Bold/Italics
-- What if I need special characters?
-- Latex (Math)
+- To make text **bold**, we add two \*\*s around it.
+- To make text *italicized*, we add just one \* around it.
+- If we need special characters (like \* or \$), then we just add a forward "\\" in front of them (but not behind).
+- Math symbols in your text are process with Latex, just put an "\$" before and after your math. Like this, \$y = x\$ becomes $y = x$. 
+
 - Code blocks
-    - Keyboard shortcuts
-    - Changing code block output
+
+To make a code block, press CTRL+ALT+I. Remember you can change the output of a code block by modifying some of its options, like below.
+
+```{r}
+banana <- 5
+
+banana + 1
+```
+
 
 ## Variables
 
 ### The assignment operator
 
+We make variables with the `<-` operator.
+
+```{r}
+my_special_var <- 1 + 2
+
+my_special_var
+```
+
+You can TECHNICALLY use `=` for assignment too. Never do this.
+
+```{r}
+my_other_var = 12
+
+my_other_var + my_special_var
+```
+
 ### Numerics
 
 **Doubles**
+
+Doubles are decimal numbers, like $1.1, 2.2, 3.0$. If I make a number variable without doing anything special, R defaults to a double.
+
+```{r}
+a <- 1.1
+b <- 2.0
+
+is.double(a)
+is.double(b)
+```
+
 **Integers**
+
+Integers must have an `L` after them. That is how R knows that you don't want a double, but instead want a "long-capable integer".
+
+```{r}
+c <- 1L
+d <- 1
+
+is.integer(c)
+is.integer(d)
+```
 
 Here is a useful cheatsheet for the different numeric operators and how they behave.
   
@@ -56,34 +110,252 @@ data.frame(
   
 **Why care about the difference?**
 
+Almost 99% of the time, this wont matter. But, with big data, integers take up must less memory.
 
-###Characters
-    - `paste()`
-    - `paste0`
-    
+```{r}
+object.size(1L:1e6)
+```
+
+XXXX <- Ian, figure out why this isnt work.
+
+```{r}
+pryr::object_size(1L:1e6L)
+```
+
+```{r}
+pryr::object_size(seq(1.0, 1e6))
+```
+
+
+### Characters
+
+Characters are text symbols and they are made with either \"\" or \'\', either works.
+
+```{r}
+a <- 'here is someone\'s text'
+b <- "here is more text"
+
+a
+b
+```
+
+To combine two strings, I use `paste()`.
+
+```{r}
+paste(a, b)
+```
+
+If I dont want a space, then I used `paste0()`.
+
+```{r}
+paste0(a, b)
+```
+
 ### Booleans
-    - What are they?
-    - Nested booles
-    - `as.numeric`
+
+These are True and False values. You make them with the symbols `T` or `TRUE` and `F` or `FALSE`.
+
+```{r}
+x <- T
+y <- F
+```
+
+To compare them, we can use three operators.
+
+- `&` is "and"
+- `|` is "or"
+- `!` is "not" (just give me the opposite of whatever is after me)
+
+```{r}
+x & y # false
+x | y # true
+x & !y # true
+```
+
+We can also have nested equations
+
+```{r}
+z <- F
+
+x & !(y | z) # true
+```
+
+We can also compare numbers.
+
+```{r}
+a <- 1
+b <- 2
+```
+
+```{r}
+a < 1
+a <= 1
+a == 1
+```
+
+If I want to compare multiple numbers, I need to do it seperately.
+
+```{r}
+(a > 1) | (b > 1)
+```
+
+Remember that booleans are ultimately numeric values underneath.
+
+```{r}
+d <- T
+k <- F
+u <- 5
+
+d*u
+d*k
+
+as.numeric(d)
+as.numeric(k)
+```
+
 
 ### Special types
-    - `NA`
-    - `NaN`
-    - `Inf`
+
+`NA` - missing
+    
+```{r}
+is.na(NA)
+```
+
+`NaN` - you did math wrong
+
+```{r}
+0/0
+```
+
+`Inf` - infinity
+
+```{r}
+-5/0
+```
+
 
 ## Vectors
 
-- Two ways to make a sequence, `:` and `seq()`
-- Sequence math with a constant
-- Sequence math with another sequence
-    - Equal size
-    - Unequal size
-- Accessing sequence elements
-    - Only 1
-    - Sequence ofdesired elements
-    - Numeric collection
-    - Booleans
-- Letter sequences
+R is built is on vectors. Vectors are collections of a bunch of values of the same type.
+
+```{r}
+my_vec <- c(1, 5, 3, 7)
+
+my_vec
+```
+
+If I try to put different types together, they go to the most primitive type (usually a character string).
+
+```{r}
+my_other_vec <- c(22, 'orange', T)
+
+my_other_vec
+```
+
+```{r}
+my_third_vec <- c(T, F, 35)
+
+my_third_vec
+```
+
+We can also missing values.
+
+```{r}
+my_fourth_vec <- c(1, 4, 5, NA)
+
+my_fourth_vec
+
+is.na(my_fourth_vec)
+```
+
+If I want to combine two vectors...
+
+```{r}
+a <- c(1, 2, 3)
+b <- c(3, 5, 7)
+
+c(a, b)
+```
+
+A brief example of matrices
+
+```{r}
+matrix(
+  data = c(a, b),
+  nrow = 2,
+  byrow = T)
+```
+
+Sometimes I want special vectors, direct sequences of numbers. There are two ways to do this. If all I want is a integer sequence (made of doubles), then I use the "`<first number>:<last number>`".
+
+```{r}
+1:5
+5:1
+```
+
+Other times, I need to count by something other than one, so I use `seq(from = <start>, to = <end>, by = <number to count by>)`
+
+```{r}
+seq(from = 1, to = 7, by = 1.3)
+```
+
+Hint: for brevity, I can leave off function parameter names, **as long as I enter them in order**
+
+```{r}
+seq(1, 7, by = 1.3)
+```
+
+If I add a constant to a vector, then they all go up by that constant.
+
+```{r}
+1:5 / 3
+```
+
+I can do math with equal-length sequences too.
+
+```{r}
+1:5 - seq(1, 4, by = .7)
+```
+
+But they **must** be equal lengths.
+
+```{r, error=TRUE}
+1:5 / 1:4
+```
+
+To access the elements of a vector, I put a number OR booleans in brackets `[]`.
+
+```{r}
+my_vec <- c('apple', 'orange', 'banana', 'pair')
+
+my_vec[2]
+```
+
+```{r}
+my_vec[2:4]
+```
+
+```{r}
+my_vec[c(3, 2, 1, 4)]
+```
+
+
+I can also use bools.
+
+```{r}
+my_other_vec <- c(1, 4, 6, 7, 9, 3, 9)
+
+my_other_vec < 5
+
+my_other_vec[my_other_vec < 5]
+```
+
+I can also use functions that return values to access vectors, if I am creative...
+
+```{r}
+my_other_vec[max(my_other_vec) == my_other_vec]
+```
 
 ## Lists
 
