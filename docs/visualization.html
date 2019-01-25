@@ -111,11 +111,14 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="2.5" data-path="basic-r.html"><a href="basic-r.html#dataframes"><i class="fa fa-check"></i><b>2.5</b> Dataframes</a><ul>
 <li class="chapter" data-level="2.5.1" data-path="basic-r.html"><a href="basic-r.html#basic-functions"><i class="fa fa-check"></i><b>2.5.1</b> Basic functions</a></li>
 </ul></li>
+<li class="chapter" data-level="2.6" data-path="basic-r.html"><a href="basic-r.html#packages"><i class="fa fa-check"></i><b>2.6</b> Packages</a></li>
 </ul></li>
 <li class="chapter" data-level="3" data-path="visualization.html"><a href="visualization.html"><i class="fa fa-check"></i><b>3</b> Visualization</a><ul>
 <li class="chapter" data-level="3.1" data-path="visualization.html"><a href="visualization.html#base-r"><i class="fa fa-check"></i><b>3.1</b> Base R</a></li>
-<li class="chapter" data-level="3.2" data-path="visualization.html"><a href="visualization.html#packages"><i class="fa fa-check"></i><b>3.2</b> Packages</a></li>
-<li class="chapter" data-level="3.3" data-path="visualization.html"><a href="visualization.html#ggplot"><i class="fa fa-check"></i><b>3.3</b> <code>ggplot</code></a></li>
+<li class="chapter" data-level="3.2" data-path="visualization.html"><a href="visualization.html#ggplot"><i class="fa fa-check"></i><b>3.2</b> <code>ggplot</code></a><ul>
+<li class="chapter" data-level="3.2.1" data-path="visualization.html"><a href="visualization.html#the-grammar-of-graphics"><i class="fa fa-check"></i><b>3.2.1</b> The Grammar of Graphics</a></li>
+<li class="chapter" data-level="3.2.2" data-path="visualization.html"><a href="visualization.html#ggplot2"><i class="fa fa-check"></i><b>3.2.2</b> <code>ggplot2</code></a></li>
+</ul></li>
 </ul></li>
 </ul>
 
@@ -138,13 +141,46 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <h1><span class="header-section-number">3</span> Visualization</h1>
 <div id="base-r" class="section level2">
 <h2><span class="header-section-number">3.1</span> Base R</h2>
-</div>
-<div id="packages" class="section level2">
-<h2><span class="header-section-number">3.2</span> Packages</h2>
+<p><strong>hist()</strong></p>
+<p><strong>barplot()</strong></p>
+<p><strong>plot()</strong></p>
 </div>
 <div id="ggplot" class="section level2">
-<h2><span class="header-section-number">3.3</span> <code>ggplot</code></h2>
+<h2><span class="header-section-number">3.2</span> <code>ggplot</code></h2>
+<div id="the-grammar-of-graphics" class="section level3">
+<h3><span class="header-section-number">3.2.1</span> The Grammar of Graphics</h3>
+<p>All statistical graphics share the same deep structure, a “Grammar of Graphics”. This means that any given plot can be uniquely identified (reproduced), given the following inputs.</p>
+<ul>
+<li>Data</li>
+<li>A coordinate system (2d plane, 3d sphere, etc)</li>
+<li>Facet specification (panel arrangement)</li>
+<li>Mappings from variables to aesthetic features</li>
+<li>One scale for each variable mapping</li>
+<li>One or more layers of geometic objects (“geoms”), statistical functions, and position adjustments</li>
+</ul>
+</div>
+<div id="ggplot2" class="section level3">
+<h3><span class="header-section-number">3.2.2</span> <code>ggplot2</code></h3>
+<p>The most popular graphics package in R to date (maybe even accross all programming languages) is <code>ggplot2</code>. An update of the original <code>ggplot</code> package, <code>ggplot2</code> is based on the Grammar of Graphics above. It functions are designed specifically to behave like a grammar, in which you add plot elements together like a sentence.</p>
+<p>Lets explore how to build a plot.</p>
+<p><strong>Blank plot</strong></p>
+<p><strong>Points</strong></p>
+<p><strong>Smoothed line</strong></p>
+<p><strong>Themes</strong></p>
+<p><strong>Labels</strong></p>
+<p><strong>Saving your plot</strong></p>
+<ul>
+<li>File type</li>
+<li>Quality</li>
+<li>Dimensions</li>
+</ul>
+<p><strong>Facets</strong></p>
+<p><strong>Where to learn more?</strong></p>
+<p>The <code>ggplot</code> <a href="https://github.com/rstudio/cheatsheets/blob/master/data-visualization-2.1.pdf">cheatsheet is available here</a> as is the quickest way to look up something you might have briefly forgotten.</p>
+<p>For more complex questions, <a href="https://ggplot2.tidyverse.org/index.html" class="uri">https://ggplot2.tidyverse.org/index.html</a> contains numerous worked examples that will bring your plots from plain old publishable to down right beautiful.</p>
+<p>If you have a really specific question, the “ggplot” tag on <a href="https://stackoverflow.com/questions/tagged/ggplot2?sort=frequent&amp;pageSize=50">Stack Overflow</a> is your best friend. Ask and you shall receive (help)!</p>
 
+</div>
 </div>
 </div>
             </section>

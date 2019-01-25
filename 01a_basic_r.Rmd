@@ -18,20 +18,16 @@ output: html_notebook
     - Keyboard shortcuts
     - Changing code block output
 
-The assignment operator
+## Variables
 
-## Variable types
-  - Numerics
-  
-  Here is an example of a numeric variable
-  
-```{r}
-x <- 2
-```
-  
-  - Doubles
-  - Integers
-  - Mathematical operators
+### The assignment operator
+
+### Numerics
+
+**Doubles**
+**Integers**
+
+Here is a useful cheatsheet for the different numeric operators and how they behave.
   
 ```{r, echo=FALSE, message=FALSE, warning=FALSE}
 library(tidyverse)
@@ -56,51 +52,69 @@ data.frame(
     align = 'c')
 ```
   
-  - Why care about the difference?
-- Characters
+**Why care about the difference?**
+
+
+###Characters
     - `paste()`
     - `paste0`
-- Booleans
-    - What are they
+    
+### Booleans
+    - What are they?
     - Nested booles
-- Special types
+    - `as.numeric`
+
+### Special types
     - `NA`
     - `NaN`
     - `Inf`
 
-## Commenting code
-
-Use these sparringly to keep code simple, but always err on side of clarity.
-
 ## Vectors
 
-- Two ways to make a sequence
+- Two ways to make a sequence, `:` and `seq()`
 - Sequence math with a constant
 - Sequence math with another sequence
     - Equal size
     - Unequal size
 - Accessing sequence elements
     - Only 1
-    - Sequence
+    - Sequence ofdesired elements
     - Numeric collection
     - Booleans
 - Letter sequences
 
+## Lists
+
+<We'll fill this section in later, when you need it. For now, they are just a fancy kind of vector.>
+
 ## Dataframes
 
-Construction
-Access
-- `$`
-- Rows with numbers
-- Rows with boolean tests
-- Columns with numbers
-- Columns with names
-- Making new columns
+**Construction**
+**Accessing elements inside the dataframe**
+  - `$`
+  - Rows with numbers
+  - Rows with boolean tests
+  - Columns with numbers
+  - Columns with names
+  - Making new columns
+**Basic data modification**
+
 
 ### Basic functions
-- What are functions?
-- Common functions
-    - `mean()`
-    - `sd()`
-    - What about missing data?
-- How can I make my own?
+**What are functions?**
+**Common functions**
+`rnorm()`
+`mean()`
+`sd()`
+**What about missing data?**
+**How can I make my own?**
+
+## Packages
+
+**Base R and the need for packages**
+
+**Package installation**
+
+**Package loading**
+
+**Calling functions without loading a package**

@@ -1,5 +1,5 @@
 ---
-title: "CSP 518 - Exercises: Intro to R"
+title: "CSP 518 - Exercises: 1a - Intro to R"
 author: "YOUR NAME HERE"
 date: "Due: 2019-02-01 @ 11:59pm"
 output: html_document

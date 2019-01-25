@@ -180,17 +180,50 @@ $(document).ready(function () {
 <h1>Visualization</h1>
 <div id="base-r" class="section level2">
 <h2>Base R</h2>
-</div>
-<div id="packages" class="section level2">
-<h2>Packages</h2>
+<p><strong>hist()</strong></p>
+<p><strong>barplot()</strong></p>
+<p><strong>plot()</strong></p>
 </div>
 <div id="ggplot" class="section level2">
 <h2><code>ggplot</code></h2>
+<div id="the-grammar-of-graphics" class="section level3">
+<h3>The Grammar of Graphics</h3>
+<p>All statistical graphics share the same deep structure, a “Grammar of Graphics”. This means that any given plot can be uniquely identified (reproduced), given the following inputs.</p>
+<ul>
+<li>A dataset</li>
+<li>A coordinate system (2d plane, 3d sphere, etc)</li>
+<li>A facet specification (panel arrangement)</li>
+<li>Mappings from variables to aesthetic features</li>
+<li>One scale for each aesthetic mapping</li>
+<li>One or more layers of geometic objects (“geoms”), statistical functions, and position adjustments</li>
+</ul>
+</div>
+<div id="ggplot2" class="section level3">
+<h3>ggplot2</h3>
+<p>The most popular graphics package in R to date (maybe even accross all programming languages) is <code>ggplot2</code>. An update of the original <code>ggplot</code> package, <code>ggplot2</code> is based on the Grammar of Graphics above. It functions are designed specifically to behave like a grammar, in which you add plot elements together like a sentence.</p>
+<p>Lets explore how to build a plot.</p>
+<p><strong>Blank plot</strong></p>
+<p><strong>Points</strong></p>
+<p><strong>Smoothed line</strong></p>
+<p><strong>Themes</strong></p>
+<p><strong>Labels</strong></p>
+<p><strong>Saving your plot</strong></p>
+<ul>
+<li>File type</li>
+<li>Quality</li>
+<li>Dimensions</li>
+</ul>
+<p><strong>Facets</strong></p>
+<p><strong>Where to learn more?</strong></p>
+<p>The <code>ggplot</code> <a href="https://github.com/rstudio/cheatsheets/blob/master/data-visualization-2.1.pdf">cheatsheet is available here</a> as is the quickest way to look up something you might have briefly forgotten.</p>
+<p>For more complex questions, <a href="https://ggplot2.tidyverse.org/index.html" class="uri">https://ggplot2.tidyverse.org/index.html</a> contains numerous worked examples that will bring your plots from plain old publishable to down right beautiful.</p>
+<p>If you have a really specific question, the “ggplot” tag on <a href="https://stackoverflow.com/questions/tagged/ggplot2?sort=frequent&amp;pageSize=50">Stack Overflow</a> is your best friend. Ask and you shall receive (help)!</p>
 <!-- rnb-text-end -->
 </div>
 </div>
+</div>
 
-<div id="rmd-source-code">LS0tCnRpdGxlOiAiVmlzdWFsaXphdGlvbiIKb3V0cHV0OiBodG1sX25vdGVib29rCi0tLQoKIyBWaXN1YWxpemF0aW9uCgojIyBCYXNlIFIKCiMjIFBhY2thZ2VzCgojIyBgZ2dwbG90YAoK</div>
+<div id="rmd-source-code">LS0tCnRpdGxlOiAiVmlzdWFsaXphdGlvbiIKb3V0cHV0OiBodG1sX25vdGVib29rCi0tLQoKIyBWaXN1YWxpemF0aW9uCgojIyBCYXNlIFIKCioqaGlzdCgpKioKCioqYmFycGxvdCgpKioKCioqcGxvdCgpKioKCiMjIGBnZ3Bsb3RgCgojIyMgVGhlIEdyYW1tYXIgb2YgR3JhcGhpY3MKCkFsbCBzdGF0aXN0aWNhbCBncmFwaGljcyBzaGFyZSB0aGUgc2FtZSBkZWVwIHN0cnVjdHVyZSwgYSAiR3JhbW1hciBvZiBHcmFwaGljcyIuIFRoaXMgbWVhbnMgdGhhdCBhbnkgZ2l2ZW4gcGxvdCBjYW4gYmUgdW5pcXVlbHkgaWRlbnRpZmllZCAocmVwcm9kdWNlZCksIGdpdmVuIHRoZSBmb2xsb3dpbmcgaW5wdXRzLiAKCi0gQSBkYXRhc2V0Ci0gQSBjb29yZGluYXRlIHN5c3RlbSAoMmQgcGxhbmUsIDNkIHNwaGVyZSwgZXRjKQotIEEgZmFjZXQgc3BlY2lmaWNhdGlvbiAocGFuZWwgYXJyYW5nZW1lbnQpCi0gTWFwcGluZ3MgZnJvbSB2YXJpYWJsZXMgdG8gYWVzdGhldGljIGZlYXR1cmVzCi0gT25lIHNjYWxlIGZvciBlYWNoIGFlc3RoZXRpYyBtYXBwaW5nCi0gT25lIG9yIG1vcmUgbGF5ZXJzIG9mIGdlb21ldGljIG9iamVjdHMgKCJnZW9tcyIpLCBzdGF0aXN0aWNhbCBmdW5jdGlvbnMsIGFuZCBwb3NpdGlvbiBhZGp1c3RtZW50cwoKIyMjIGdncGxvdDIKClRoZSBtb3N0IHBvcHVsYXIgZ3JhcGhpY3MgcGFja2FnZSBpbiBSIHRvIGRhdGUgKG1heWJlIGV2ZW4gYWNjcm9zcyBhbGwgcHJvZ3JhbW1pbmcgbGFuZ3VhZ2VzKSBpcyBgZ2dwbG90MmAuIEFuIHVwZGF0ZSBvZiB0aGUgb3JpZ2luYWwgYGdncGxvdGAgcGFja2FnZSwgYGdncGxvdDJgIGlzIGJhc2VkIG9uIHRoZSBHcmFtbWFyIG9mIEdyYXBoaWNzIGFib3ZlLiBJdCBmdW5jdGlvbnMgYXJlIGRlc2lnbmVkIHNwZWNpZmljYWxseSB0byBiZWhhdmUgbGlrZSBhIGdyYW1tYXIsIGluIHdoaWNoIHlvdSBhZGQgcGxvdCBlbGVtZW50cyB0b2dldGhlciBsaWtlIGEgc2VudGVuY2UuCgpMZXRzIGV4cGxvcmUgaG93IHRvIGJ1aWxkIGEgcGxvdC4KCioqQmxhbmsgcGxvdCoqCgoqKlBvaW50cyoqCgoqKlNtb290aGVkIGxpbmUqKgoKKipUaGVtZXMqKgoKKipMYWJlbHMqKgoKKipTYXZpbmcgeW91ciBwbG90KioKCi0gRmlsZSB0eXBlCi0gUXVhbGl0eQotIERpbWVuc2lvbnMKCioqRmFjZXRzKioKCioqV2hlcmUgdG8gbGVhcm4gbW9yZT8qKgoKVGhlIGBnZ3Bsb3RgIFtjaGVhdHNoZWV0IGlzIGF2YWlsYWJsZSBoZXJlXShodHRwczovL2dpdGh1Yi5jb20vcnN0dWRpby9jaGVhdHNoZWV0cy9ibG9iL21hc3Rlci9kYXRhLXZpc3VhbGl6YXRpb24tMi4xLnBkZikgYXMgaXMgdGhlIHF1aWNrZXN0IHdheSB0byBsb29rIHVwIHNvbWV0aGluZyB5b3UgbWlnaHQgaGF2ZSBicmllZmx5IGZvcmdvdHRlbi4KCkZvciBtb3JlIGNvbXBsZXggcXVlc3Rpb25zLCBbaHR0cHM6Ly9nZ3Bsb3QyLnRpZHl2ZXJzZS5vcmcvaW5kZXguaHRtbF0oaHR0cHM6Ly9nZ3Bsb3QyLnRpZHl2ZXJzZS5vcmcvaW5kZXguaHRtbCkgY29udGFpbnMgbnVtZXJvdXMgd29ya2VkIGV4YW1wbGVzIHRoYXQgd2lsbCBicmluZyB5b3VyIHBsb3RzIGZyb20gcGxhaW4gb2xkIHB1Ymxpc2hhYmxlIHRvIGRvd24gcmlnaHQgYmVhdXRpZnVsLiAKCklmIHlvdSBoYXZlIGEgcmVhbGx5IHNwZWNpZmljIHF1ZXN0aW9uLCB0aGUgImdncGxvdCIgdGFnIG9uIFtTdGFjayBPdmVyZmxvd10oaHR0cHM6Ly9zdGFja292ZXJmbG93LmNvbS9xdWVzdGlvbnMvdGFnZ2VkL2dncGxvdDI/c29ydD1mcmVxdWVudCZwYWdlU2l6ZT01MCkgaXMgeW91ciBiZXN0IGZyaWVuZC4gQXNrIGFuZCB5b3Ugc2hhbGwgcmVjZWl2ZSAoaGVscCkhCg==</div>
 
 
 

@@ -7,7 +7,53 @@ output: html_notebook
 
 ## Base R
 
-## Packages
+**hist()**
+
+**barplot()**
+
+**plot()**
 
 ## `ggplot`
 
+### The Grammar of Graphics
+
+All statistical graphics share the same deep structure, a "Grammar of Graphics". This means that any given plot can be uniquely identified (reproduced), given the following inputs. 
+
+- A dataset
+- A coordinate system (2d plane, 3d sphere, etc)
+- A facet specification (panel arrangement)
+- Mappings from variables to aesthetic features
+- One scale for each aesthetic mapping
+- One or more layers of geometic objects ("geoms"), statistical functions, and position adjustments
+
+### ggplot2
+
+The most popular graphics package in R to date (maybe even accross all programming languages) is `ggplot2`. An update of the original `ggplot` package, `ggplot2` is based on the Grammar of Graphics above. It functions are designed specifically to behave like a grammar, in which you add plot elements together like a sentence.
+
+Lets explore how to build a plot.
+
+**Blank plot**
+
+**Points**
+
+**Smoothed line**
+
+**Themes**
+
+**Labels**
+
+**Saving your plot**
+
+- File type
+- Quality
+- Dimensions
+
+**Facets**
+
+**Where to learn more?**
+
+The `ggplot` [cheatsheet is available here](https://github.com/rstudio/cheatsheets/blob/master/data-visualization-2.1.pdf) as is the quickest way to look up something you might have briefly forgotten.
+
+For more complex questions, [https://ggplot2.tidyverse.org/index.html](https://ggplot2.tidyverse.org/index.html) contains numerous worked examples that will bring your plots from plain old publishable to down right beautiful. 
+
+If you have a really specific question, the "ggplot" tag on [Stack Overflow](https://stackoverflow.com/questions/tagged/ggplot2?sort=frequent&pageSize=50) is your best friend. Ask and you shall receive (help)!

@@ -1,13 +1,9 @@
 ---
-title: "CSP 518 - Exercises: Intro to R"
+title: "CSP 518 - Exercises: 1a - Intro to R"
 author: "YOUR NAME HERE"
 date: "Due: 2019-02-01 @ 11:59pm"
 output: html_document
 ---
-
-```{r global_options, include=FALSE}
-knitr::opts_chunk$set(echo=FALSE, warning=FALSE, message=FALSE, eval=FALSE)
-```
 
 ## Instructions
 
@@ -39,11 +35,13 @@ knitr::opts_chunk$set(echo=FALSE, warning=FALSE, message=FALSE, eval=FALSE)
 6. With the same vector you used above, select every other number in the vector using `seq()` (starting with the first element).
 
 
-7. Again, with the same vector from #5, select only the even numbers. (Hint: use modulo division, `%%`, to test whether the numbers have a remainder when divided by $2$).
-
-8. Use the `mean()` function to find the mean of the following vector, ignoring the missing value.
+7. Use the `mean()` function to find the mean of the following vector, ignoring the missing value.
 
 ```{r, echo=TRUE}
 my_vec <- c(1, 4, 3, 5, 2, NA)
 ```
+
+**Optional**
+
+8. Again, with the same vector from #5, select only the even numbers. Specifically, use modulo division, `%%`, to test whether the numbers have a remainder when divided by $2$.
 
