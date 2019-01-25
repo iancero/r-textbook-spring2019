@@ -3,3 +3,6 @@
 .RData
 .Ruserdata
 *key*
+*.html
+!docs/*.html
+!_bookdown_files/*.html
