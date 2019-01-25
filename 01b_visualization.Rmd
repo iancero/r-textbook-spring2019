@@ -5,6 +5,8 @@ output: html_notebook
 
 # Visualization
 
+There are many ways to visualize data in R. Two of the most common include Base R's built-in functions and the `ggplot2` package.
+
 ## Base R
 
 **hist()**
