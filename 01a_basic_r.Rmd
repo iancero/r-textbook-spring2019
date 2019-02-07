@@ -364,12 +364,9 @@ vec <- c(1, 3, 4, 5, 3, 2, NA)
 mean(vec, na.rm = T)
 ```
 
-
 ## Lists
 
-Lists are a kind of vector that we make using the `list()` function, rather than the `c()` function. They have a few special properties.
-
-## Lists
+<< More on lists to come >>
 
 Lists are special vectors that can hold multiple types of elements.
 
