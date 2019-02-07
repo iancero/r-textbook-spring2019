@@ -114,10 +114,16 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 </ul></li>
 <li class="chapter" data-level="2.3" data-path="basic-r.html"><a href="basic-r.html#vectors"><i class="fa fa-check"></i><b>2.3</b> Vectors</a></li>
 <li class="chapter" data-level="2.4" data-path="basic-r.html"><a href="basic-r.html#lists"><i class="fa fa-check"></i><b>2.4</b> Lists</a></li>
-<li class="chapter" data-level="2.5" data-path="basic-r.html"><a href="basic-r.html#dataframes"><i class="fa fa-check"></i><b>2.5</b> Dataframes</a><ul>
-<li class="chapter" data-level="2.5.1" data-path="basic-r.html"><a href="basic-r.html#basic-functions"><i class="fa fa-check"></i><b>2.5.1</b> Basic functions</a></li>
+<li class="chapter" data-level="2.5" data-path="basic-r.html"><a href="basic-r.html#lists-1"><i class="fa fa-check"></i><b>2.5</b> Lists</a></li>
+<li class="chapter" data-level="2.6" data-path="basic-r.html"><a href="basic-r.html#dataframes"><i class="fa fa-check"></i><b>2.6</b> Dataframes</a><ul>
+<li class="chapter" data-level="2.6.1" data-path="basic-r.html"><a href="basic-r.html#construction"><i class="fa fa-check"></i><b>2.6.1</b> Construction</a></li>
+<li class="chapter" data-level="2.6.2" data-path="basic-r.html"><a href="basic-r.html#built-in-dataframes"><i class="fa fa-check"></i><b>2.6.2</b> Built-in dataframes</a></li>
 </ul></li>
-<li class="chapter" data-level="2.6" data-path="basic-r.html"><a href="basic-r.html#packages"><i class="fa fa-check"></i><b>2.6</b> Packages</a></li>
+<li class="chapter" data-level="2.7" data-path="basic-r.html"><a href="basic-r.html#functions"><i class="fa fa-check"></i><b>2.7</b> Functions</a><ul>
+<li class="chapter" data-level="2.7.1" data-path="basic-r.html"><a href="basic-r.html#getting-help"><i class="fa fa-check"></i><b>2.7.1</b> Getting help</a></li>
+<li class="chapter" data-level="2.7.2" data-path="basic-r.html"><a href="basic-r.html#function-parameters"><i class="fa fa-check"></i><b>2.7.2</b> Function parameters</a></li>
+</ul></li>
+<li class="chapter" data-level="2.8" data-path="basic-r.html"><a href="basic-r.html#packages"><i class="fa fa-check"></i><b>2.8</b> Packages</a></li>
 </ul></li>
 <li class="chapter" data-level="3" data-path="visualization.html"><a href="visualization.html"><i class="fa fa-check"></i><b>3</b> Visualization</a><ul>
 <li class="chapter" data-level="3.1" data-path="visualization.html"><a href="visualization.html#base-r"><i class="fa fa-check"></i><b>3.1</b> Base R</a></li>
@@ -254,13 +260,15 @@ d &lt;-<span class="st"> </span><span class="dv">1</span>
 </table>
 <p><strong>Why care about the difference?</strong></p>
 <p>Almost 99% of the time, this wont matter. But, with big data, integers take up must less memory.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">object.size</span>(1L<span class="op">:</span><span class="fl">1e6</span>)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">my_integers &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="dt">from =</span> 1L, <span class="dt">to =</span> 1e6L, <span class="dt">by =</span> 1L)
+my_doubles &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="dt">from =</span> <span class="fl">1.0</span>, <span class="dt">to =</span> <span class="fl">1e6</span>, <span class="dt">by =</span> <span class="fl">1.0</span>)
+
+<span class="kw">object.size</span>(my_integers)</code></pre></div>
 <pre><code>## 4000040 bytes</code></pre>
-<p>XXXX &lt;- Ian, figure out why this isnt work.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">pryr<span class="op">::</span><span class="kw">object_size</span>(1L<span class="op">:</span>1e6L)</code></pre></div>
-<pre><code>## 4 MB</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">pryr<span class="op">::</span><span class="kw">object_size</span>(<span class="kw">seq</span>(<span class="fl">1.0</span>, <span class="fl">1e6</span>))</code></pre></div>
-<pre><code>## 4 MB</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">object.size</span>(my_doubles)</code></pre></div>
+<pre><code>## 8000040 bytes</code></pre>
+<p>Note here that although we are using only whole numbers from 1 to 1 million, the first sequence (<code>my_integers</code>) is stored as an integer and the second sequence (<code>my_doubles</code>) is stored as a number that may include decimals. This second case needs more space (twice as much) to be allocated in advance, even if we never use those decimal places.</p>
+<p>Again, this will almost never matter for most people, most of the time. However, it is good to be aware of for when your datasets get large (i.e., several million cases or more).</p>
 </div>
 <div id="characters" class="section level3">
 <h3><span class="header-section-number">2.2.3</span> Characters</h3>
@@ -419,31 +427,126 @@ my_other_vec <span class="op">&lt;</span><span class="st"> </span><span class="d
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">my_other_vec[<span class="kw">max</span>(my_other_vec) <span class="op">==</span><span class="st"> </span>my_other_vec]</code></pre></div>
 <pre><code>## [1] 9 9</code></pre>
 <p>R also has special vectors that are pre-loaded. The most commonly used are <code>letters</code> and <code>LETTERS</code>, which return the lower-case letters and uppercase letters of the English alphabet, respectively.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">letters</code></pre></div>
-<pre><code>##  [1] &quot;a&quot; &quot;b&quot; &quot;c&quot; &quot;d&quot; &quot;e&quot; &quot;f&quot; &quot;g&quot; &quot;h&quot; &quot;i&quot; &quot;j&quot; &quot;k&quot; &quot;l&quot; &quot;m&quot; &quot;n&quot; &quot;o&quot; &quot;p&quot; &quot;q&quot;
-## [18] &quot;r&quot; &quot;s&quot; &quot;t&quot; &quot;u&quot; &quot;v&quot; &quot;w&quot; &quot;x&quot; &quot;y&quot; &quot;z&quot;</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">LETTERS</code></pre></div>
-<pre><code>##  [1] &quot;A&quot; &quot;B&quot; &quot;C&quot; &quot;D&quot; &quot;E&quot; &quot;F&quot; &quot;G&quot; &quot;H&quot; &quot;I&quot; &quot;J&quot; &quot;K&quot; &quot;L&quot; &quot;M&quot; &quot;N&quot; &quot;O&quot; &quot;P&quot; &quot;Q&quot;
-## [18] &quot;R&quot; &quot;S&quot; &quot;T&quot; &quot;U&quot; &quot;V&quot; &quot;W&quot; &quot;X&quot; &quot;Y&quot; &quot;Z&quot;</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">vec &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>, <span class="dv">3</span>, <span class="dv">2</span>, <span class="ot">NA</span>)
+
+<span class="kw">mean</span>(vec, <span class="dt">na.rm =</span> T)</code></pre></div>
+<pre><code>## [1] 3</code></pre>
 </div>
 <div id="lists" class="section level2">
 <h2><span class="header-section-number">2.4</span> Lists</h2>
-<p><We'll fill this section in later, when you need it. For now, they are just a fancy kind of vector.></p>
+<p>Lists are a kind of vector that we make using the <code>list()</code> function, rather than the <code>c()</code> function. They have a few special properties.</p>
+</div>
+<div id="lists-1" class="section level2">
+<h2><span class="header-section-number">2.5</span> Lists</h2>
+<p>Lists are special vectors that can hold multiple types of elements.</p>
+<p>They can even hold other vectors.</p>
 </div>
 <div id="dataframes" class="section level2">
-<h2><span class="header-section-number">2.5</span> Dataframes</h2>
-<p><strong>Construction</strong> <strong>Accessing elements inside the dataframe</strong> - <code>$</code> - Rows with numbers - Rows with boolean tests - Columns with numbers - Columns with names - Making new columns <strong>Basic data modification</strong></p>
-<div id="basic-functions" class="section level3">
-<h3><span class="header-section-number">2.5.1</span> Basic functions</h3>
-<p><strong>What are functions?</strong> <strong>Common functions</strong> <code>rnorm()</code> <code>mean()</code> <code>sd()</code> <strong>What about missing data?</strong> <strong>How can I make my own?</strong></p>
+<h2><span class="header-section-number">2.6</span> Dataframes</h2>
+<div id="construction" class="section level3">
+<h3><span class="header-section-number">2.6.1</span> Construction</h3>
+<p>Dataframes are spreadsheets. Under the hood of R, they are just lists of vectors, where all the vectors are required to be the same length. To make one, you can call the <code>data.frame()</code> function and put your vectors inside.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">heights &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">60</span>, <span class="dv">65</span>, <span class="dv">71</span>, <span class="dv">72</span>, <span class="dv">64</span>)
+sexes &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&#39;female&#39;</span>, <span class="st">&#39;female&#39;</span>, <span class="st">&#39;male&#39;</span>, <span class="st">&#39;male&#39;</span>, <span class="st">&#39;female&#39;</span>)
+shoes &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&#39;Adidas&#39;</span>, <span class="st">&#39;Nike&#39;</span>, <span class="st">&#39;Nike&#39;</span>, <span class="st">&#39;Salvatore Ferragamo&#39;</span>, <span class="st">&#39;Reebok&#39;</span>)
+
+df &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">height =</span> heights, <span class="dt">sex =</span> sexes, <span class="dt">shoes =</span> shoes)
+
+df</code></pre></div>
+<pre><code>##   height    sex               shoes
+## 1     60 female              Adidas
+## 2     65 female                Nike
+## 3     71   male                Nike
+## 4     72   male Salvatore Ferragamo
+## 5     64 female              Reebok</code></pre>
+</div>
+<div id="built-in-dataframes" class="section level3">
+<h3><span class="header-section-number">2.6.2</span> Built-in dataframes</h3>
+<p>R has numerous built-in datasets that are ideal for demonstration purposes. We can get access to them using the <code>data()</code> command. This will load the data into our session, so we can then look at it.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">data</span>(<span class="st">&#39;mtcars&#39;</span>)
+
+mtcars</code></pre></div>
+<pre><code>##                      mpg cyl  disp  hp drat    wt  qsec vs am gear carb
+## Mazda RX4           21.0   6 160.0 110 3.90 2.620 16.46  0  1    4    4
+## Mazda RX4 Wag       21.0   6 160.0 110 3.90 2.875 17.02  0  1    4    4
+## Datsun 710          22.8   4 108.0  93 3.85 2.320 18.61  1  1    4    1
+## Hornet 4 Drive      21.4   6 258.0 110 3.08 3.215 19.44  1  0    3    1
+## Hornet Sportabout   18.7   8 360.0 175 3.15 3.440 17.02  0  0    3    2
+## Valiant             18.1   6 225.0 105 2.76 3.460 20.22  1  0    3    1
+## Duster 360          14.3   8 360.0 245 3.21 3.570 15.84  0  0    3    4
+## Merc 240D           24.4   4 146.7  62 3.69 3.190 20.00  1  0    4    2
+## Merc 230            22.8   4 140.8  95 3.92 3.150 22.90  1  0    4    2
+## Merc 280            19.2   6 167.6 123 3.92 3.440 18.30  1  0    4    4
+## Merc 280C           17.8   6 167.6 123 3.92 3.440 18.90  1  0    4    4
+## Merc 450SE          16.4   8 275.8 180 3.07 4.070 17.40  0  0    3    3
+## Merc 450SL          17.3   8 275.8 180 3.07 3.730 17.60  0  0    3    3
+## Merc 450SLC         15.2   8 275.8 180 3.07 3.780 18.00  0  0    3    3
+## Cadillac Fleetwood  10.4   8 472.0 205 2.93 5.250 17.98  0  0    3    4
+## Lincoln Continental 10.4   8 460.0 215 3.00 5.424 17.82  0  0    3    4
+## Chrysler Imperial   14.7   8 440.0 230 3.23 5.345 17.42  0  0    3    4
+## Fiat 128            32.4   4  78.7  66 4.08 2.200 19.47  1  1    4    1
+## Honda Civic         30.4   4  75.7  52 4.93 1.615 18.52  1  1    4    2
+## Toyota Corolla      33.9   4  71.1  65 4.22 1.835 19.90  1  1    4    1
+## Toyota Corona       21.5   4 120.1  97 3.70 2.465 20.01  1  0    3    1
+## Dodge Challenger    15.5   8 318.0 150 2.76 3.520 16.87  0  0    3    2
+## AMC Javelin         15.2   8 304.0 150 3.15 3.435 17.30  0  0    3    2
+## Camaro Z28          13.3   8 350.0 245 3.73 3.840 15.41  0  0    3    4
+## Pontiac Firebird    19.2   8 400.0 175 3.08 3.845 17.05  0  0    3    2
+## Fiat X1-9           27.3   4  79.0  66 4.08 1.935 18.90  1  1    4    1
+## Porsche 914-2       26.0   4 120.3  91 4.43 2.140 16.70  0  1    5    2
+## Lotus Europa        30.4   4  95.1 113 3.77 1.513 16.90  1  1    5    2
+## Ford Pantera L      15.8   8 351.0 264 4.22 3.170 14.50  0  1    5    4
+## Ferrari Dino        19.7   6 145.0 175 3.62 2.770 15.50  0  1    5    6
+## Maserati Bora       15.0   8 301.0 335 3.54 3.570 14.60  0  1    5    8
+## Volvo 142E          21.4   4 121.0 109 4.11 2.780 18.60  1  1    4    2</code></pre>
+<p>Some datasets do not come in the form of a dataframe right away, but they can be converted into one using the <code>as.data.frame()</code> function.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">data</span>(Seatbelts)
+
+<span class="kw">is.data.frame</span>(Seatbelts)</code></pre></div>
+<pre><code>## [1] FALSE</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">seatbelts_df &lt;-<span class="st"> </span><span class="kw">as.data.frame</span>(Seatbelts)
+
+<span class="kw">is.data.frame</span>(seatbelts_df)</code></pre></div>
+<pre><code>## [1] TRUE</code></pre>
+</div>
+</div>
+<div id="functions" class="section level2">
+<h2><span class="header-section-number">2.7</span> Functions</h2>
+<p>A function is a piece of code that does work for you. It takes inputs and (usually) returns outputs. For example, the <code>sum()</code> function takes the mean of a numeric vector.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">my_vec &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">3</span>, <span class="dv">6</span>, <span class="dv">2</span>, <span class="dv">3</span>)
+
+<span class="kw">sum</span>(my_vec)</code></pre></div>
+<pre><code>## [1] 14</code></pre>
+<div id="getting-help" class="section level3">
+<h3><span class="header-section-number">2.7.1</span> Getting help</h3>
+<p>If I ever need to know something about a function, I can put a question mark in front of it (no <code>()</code>s) and run that line. That will bring up the help document for that function.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">?sum</code></pre></div>
+</div>
+<div id="function-parameters" class="section level3">
+<h3><span class="header-section-number">2.7.2</span> Function parameters</h3>
+<p>In addition to the data they take as input, most functions have additional <em>parameters</em> (sometimes called “arguments”, but they mean the same thing). Looking at its help file, the <code>sum()</code> function has two parameters:</p>
+<ul>
+<li><code>...</code>, the numbers you want to sum</li>
+<li><code>na.rm = FALSE</code>, which tells <code>sum()</code> whether you want to remove (‘rm’) missing values (‘na’) before summing.</li>
+</ul>
+<p>Let’s look at what happens when we try to <code>sum()</code> a vector with a missing value.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">my_vec &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">5</span>, <span class="ot">NA</span>, <span class="dv">2</span>, <span class="dv">3</span>) <span class="co"># should be 10</span>
+
+<span class="kw">sum</span>(my_vec)</code></pre></div>
+<pre><code>## [1] NA</code></pre>
+<p>R tells us the answer is missing (<code>NA</code>) because at least one of the vector elements is missing. This is to be conservative and to force you never to ignore missing values by accident. But what do we do if we really do want to sum all available values, ignoring the missing values.</p>
+<p>Again, looking at the help file, we can see that the <code>na.rm</code> parameter of the function is followed by <code>= FALSE</code>, under the Usage heading (see <code>sum(..., na.rm = FALSE)</code>). This tells us that the parameter <code>na.rm</code>, which tells <code>sum()</code> whether to remove missing values from the calulation, defaults to <code>FALSE</code>.</p>
+<p>To get <code>sum()</code> to ignore the missing values in our vector, we simply set <code>na.rm</code> to <code>TRUE</code> (or <code>T</code> for short).</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">sum</span>(my_vec, <span class="dt">na.rm =</span> T) <span class="co"># should be 10</span></code></pre></div>
+<pre><code>## [1] 10</code></pre>
 </div>
 </div>
 <div id="packages" class="section level2">
-<h2><span class="header-section-number">2.6</span> Packages</h2>
-<p><strong>Base R and the need for packages</strong></p>
-<p><strong>Package installation</strong></p>
-<p><strong>Package loading</strong></p>
-<p><strong>Calling functions without loading a package</strong></p>
+<h2><span class="header-section-number">2.8</span> Packages</h2>
+<p>Packages are collections of functions that someone else put together for you. You can install them using the <code>install.packages()</code> function, with the name of your package inside the <code>()</code>.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">install.packages</span>(<span class="st">&#39;ggplot2&#39;</span>)</code></pre></div>
+<p>Once installed, use the <code>library()</code> function to load your package into your R session.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(ggplot2)</code></pre></div>
 
 </div>
 </div>
