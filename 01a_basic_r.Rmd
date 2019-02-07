@@ -415,7 +415,7 @@ is.data.frame(seatbelts_df)
 
 ## Functions
 
-A function is a piece of code that does work for you. It takes inputs and (usually) returns outputs. For example, the `sum()` function takes the mean of a numeric vector.
+A function is a piece of code that does work for you. It takes inputs and (usually) returns outputs. For example, the `sum()` function takes the sum of a numeric vector.
 
 ```{r}
 my_vec <- c(3, 6, 2, 3)
@@ -448,7 +448,7 @@ sum(my_vec)
 
 R tells us the answer is missing (`NA`) because at least one of the vector elements is missing. This is to be conservative and to force you never to ignore missing values by accident. But what do we do if we really do want to sum all available values, ignoring the missing values.
 
-Again, looking at the help file, we can see that the `na.rm` parameter of the function is followed by  `= FALSE`, under the Usage heading (see `sum(..., na.rm = FALSE)`). This tells us that the parameter `na.rm`, which tells `sum()` whether to remove missing values from the calulation, defaults to `FALSE`. 
+Again, looking at the help file, we can see that the `na.rm` parameter of the function is followed by  `= FALSE`, under the **Usage** heading of that help document (look for `sum(..., na.rm = FALSE)`). This tells us that the parameter `na.rm`, which tells `sum()` whether to remove missing values from the calulation, defaults to `FALSE`. 
 
 To get `sum()` to ignore the missing values in our vector, we simply set `na.rm` to `TRUE` (or `T` for short).
 
@@ -458,13 +458,13 @@ sum(my_vec, na.rm = T) # should be 10
 
 ## Packages
 
-Packages are collections of functions that someone else put together for you. You can install them using the `install.packages()` function, with the name of your package inside the `()`.
+Packages are collections of functions that someone else put together for you. You can install them using the `install.packages()` function, with the name of your package inside the `()` - don't forget to use either single (`' '`) or double quotes (`" "`) around the package name too.
 
 ```{r, eval=FALSE}
 install.packages('ggplot2')
 ```
 
-Once installed, use the `library()` function to load your package into your R session.
+Once installed, use the `library()` function to load your package into your R session. Note, you don't need quotes here.
 
 ```{r}
 library(ggplot2)

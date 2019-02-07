@@ -508,7 +508,7 @@ mtcars</code></pre></div>
 </div>
 <div id="functions" class="section level2">
 <h2><span class="header-section-number">2.6</span> Functions</h2>
-<p>A function is a piece of code that does work for you. It takes inputs and (usually) returns outputs. For example, the <code>sum()</code> function takes the mean of a numeric vector.</p>
+<p>A function is a piece of code that does work for you. It takes inputs and (usually) returns outputs. For example, the <code>sum()</code> function takes the sum of a numeric vector.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">my_vec &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">3</span>, <span class="dv">6</span>, <span class="dv">2</span>, <span class="dv">3</span>)
 
 <span class="kw">sum</span>(my_vec)</code></pre></div>
@@ -531,7 +531,7 @@ mtcars</code></pre></div>
 <span class="kw">sum</span>(my_vec)</code></pre></div>
 <pre><code>## [1] NA</code></pre>
 <p>R tells us the answer is missing (<code>NA</code>) because at least one of the vector elements is missing. This is to be conservative and to force you never to ignore missing values by accident. But what do we do if we really do want to sum all available values, ignoring the missing values.</p>
-<p>Again, looking at the help file, we can see that the <code>na.rm</code> parameter of the function is followed by <code>= FALSE</code>, under the Usage heading (see <code>sum(..., na.rm = FALSE)</code>). This tells us that the parameter <code>na.rm</code>, which tells <code>sum()</code> whether to remove missing values from the calulation, defaults to <code>FALSE</code>.</p>
+<p>Again, looking at the help file, we can see that the <code>na.rm</code> parameter of the function is followed by <code>= FALSE</code>, under the <strong>Usage</strong> heading of that help document (look for <code>sum(..., na.rm = FALSE)</code>). This tells us that the parameter <code>na.rm</code>, which tells <code>sum()</code> whether to remove missing values from the calulation, defaults to <code>FALSE</code>.</p>
 <p>To get <code>sum()</code> to ignore the missing values in our vector, we simply set <code>na.rm</code> to <code>TRUE</code> (or <code>T</code> for short).</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">sum</span>(my_vec, <span class="dt">na.rm =</span> T) <span class="co"># should be 10</span></code></pre></div>
 <pre><code>## [1] 10</code></pre>
@@ -539,9 +539,9 @@ mtcars</code></pre></div>
 </div>
 <div id="packages" class="section level2">
 <h2><span class="header-section-number">2.7</span> Packages</h2>
-<p>Packages are collections of functions that someone else put together for you. You can install them using the <code>install.packages()</code> function, with the name of your package inside the <code>()</code>.</p>
+<p>Packages are collections of functions that someone else put together for you. You can install them using the <code>install.packages()</code> function, with the name of your package inside the <code>()</code> - don’t forget to use either single (<code>' '</code>) or double quotes (<code>&quot; &quot;</code>) around the package name too.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">install.packages</span>(<span class="st">&#39;ggplot2&#39;</span>)</code></pre></div>
-<p>Once installed, use the <code>library()</code> function to load your package into your R session.</p>
+<p>Once installed, use the <code>library()</code> function to load your package into your R session. Note, you don’t need quotes here.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(ggplot2)</code></pre></div>
 
 </div>
