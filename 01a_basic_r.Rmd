@@ -114,19 +114,16 @@ data.frame(
 Almost 99% of the time, this wont matter. But, with big data, integers take up must less memory.
 
 ```{r}
-object.size(1L:1e6)
+my_integers <- seq(from = 1L, to = 1e6L, by = 1L)
+my_doubles <- seq(from = 1.0, to = 1e6, by = 1.0)
+
+object.size(my_integers)
+object.size(my_doubles)
 ```
 
-XXXX <- Ian, figure out why this isnt work.
+Note here that although we are using only whole numbers from 1 to 1 million, the first sequence (`my_integers`) is stored as an integer and the second sequence (`my_doubles`) is stored as a number that may include decimals. This second case needs more space (twice as much) to be allocated in advance, even if we never use those decimal places.
 
-```{r}
-pryr::object_size(1L:1e6L)
-```
-
-```{r}
-pryr::object_size(seq(1.0, 1e6))
-```
-
+Again, this will almost never matter for most people, most of the time. However, it is good to be aware of for when your datasets get large (i.e., several million cases or more).
 
 ### Characters
 
