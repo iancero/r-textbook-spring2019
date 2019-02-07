@@ -9,6 +9,8 @@ There are many ways to visualize data in R. Two of the most common include Base 
 
 ## Base R
 
+The term "Base R" refers to the set of packages and functions that R loads into each session by default. These packages include several statistical and plotting functions you will probably use a lot. Some of the most common plotting functions are given below.
+
 **hist()**
 
 **barplot()**
@@ -17,42 +19,87 @@ There are many ways to visualize data in R. Two of the most common include Base 
 
 ## `ggplot`
 
-### The Grammar of Graphics
-
 All statistical graphics share the same deep structure, a "Grammar of Graphics". This means that any given plot can be uniquely identified (reproduced), given the following inputs. 
 
 - A dataset
-- A coordinate system (2d plane, 3d sphere, etc)
+- A coordinate system (2d Cartesian plane, 3d spherical coordinates, even quaternions!^[Quaternions are... hard to describe. They are basically 4-part complex numbers that satisfy certain conditions. This allows them to elegently represent space in higher than 3-dimensions. However, they have been despised for much of their history. In fact, William Thomson, first baron Kelvin, note in 1892 "quaternions..though  beautifully  ingenious,  have  been  an  unmixed  evil  to those who have touched them in any way..."])
 - A facet specification (panel arrangement)
 - Mappings from variables to aesthetic features
 - One scale for each aesthetic mapping
 - One or more layers of geometic objects ("geoms"), statistical functions, and position adjustments
 
-### ggplot2
-
 The most popular graphics package in R to date (maybe even accross all programming languages) is `ggplot2`. An update of the original `ggplot` package, `ggplot2` is based on the Grammar of Graphics above. It functions are designed specifically to behave like a grammar, in which you add plot elements together like a sentence.
 
 Lets explore how to build a plot.
 
-**Blank plot**
+We'll start by loading the `ggplot2` package and one of its built-in datasets (called `mpg`). This dataset includes information on 234 cars that will be convenient for us to plot.
 
-**Points**
+```{r}
+library(ggplot2)
 
-**Smoothed line**
+data(mpg)
 
-**Themes**
+mpg
+```
 
-**Labels**
 
-**Saving your plot**
+### Blank ggplot plot
+
+```{r}
+ggplot(mpg)
+```
+
+### Geoms
+
+Getting points to display (displ, hwy)
+
+Adding two sets of points with different colors (hwy vs city)
+
+Moving the mapping command to `ggplot()`
+
+Other features of points we can change (size = cyl, color = class)
+
+Smoothed line
+
+------ (2nd block)
+
+Lines 
+
+```{r}
+data(beavers)
+
+ggplot(beaver1, mapping = aes(x = time, y = temp)) +
+  geom_point() +
+  geom_line()
+```
+
+Vlines and Hlines
+
+Density plots
+
+Histograms
+
+Boxplots
+
+### Stat Functions
+
+### Themes
+
+### Labels
+
+### Scales
+
+### Saving your plot**
 
 - File type
 - Quality
 - Dimensions
 
-**Facets**
+### Facets
 
-**Where to learn more?**
+<<Use drv as faceting variable>>
+
+### Where to learn more
 
 The `ggplot` [cheatsheet is available here](https://github.com/rstudio/cheatsheets/blob/master/data-visualization-2.1.pdf) as is the quickest way to look up something you might have briefly forgotten.
 

@@ -27,9 +27,9 @@ Using R is just a chat with the computer.
 - If we need special characters (like \* or \$), then we just add a forward "\\" in front of them (but not behind).
 - Math symbols in your text are process with Latex, just put an "\$" before and after your math. Like this, \$y = x\$ becomes $y = x$. 
 
-- Code blocks
+### Code blocks
 
-To make a code block, press CTRL+ALT+I. Remember you can change the output of a code block by modifying some of its options, like below.
+To make a code block, press CTRL+ALT+I.
 
 ```{r}
 banana <- 5
@@ -40,9 +40,11 @@ banana + 1
 
 ## Variables
 
+Variables are values that I want to give names to and save for later.
+
 ### The assignment operator
 
-We make variables with the `<-` operator.
+We make variables with the `<-` operator. This is called the *assignment operator* because it assigns values on the right to names on the left. If I want to know what the value of a variable is, I can run it alone on its own line.
 
 ```{r}
 my_special_var <- 1 + 2
@@ -50,13 +52,15 @@ my_special_var <- 1 + 2
 my_special_var
 ```
 
-You can TECHNICALLY use `=` for assignment too. Never do this.
+You can TECHNICALLY use `=` for assignment too. Never do this.  
 
 ```{r}
 my_other_var = 12
 
 my_other_var + my_special_var
 ```
+
+The `=` symbol gets also used for a few other things in R. So, using it to assign variables will make your code more confusing to you, when you go back to read it over later.
 
 ### Numerics
 
@@ -368,9 +372,15 @@ mean(vec, na.rm = T)
 
 << More on lists to come >>
 
-Lists are special vectors that can hold multiple types of elements.
+Lists are special vectors that can hold multiple types of elements, even vectors
 
-They can even hold other vectors.
+```{r}
+my_vec <- c(4, 5, 6)
+
+my_list <- list(1, 'banana', 3, NA, my_vec)
+
+my_list
+```
 
 ## Dataframes
 
