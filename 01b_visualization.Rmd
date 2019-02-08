@@ -13,9 +13,42 @@ The term "Base R" refers to the set of packages and functions that R loads into 
 
 **hist()**
 
+
+```{r}
+rpois(100, lambda = 3)
+
+```
+
+
+```{r}
+my_vals <- rexp(100, 10)
+
+hist(
+  my_vals, 
+  breaks = 20, 
+  main = 'Plot of Exponential Dis.', 
+  xlab = 'X Values', 
+  ylab = 'Y values',
+  col = 'cyan')
+```
+
 **barplot()**
 
+```{r}
+heights <- 1:10
+barplot(heights)
+```
+
+
 **plot()**
+
+```{r}
+x_vals <- 1:10
+y_values <- rnorm(10)
+
+plot(x_vals, y_values, main = 'Banana', xlab = 'My X')
+```
+
 
 ## `ggplot`
 
@@ -33,6 +66,11 @@ The most popular graphics package in R to date (maybe even accross all programmi
 Lets explore how to build a plot.
 
 We'll start by loading the `ggplot2` package and one of its built-in datasets (called `mpg`). This dataset includes information on 234 cars that will be convenient for us to plot.
+
+```{r}
+install.packages('ggplot2')
+```
+
 
 ```{r}
 library(ggplot2)
@@ -53,11 +91,24 @@ ggplot(mpg)
 
 Getting points to display (displ, hwy)
 
-Adding two sets of points with different colors (hwy vs city)
+```{r}
+ggplot(mpg) + 
+  geom_point(mapping = aes(x = displ, y = cty))
+```
 
-Moving the mapping command to `ggplot()`
+```{r}
+ggplot(mpg, mapping = aes(x = displ)) + 
+  geom_point(mapping = aes(y = cty), color = 'steelblue') +
+  geom_point(mapping = aes(y = hwy), color = 'tomato')
+```
 
 Other features of points we can change (size = cyl, color = class)
+
+```{r}
+ggplot(mpg, mapping = aes(x = displ, shape = drv, color = drv)) + 
+  geom_point(mapping = aes(y = cty)) +
+  geom_point(mapping = aes(y = hwy))
+```
 
 Smoothed line
 

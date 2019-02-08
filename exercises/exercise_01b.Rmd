@@ -5,6 +5,7 @@ output:
   pdf_document: default
 ---
 
+
 ## Instructions
 
 1. Make a .Rmd file to complete these exercises.
@@ -33,7 +34,7 @@ output:
 
     4. Change the labels to something more descriptive and publication ready.
     
---- stop here, wait for block 2 of lecture
+--- Everything past here is bonus material!
 
 4. Show me how you would save the output of your plot from #4 as a .png file. Make the file 8 inches wide and 6 inches high. Note, you don't need to actually save it and turn it in, just show me the code you would use.
 
