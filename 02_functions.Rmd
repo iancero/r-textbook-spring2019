@@ -13,7 +13,59 @@ Functions allow you to automate boring tasks so that you don't have to keep doin
 
 This chapter covers the basics of function construction and use.
 
+## Basic Example
+
+```{r}
+x <- 1:10
+y <- 2:20
+z <- 3:34
+
+
+# Obscure reviewer request
+x <- x/2
+x <- sqrt(x)
+x <- round(x)
+
+y <- y/2
+y <- sqrt(y)
+y <- round(x)
+
+z <- z/2
+z <- sqrt(z)
+z <- round(z)
+```
+
+
 ## Anatomy of an R function
+
+Making functions speeds up the process and makes it safer. To make a function, we need to use the `function()` command, assign it to a name, provide potential parameters, then give it code to execute.
+
+```{r}
+reviewer_transformation <- function(vals) {
+  vals <- vals/2
+  vals <- sqrt(vals)
+  vals <- round(vals)
+  
+  vals 
+}
+
+
+
+# Obscure reviewer request
+x <- 1:10
+x <- x/2
+x <- sqrt(x)
+x <- round(x)
+
+x
+other_x <- 1:10
+transformed_x <- reviewer_transformation(other_x)
+```
+
+```{r}
+x
+```
+
 
 - Name
 - Parameters/Arguments
@@ -21,7 +73,31 @@ This chapter covers the basics of function construction and use.
 - Code
 - Return values
 
-<Let's make a correlation function!>
+$$
+r = \frac{\text{cov}(x, y)}{\sigma_x\sigma_y}
+$$
+
+
+```{r}
+# set.seed(314159)
+x <- 1:10
+y <- x*rpois(n = 10, lambda = 3)
+
+w <- 1:20
+u <- runif(n = 20)
+
+cor(x, y)
+cov(x, y)/(sd(x)*sd(y))
+
+print('---')
+
+correlation <- function(a, b) {
+  cov(a, b)/(sd(a)*sd(b))
+}
+
+cor(w, u)
+correlation(w, u)
+```
 
 
 ## Base R functions
@@ -49,9 +125,36 @@ ggplot(df, aes(x, y)) +
 
 - What happens inside a function, stays inside a function
 - Discussion of shadow variables
-- If you *really* need a function to have side effects `<<-`
 
 ### Conditional execution
+
+```{r}
+set.seed(314159)
+x <- 1:10
+y <- x*rpois(n = 10, lambda = 3)
+
+x[4] <- 1
+y[5] <- 2
+
+correlation <- function(a, b) {
+  
+  if(any(is.na(a)) & !any(is.na(b))){
+    
+    return('Only one missing data issue.')
+  }
+  else if(any(is.na(a)) & any(is.na(b))){
+    
+    return('You have missing data butthead!')
+  } else {
+    
+    cov(a, b)/(sd(a)*sd(b))  
+  }
+}
+
+cor(x, y)
+correlation(a = x, b = y)
+```
+
 
 `if()`
 
@@ -63,7 +166,6 @@ ggplot(df, aes(x, y)) +
 
 ### the `return()` command
 
-### Anonymous functions
 
 --------------- Part II -----------------
 
