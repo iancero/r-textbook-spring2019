@@ -1,0 +1,109 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+# Functions
+
+Functions allow you to automate boring tasks so that you don't have to keep doing the same thing over and over again. There are several advantages of this.
+
+1. As stated above, it is faster for you.
+2. When something changes (e.g., a reviewer wants you to exclude outliers), you only need to change your code in one place, rather than several.
+3. You eliminate the risk of "copy-and-paste" mistakes.
+
+This chapter covers the basics of function construction and use.
+
+## Anatomy of an R function
+
+- Name
+- Parameters/Arguments
+    - Defaults
+- Code
+- Return values
+
+<Let's make a correlation function!>
+
+
+## Base R functions
+
+- Basic stat functions
+- Random numbers!
+
+```{r}
+x <- rpois(100, 10)
+y <- 2*x + rnorm(100)
+df <- data.frame(x, y)
+
+library(ggplot2)
+
+ggplot(df, aes(x, y)) +
+  geom_point() +
+  geom_hline(yintercept = mean(y), color = 'red')
+```
+
+- Setting the random seed
+
+- `paste()` and `paste0()` 
+
+### Scoping
+
+- What happens inside a function, stays inside a function
+- Discussion of shadow variables
+- If you *really* need a function to have side effects `<<-`
+
+### Conditional execution
+
+`if()`
+
+`if()`/`else()`
+
+`else if()`
+
+`ifelse()`
+
+### the `return()` command
+
+### Anonymous functions
+
+--------------- Part II -----------------
+
+## Pipes
+
+Sometimes (often) it is useful to execute several functions in a row, using the answer from the last function as the input for the next function. But this can make your code redundant and a little unclear.
+
+<example>
+
+To address this, we use pipes.
+
+### Basic usage
+
+The `%>%` operator (pronounced "pipe") takes whatever is on its left-hand-side (LHS) and applies it to the *first parameter* of the function listed on the right-hand-side. Install and load the `magrittr` package to use it.
+
+```{r, eval=FALSE}
+install.packages('magrittr')
+
+library(magrittr)
+```
+
+<example square then double>
+
+### Sending the LHS to another parameter
+
+But what do I do when I need the LHS output to go to another parameter in the RHS function? I use the `.` to remind the RHS function I want the LHS output to go to a different place.
+
+<example using paste>
+
+### Convenient magrittr functions
+
+
+## More talk about the help files
+
+
+
+## Functions from other packages
+
+- I can import functions from another package by...
+- What if I only want to import once?
+- Namespace considerations
+
+##

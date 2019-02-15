@@ -5,11 +5,11 @@
 
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>3 Visualization | R Textbook</title>
+  <title>4 Functions | R Textbook</title>
   <meta name="description" content="This is the ‘organic’ textbook created by our class discussions and exercises.">
   <meta name="generator" content="bookdown  and GitBook 2.6.7">
 
-  <meta property="og:title" content="3 Visualization | R Textbook" />
+  <meta property="og:title" content="4 Functions | R Textbook" />
   <meta property="og:type" content="book" />
   
   
@@ -17,7 +17,7 @@
   <meta name="github-repo" content="iancero/r-textbook-spring2019" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="3 Visualization | R Textbook" />
+  <meta name="twitter:title" content="4 Functions | R Textbook" />
   
   <meta name="twitter:description" content="This is the ‘organic’ textbook created by our class discussions and exercises." />
   
@@ -31,8 +31,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
   
   
-<link rel="prev" href="basic-r.html">
-<link rel="next" href="functions-1.html">
+<link rel="prev" href="visualization.html">
+
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -173,152 +173,122 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="visualization" class="section level1">
-<h1><span class="header-section-number">3</span> Visualization</h1>
-<p>There are many ways to visualize data in R. Two of the most common include Base R’s built-in functions and the <code>ggplot2</code> package.</p>
-<div id="base-r" class="section level2">
-<h2><span class="header-section-number">3.1</span> Base R</h2>
-<p>The term “Base R” refers to the set of packages and functions that R loads into each session by default. These packages include several statistical and plotting functions you will probably use a lot. Some of the most common plotting functions are given below.</p>
-<p><strong>hist()</strong></p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">rpois</span>(<span class="dv">100</span>, <span class="dt">lambda =</span> <span class="dv">3</span>)</code></pre></div>
-<pre><code>##   [1] 2 6 6 6 3 5 4 2 3 0 3 2 3 5 1 5 6 0 1 5 6 2 3 3 2 2 0 4 2 2 0 3 2 1 3
-##  [36] 2 1 3 2 3 2 3 3 3 1 4 4 2 4 3 1 5 2 5 1 5 2 2 4 2 3 7 4 4 3 5 4 2 3 4
-##  [71] 4 3 6 3 2 3 3 0 1 3 3 2 3 2 3 1 3 1 1 6 1 4 4 4 5 6 4 2 1 6</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">my_vals &lt;-<span class="st"> </span><span class="kw">rexp</span>(<span class="dv">100</span>, <span class="dv">10</span>)
-
-<span class="kw">hist</span>(
-  my_vals, 
-  <span class="dt">breaks =</span> <span class="dv">20</span>, 
-  <span class="dt">main =</span> <span class="st">&#39;Plot of Exponential Dis.&#39;</span>, 
-  <span class="dt">xlab =</span> <span class="st">&#39;X Values&#39;</span>, 
-  <span class="dt">ylab =</span> <span class="st">&#39;Y values&#39;</span>,
-  <span class="dt">col =</span> <span class="st">&#39;cyan&#39;</span>)</code></pre></div>
-<p><img src="_main_files/figure-html/unnamed-chunk-52-1.png" width="672" /></p>
-<p><strong>barplot()</strong></p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">heights &lt;-<span class="st"> </span><span class="dv">1</span><span class="op">:</span><span class="dv">10</span>
-<span class="kw">barplot</span>(heights)</code></pre></div>
-<p><img src="_main_files/figure-html/unnamed-chunk-53-1.png" width="672" /></p>
-<p><strong>plot()</strong></p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">x_vals &lt;-<span class="st"> </span><span class="dv">1</span><span class="op">:</span><span class="dv">10</span>
-y_values &lt;-<span class="st"> </span><span class="kw">rnorm</span>(<span class="dv">10</span>)
-
-<span class="kw">plot</span>(x_vals, y_values, <span class="dt">main =</span> <span class="st">&#39;Banana&#39;</span>, <span class="dt">xlab =</span> <span class="st">&#39;My X&#39;</span>)</code></pre></div>
-<p><img src="_main_files/figure-html/unnamed-chunk-54-1.png" width="672" /></p>
-</div>
-<div id="ggplot" class="section level2">
-<h2><span class="header-section-number">3.2</span> <code>ggplot</code></h2>
-<p>All statistical graphics share the same deep structure, a “Grammar of Graphics”. This means that any given plot can be uniquely identified (reproduced), given the following inputs.</p>
-<ul>
-<li>A dataset</li>
-<li>A coordinate system (2d Cartesian plane, 3d spherical coordinates, even quaternions!<a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a>)</li>
-<li>A facet specification (panel arrangement)</li>
-<li>Mappings from variables to aesthetic features</li>
-<li>One scale for each aesthetic mapping</li>
-<li>One or more layers of geometic objects (“geoms”), statistical functions, and position adjustments</li>
-</ul>
-<p>The most popular graphics package in R to date (maybe even accross all programming languages) is <code>ggplot2</code>. An update of the original <code>ggplot</code> package, <code>ggplot2</code> is based on the Grammar of Graphics above. It functions are designed specifically to behave like a grammar, in which you add plot elements together like a sentence.</p>
-<p>Lets explore how to build a plot.</p>
-<p>We’ll start by loading the <code>ggplot2</code> package and one of its built-in datasets (called <code>mpg</code>). This dataset includes information on 234 cars that will be convenient for us to plot.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">install.packages</span>(<span class="st">&#39;ggplot2&#39;</span>)</code></pre></div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(ggplot2)
-
-<span class="kw">data</span>(mpg)
-
-mpg</code></pre></div>
-<pre><code>## # A tibble: 234 x 11
-##    manufacturer model displ  year   cyl trans drv     cty   hwy fl    cla…
-##    &lt;chr&gt;        &lt;chr&gt; &lt;dbl&gt; &lt;int&gt; &lt;int&gt; &lt;chr&gt; &lt;chr&gt; &lt;int&gt; &lt;int&gt; &lt;chr&gt; &lt;ch&gt;
-##  1 audi         a4      1.8  1999     4 auto… f        18    29 p     com…
-##  2 audi         a4      1.8  1999     4 manu… f        21    29 p     com…
-##  3 audi         a4      2    2008     4 manu… f        20    31 p     com…
-##  4 audi         a4      2    2008     4 auto… f        21    30 p     com…
-##  5 audi         a4      2.8  1999     6 auto… f        16    26 p     com…
-##  6 audi         a4      2.8  1999     6 manu… f        18    26 p     com…
-##  7 audi         a4      3.1  2008     6 auto… f        18    27 p     com…
-##  8 audi         a4 q…   1.8  1999     4 manu… 4        18    26 p     com…
-##  9 audi         a4 q…   1.8  1999     4 auto… 4        16    25 p     com…
-## 10 audi         a4 q…   2    2008     4 manu… 4        20    28 p     com…
-## # ... with 224 more rows</code></pre>
-<div id="blank-ggplot-plot" class="section level3">
-<h3><span class="header-section-number">3.2.1</span> Blank ggplot plot</h3>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(mpg)</code></pre></div>
-<p><img src="_main_files/figure-html/unnamed-chunk-57-1.png" width="672" /></p>
-</div>
-<div id="geoms" class="section level3">
-<h3><span class="header-section-number">3.2.2</span> Geoms</h3>
-<p>Getting points to display (displ, hwy)</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(mpg) <span class="op">+</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">mapping =</span> <span class="kw">aes</span>(<span class="dt">x =</span> displ, <span class="dt">y =</span> cty))</code></pre></div>
-<p><img src="_main_files/figure-html/unnamed-chunk-58-1.png" width="672" /></p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(mpg, <span class="dt">mapping =</span> <span class="kw">aes</span>(<span class="dt">x =</span> displ)) <span class="op">+</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">mapping =</span> <span class="kw">aes</span>(<span class="dt">y =</span> cty), <span class="dt">color =</span> <span class="st">&#39;steelblue&#39;</span>) <span class="op">+</span>
-<span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">mapping =</span> <span class="kw">aes</span>(<span class="dt">y =</span> hwy), <span class="dt">color =</span> <span class="st">&#39;tomato&#39;</span>)</code></pre></div>
-<p><img src="_main_files/figure-html/unnamed-chunk-59-1.png" width="672" /></p>
-<p>Other features of points we can change (size = cyl, color = class)</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(mpg, <span class="dt">mapping =</span> <span class="kw">aes</span>(<span class="dt">x =</span> displ, <span class="dt">shape =</span> drv, <span class="dt">color =</span> drv)) <span class="op">+</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">mapping =</span> <span class="kw">aes</span>(<span class="dt">y =</span> cty)) <span class="op">+</span>
-<span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">mapping =</span> <span class="kw">aes</span>(<span class="dt">y =</span> hwy))</code></pre></div>
-<p><img src="_main_files/figure-html/unnamed-chunk-60-1.png" width="672" /></p>
-<p>Smoothed line</p>
-<p>—— (2nd block)</p>
-<p>Lines</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">data</span>(beavers)
-
-<span class="kw">ggplot</span>(beaver1, <span class="dt">mapping =</span> <span class="kw">aes</span>(<span class="dt">x =</span> time, <span class="dt">y =</span> temp)) <span class="op">+</span>
-<span class="st">  </span><span class="kw">geom_point</span>() <span class="op">+</span>
-<span class="st">  </span><span class="kw">geom_line</span>()</code></pre></div>
-<p><img src="_main_files/figure-html/unnamed-chunk-61-1.png" width="672" /></p>
-<p>Vlines and Hlines</p>
-<p>Density plots</p>
-<p>Histograms</p>
-<p>Boxplots</p>
-</div>
-<div id="stat-functions" class="section level3">
-<h3><span class="header-section-number">3.2.3</span> Stat Functions</h3>
-</div>
-<div id="themes" class="section level3">
-<h3><span class="header-section-number">3.2.4</span> Themes</h3>
-</div>
-<div id="labels" class="section level3">
-<h3><span class="header-section-number">3.2.5</span> Labels</h3>
-</div>
-<div id="scales" class="section level3">
-<h3><span class="header-section-number">3.2.6</span> Scales</h3>
-</div>
-<div id="saving-your-plot" class="section level3">
-<h3><span class="header-section-number">3.2.7</span> Saving your plot**</h3>
-<ul>
-<li>File type</li>
-<li>Quality</li>
-<li>Dimensions</li>
-</ul>
-</div>
-<div id="facets" class="section level3">
-<h3><span class="header-section-number">3.2.8</span> Facets</h3>
-<p>&lt;<Use drv as faceting variable>&gt;</p>
-</div>
-<div id="where-to-learn-more" class="section level3">
-<h3><span class="header-section-number">3.2.9</span> Where to learn more</h3>
-<p>The <code>ggplot</code> <a href="https://github.com/rstudio/cheatsheets/blob/master/data-visualization-2.1.pdf">cheatsheet is available here</a> as is the quickest way to look up something you might have briefly forgotten.</p>
-<p>For more complex questions, <a href="https://ggplot2.tidyverse.org/index.html" class="uri">https://ggplot2.tidyverse.org/index.html</a> contains numerous worked examples that will bring your plots from plain old publishable to down right beautiful.</p>
-<p>If you have a really specific question, the “ggplot” tag on <a href="https://stackoverflow.com/questions/tagged/ggplot2?sort=frequent&amp;pageSize=50">Stack Overflow</a> is your best friend. Ask and you shall receive (help)!</p>
-
-</div>
-</div>
-</div>
-<div class="footnotes">
-<hr />
-<ol start="1">
-<li id="fn1"><p>Quaternions are… hard to describe. They are basically 4-part complex numbers that satisfy certain conditions. This allows them to elegently represent space in higher than 3-dimensions. However, they have been despised for much of their history. In fact, William Thomson, first baron Kelvin, note in 1892 “quaternions..though beautifully ingenious, have been an unmixed evil to those who have touched them in any way…”<a href="visualization.html#fnref1">↩</a></p></li>
+<div id="functions-1" class="section level1">
+<h1><span class="header-section-number">4</span> Functions</h1>
+<p>Functions allow you to automate boring tasks so that you don’t have to keep doing the same thing over and over again. There are several advantages of this.</p>
+<ol style="list-style-type: decimal">
+<li>As stated above, it is faster for you.</li>
+<li>When something changes (e.g., a reviewer wants you to exclude outliers), you only need to change your code in one place, rather than several.</li>
+<li>You eliminate the risk of “copy-and-paste” mistakes.</li>
 </ol>
+<p>This chapter covers the basics of function construction and use.</p>
+<div id="anatomy-of-an-r-function" class="section level2">
+<h2><span class="header-section-number">4.1</span> Anatomy of an R function</h2>
+<ul>
+<li>Name</li>
+<li>Parameters/Arguments
+<ul>
+<li>Defaults</li>
+</ul></li>
+<li>Code</li>
+<li>Return values</li>
+</ul>
+<p><Let's make a correlation function!></p>
 </div>
+<div id="base-r-functions" class="section level2">
+<h2><span class="header-section-number">4.2</span> Base R functions</h2>
+<ul>
+<li>Basic stat functions</li>
+<li>Random numbers!</li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">x &lt;-<span class="st"> </span><span class="kw">rpois</span>(<span class="dv">100</span>, <span class="dv">10</span>)
+y &lt;-<span class="st"> </span><span class="dv">2</span><span class="op">*</span>x <span class="op">+</span><span class="st"> </span><span class="kw">rnorm</span>(<span class="dv">100</span>)
+df &lt;-<span class="st"> </span><span class="kw">data.frame</span>(x, y)
+
+<span class="kw">library</span>(ggplot2)
+
+<span class="kw">ggplot</span>(df, <span class="kw">aes</span>(x, y)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_point</span>() <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_hline</span>(<span class="dt">yintercept =</span> <span class="kw">mean</span>(y), <span class="dt">color =</span> <span class="st">&#39;red&#39;</span>)</code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-62-1.png" width="672" /></p>
+<ul>
+<li><p>Setting the random seed</p></li>
+<li><p><code>paste()</code> and <code>paste0()</code></p></li>
+</ul>
+<div id="scoping" class="section level3">
+<h3><span class="header-section-number">4.2.1</span> Scoping</h3>
+<ul>
+<li>What happens inside a function, stays inside a function</li>
+<li>Discussion of shadow variables</li>
+<li>If you <em>really</em> need a function to have side effects <code>&lt;&lt;-</code></li>
+</ul>
+</div>
+<div id="conditional-execution" class="section level3">
+<h3><span class="header-section-number">4.2.2</span> Conditional execution</h3>
+<p><code>if()</code></p>
+<p><code>if()</code>/<code>else()</code></p>
+<p><code>else if()</code></p>
+<p><code>ifelse()</code></p>
+</div>
+<div id="the-return-command" class="section level3">
+<h3><span class="header-section-number">4.2.3</span> the <code>return()</code> command</h3>
+</div>
+<div id="anonymous-functions" class="section level3">
+<h3><span class="header-section-number">4.2.4</span> Anonymous functions</h3>
+<p>————— Part II —————–</p>
+</div>
+</div>
+<div id="pipes" class="section level2">
+<h2><span class="header-section-number">4.3</span> Pipes</h2>
+<p>Sometimes (often) it is useful to execute several functions in a row, using the answer from the last function as the input for the next function. But this can make your code redundant and a little unclear.</p>
+<example>
+<p>To address this, we use pipes.</p>
+<div id="basic-usage" class="section level3">
+<h3><span class="header-section-number">4.3.1</span> Basic usage</h3>
+<p>The <code>%&gt;%</code> operator (pronounced “pipe”) takes whatever is on its left-hand-side (LHS) and applies it to the <em>first parameter</em> of the function listed on the right-hand-side. Install and load the <code>magrittr</code> package to use it.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">install.packages</span>(<span class="st">&#39;magrittr&#39;</span>)
+
+<span class="kw">library</span>(magrittr)</code></pre></div>
+<example square then double>
+</div>
+<div id="sending-the-lhs-to-another-parameter" class="section level3">
+<h3><span class="header-section-number">4.3.2</span> Sending the LHS to another parameter</h3>
+<p>But what do I do when I need the LHS output to go to another parameter in the RHS function? I use the <code>.</code> to remind the RHS function I want the LHS output to go to a different place.</p>
+<example using paste>
+</div>
+<div id="convenient-magrittr-functions" class="section level3">
+<h3><span class="header-section-number">4.3.3</span> Convenient magrittr functions</h3>
+</div>
+</div>
+<div id="more-talk-about-the-help-files" class="section level2">
+<h2><span class="header-section-number">4.4</span> More talk about the help files</h2>
+</div>
+<div id="functions-from-other-packages" class="section level2">
+<h2><span class="header-section-number">4.5</span> Functions from other packages</h2>
+<ul>
+<li>I can import functions from another package by…</li>
+<li>What if I only want to import once?</li>
+<li>Namespace considerations</li>
+</ul>
+</div>
+<div id="section" class="section level2">
+<h2><span class="header-section-number">4.6</span> </h2>
+
+</div>
+</div>
+
+
+
+
+
+
             </section>
 
           </div>
         </div>
       </div>
-<a href="basic-r.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="functions-1.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="visualization.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>

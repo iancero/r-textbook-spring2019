@@ -67,7 +67,7 @@ Lets explore how to build a plot.
 
 We'll start by loading the `ggplot2` package and one of its built-in datasets (called `mpg`). This dataset includes information on 234 cars that will be convenient for us to plot.
 
-```{r}
+```{r, eval=FALSE}
 install.packages('ggplot2')
 ```
 

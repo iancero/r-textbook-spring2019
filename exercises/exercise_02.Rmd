@@ -1,0 +1,32 @@
+---
+title: 'CSP 518 - Exercises: 02 - Functions'
+date: 'Due: 2019-02-22 @ 11:59pm'
+output:
+  pdf_document: default
+---
+
+## Instructions
+
+1. Make a .Rmd file to complete these exercises.
+
+  - Title it "CSP 518 - Exercises: Intro to R" (in quotes)
+  - Add your name(s) in the author slot (in quotes)
+  - The output can be either be `pdf_document` or `html_document` (no quotes)
+
+2. Turn in just your .Rmd file on Blackboard. Note, I will need to be able to `knit` it myself, so make sure everything runs the way you intend, before you turn it in.
+
+3. For clarity, write "## Question <number>" befor each question to signal which one you are answering.
+
+## Exercises
+
+1. Use the `rnorm()` function to generate n = 100 random numbers with a mean and standard deviation of your choice. Save these numbers to a variable called `x`.
+
+2. Make a function to computes the standard deviation of your `x` values from #1. Double-check your answer using the `sd()` function on your vector to make sure your function delivers the same answer.
+
+3. Add a missing value condition to the function from #1. Make you're function print "Warning: missing values detected" if there are any missing values. Hint: use the `is.na()` function to test which values in your vector are missing, then wrap that in the `any()` function, which returns TRUE if at least one of its inputs are true (i.e., `any(is.na(x))`). If missing values are detected, then your function should return `NA`; if no values are missing, it should return the standard deviation.
+
+4. Remake the first function (don't worry about missing values), but this time include at least one pipe (`%>%`). Dont forget to load `library(magrittr)`
+
+5. BONUS: Make a function that performs an indepentant-samples *t*-Test one two vectors called `x` and `y`. So, your function should look like `t_test(x, y)` and return a t-value.
+
+6. BONUS: use the `pt()` function to compute a p-value for the output of your t-test. HINT: You will probably need to consult the help files for information on how to use this function. If the help files are unclear, go to Google.
