@@ -173,7 +173,50 @@ correlation(a = x, b = y)
 
 Sometimes (often) it is useful to execute several functions in a row, using the answer from the last function as the input for the next function. But this can make your code redundant and a little unclear.
 
-<example>
+```{r}
+reviewer_transformation <- function(vals) {
+  vals <- vals/2
+  vals <- sqrt(vals)
+  vals <- round(vals)
+  
+  vals 
+}
+
+reviewer_transformation2 <- function(vals) {
+  round(sqrt(vals/2))
+}
+
+reviewer_transformation_pipe <- function(vals) {
+  vals %>%
+    magrittr::divide_by(2) %>%
+    sqrt() %>%
+    round()
+}
+
+x <- 1:10
+reviewer_transformation(x)
+reviewer_transformation2(x)
+reviewer_transformation_pipe(x)
+```
+
+```{r}
+library(magrittr)
+
+fun1 <- function(x){
+  x *2
+}
+
+fun2 <- function(y) {
+  y - 3
+}
+
+fun2(fun1(x))
+
+x %>%
+  fun1() %>%
+  fun2()
+```
+
 
 To address this, we use pipes.
 
@@ -186,8 +229,6 @@ install.packages('magrittr')
 
 library(magrittr)
 ```
-
-<example square then double>
 
 ### Sending the LHS to another parameter
 

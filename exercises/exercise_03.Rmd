@@ -1,0 +1,48 @@
+---
+title: 'CSP 518 - Exercises: 03 - Dataframes'
+date: 'Due: 2019-03-01 @ 11:59pm'
+output:
+  pdf_document: default
+---
+
+## Instructions
+
+1. Make a .Rmd file to complete these exercises.
+
+  - Title it "CSP 518 - Exercises: Intro to R" (in quotes)
+  - Add your name(s) in the author slot (in quotes)
+  - The output can be either be `pdf_document` or `html_document` (no quotes)
+
+2. Turn in just your .Rmd file on Blackboard. Note, I will need to be able to `knit` it myself, so make sure everything runs the way you intend, before you turn it in.
+
+3. For clarity, write "## Question <number>" befor each question to signal which one you are answering.
+
+## Exercises
+
+1. Make a new dataframe with two string (categorical) variables and two numeric variables. Your dataframe should have at least five rows in it.
+
+2. Ask R to show you all the columns for the second row.
+
+3. Ask R to show you all the rows in the third column.
+
+4. Ask R to show you all the entries in your two categorical columns, selecting them by using their string names (not numeric column numbers).
+
+5. Make a new column using the `$` operator at least once in the process.
+
+6. Use `dplyr` to select two columns from your dataset. Make sure not to overwrite your original dataset.
+
+7. Use `dplyr` to filter some rows out of your dataset. Make sure not to overwrite your original dataset.
+
+8. Make a new column from one of the numeric variables in your dataset, using the `mutate()` function. This time, do save the result to your original dataframe.
+
+9. Use group your data by one of your categorical variables and use `summarize()` to get the means of your two numeric variables. Do NOT use a pipe (`%>%`).
+
+10. Perform the same task as in the question above, but this time make sure to use at least two pipes (`%>%`).
+
+11. BONUS: the command below will load a dataset about seatbelt laws and traffic fatalities. Use a `dplyr` pipeline to tell me something intersting (the bar is low here).
+
+```{r}
+data("Seatbelts")
+df <- as.data.frame(Seatbelts)
+```
+

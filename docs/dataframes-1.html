@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html >
+
+<head>
+
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>5 Dataframes | R Textbook</title>
+  <meta name="description" content="This is the ‘organic’ textbook created by our class discussions and exercises.">
+  <meta name="generator" content="bookdown  and GitBook 2.6.7">
+
+  <meta property="og:title" content="5 Dataframes | R Textbook" />
+  <meta property="og:type" content="book" />
+  
+  
+  <meta property="og:description" content="This is the ‘organic’ textbook created by our class discussions and exercises." />
+  <meta name="github-repo" content="iancero/r-textbook-spring2019" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="5 Dataframes | R Textbook" />
+  
+  <meta name="twitter:description" content="This is the ‘organic’ textbook created by our class discussions and exercises." />
+  
+
+<meta name="author" content="Ian Cero’s CSP 518 Class">
+
+
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  
+  
+<link rel="prev" href="functions-1.html">
+
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+<style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+</style>
+
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Preface</a></li>
+<li class="chapter" data-level="2" data-path="basic-r.html"><a href="basic-r.html"><i class="fa fa-check"></i><b>2</b> Basic R</a><ul>
+<li class="chapter" data-level="2.1" data-path="basic-r.html"><a href="basic-r.html#writing-in-r-and-rmarkdown"><i class="fa fa-check"></i><b>2.1</b> Writing in R and Rmarkdown</a><ul>
+<li class="chapter" data-level="2.1.1" data-path="basic-r.html"><a href="basic-r.html#chatting-with-r"><i class="fa fa-check"></i><b>2.1.1</b> Chatting with R</a></li>
+<li class="chapter" data-level="2.1.2" data-path="basic-r.html"><a href="basic-r.html#rmarkdown-tricks"><i class="fa fa-check"></i><b>2.1.2</b> Rmarkdown tricks</a></li>
+<li class="chapter" data-level="2.1.3" data-path="basic-r.html"><a href="basic-r.html#code-blocks"><i class="fa fa-check"></i><b>2.1.3</b> Code blocks</a></li>
+</ul></li>
+<li class="chapter" data-level="2.2" data-path="basic-r.html"><a href="basic-r.html#variables"><i class="fa fa-check"></i><b>2.2</b> Variables</a><ul>
+<li class="chapter" data-level="2.2.1" data-path="basic-r.html"><a href="basic-r.html#the-assignment-operator"><i class="fa fa-check"></i><b>2.2.1</b> The assignment operator</a></li>
+<li class="chapter" data-level="2.2.2" data-path="basic-r.html"><a href="basic-r.html#numerics"><i class="fa fa-check"></i><b>2.2.2</b> Numerics</a></li>
+<li class="chapter" data-level="2.2.3" data-path="basic-r.html"><a href="basic-r.html#characters"><i class="fa fa-check"></i><b>2.2.3</b> Characters</a></li>
+<li class="chapter" data-level="2.2.4" data-path="basic-r.html"><a href="basic-r.html#booleans"><i class="fa fa-check"></i><b>2.2.4</b> Booleans</a></li>
+<li class="chapter" data-level="2.2.5" data-path="basic-r.html"><a href="basic-r.html#special-types"><i class="fa fa-check"></i><b>2.2.5</b> Special types</a></li>
+</ul></li>
+<li class="chapter" data-level="2.3" data-path="basic-r.html"><a href="basic-r.html#vectors"><i class="fa fa-check"></i><b>2.3</b> Vectors</a></li>
+<li class="chapter" data-level="2.4" data-path="basic-r.html"><a href="basic-r.html#lists"><i class="fa fa-check"></i><b>2.4</b> Lists</a></li>
+<li class="chapter" data-level="2.5" data-path="basic-r.html"><a href="basic-r.html#dataframes"><i class="fa fa-check"></i><b>2.5</b> Dataframes</a><ul>
+<li class="chapter" data-level="2.5.1" data-path="basic-r.html"><a href="basic-r.html#construction"><i class="fa fa-check"></i><b>2.5.1</b> Construction</a></li>
+<li class="chapter" data-level="2.5.2" data-path="basic-r.html"><a href="basic-r.html#built-in-dataframes"><i class="fa fa-check"></i><b>2.5.2</b> Built-in dataframes</a></li>
+</ul></li>
+<li class="chapter" data-level="2.6" data-path="basic-r.html"><a href="basic-r.html#functions"><i class="fa fa-check"></i><b>2.6</b> Functions</a><ul>
+<li class="chapter" data-level="2.6.1" data-path="basic-r.html"><a href="basic-r.html#getting-help"><i class="fa fa-check"></i><b>2.6.1</b> Getting help</a></li>
+<li class="chapter" data-level="2.6.2" data-path="basic-r.html"><a href="basic-r.html#function-parameters"><i class="fa fa-check"></i><b>2.6.2</b> Function parameters</a></li>
+</ul></li>
+<li class="chapter" data-level="2.7" data-path="basic-r.html"><a href="basic-r.html#packages"><i class="fa fa-check"></i><b>2.7</b> Packages</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="visualization.html"><a href="visualization.html"><i class="fa fa-check"></i><b>3</b> Visualization</a><ul>
+<li class="chapter" data-level="3.1" data-path="visualization.html"><a href="visualization.html#base-r"><i class="fa fa-check"></i><b>3.1</b> Base R</a></li>
+<li class="chapter" data-level="3.2" data-path="visualization.html"><a href="visualization.html#ggplot"><i class="fa fa-check"></i><b>3.2</b> <code>ggplot</code></a><ul>
+<li class="chapter" data-level="3.2.1" data-path="visualization.html"><a href="visualization.html#blank-ggplot-plot"><i class="fa fa-check"></i><b>3.2.1</b> Blank ggplot plot</a></li>
+<li class="chapter" data-level="3.2.2" data-path="visualization.html"><a href="visualization.html#geoms"><i class="fa fa-check"></i><b>3.2.2</b> Geoms</a></li>
+<li class="chapter" data-level="3.2.3" data-path="visualization.html"><a href="visualization.html#stat-functions"><i class="fa fa-check"></i><b>3.2.3</b> Stat Functions</a></li>
+<li class="chapter" data-level="3.2.4" data-path="visualization.html"><a href="visualization.html#themes"><i class="fa fa-check"></i><b>3.2.4</b> Themes</a></li>
+<li class="chapter" data-level="3.2.5" data-path="visualization.html"><a href="visualization.html#labels"><i class="fa fa-check"></i><b>3.2.5</b> Labels</a></li>
+<li class="chapter" data-level="3.2.6" data-path="visualization.html"><a href="visualization.html#scales"><i class="fa fa-check"></i><b>3.2.6</b> Scales</a></li>
+<li class="chapter" data-level="3.2.7" data-path="visualization.html"><a href="visualization.html#saving-your-plot"><i class="fa fa-check"></i><b>3.2.7</b> Saving your plot**</a></li>
+<li class="chapter" data-level="3.2.8" data-path="visualization.html"><a href="visualization.html#facets"><i class="fa fa-check"></i><b>3.2.8</b> Facets</a></li>
+<li class="chapter" data-level="3.2.9" data-path="visualization.html"><a href="visualization.html#where-to-learn-more"><i class="fa fa-check"></i><b>3.2.9</b> Where to learn more</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="functions-1.html"><a href="functions-1.html"><i class="fa fa-check"></i><b>4</b> Functions</a><ul>
+<li class="chapter" data-level="4.1" data-path="functions-1.html"><a href="functions-1.html#basic-example"><i class="fa fa-check"></i><b>4.1</b> Basic Example</a></li>
+<li class="chapter" data-level="4.2" data-path="functions-1.html"><a href="functions-1.html#anatomy-of-an-r-function"><i class="fa fa-check"></i><b>4.2</b> Anatomy of an R function</a></li>
+<li class="chapter" data-level="4.3" data-path="functions-1.html"><a href="functions-1.html#base-r-functions"><i class="fa fa-check"></i><b>4.3</b> Base R functions</a><ul>
+<li class="chapter" data-level="4.3.1" data-path="functions-1.html"><a href="functions-1.html#scoping"><i class="fa fa-check"></i><b>4.3.1</b> Scoping</a></li>
+<li class="chapter" data-level="4.3.2" data-path="functions-1.html"><a href="functions-1.html#conditional-execution"><i class="fa fa-check"></i><b>4.3.2</b> Conditional execution</a></li>
+<li class="chapter" data-level="4.3.3" data-path="functions-1.html"><a href="functions-1.html#the-return-command"><i class="fa fa-check"></i><b>4.3.3</b> the <code>return()</code> command</a></li>
+</ul></li>
+<li class="chapter" data-level="4.4" data-path="functions-1.html"><a href="functions-1.html#pipes"><i class="fa fa-check"></i><b>4.4</b> Pipes</a><ul>
+<li class="chapter" data-level="4.4.1" data-path="functions-1.html"><a href="functions-1.html#basic-usage"><i class="fa fa-check"></i><b>4.4.1</b> Basic usage</a></li>
+<li class="chapter" data-level="4.4.2" data-path="functions-1.html"><a href="functions-1.html#sending-the-lhs-to-another-parameter"><i class="fa fa-check"></i><b>4.4.2</b> Sending the LHS to another parameter</a></li>
+<li class="chapter" data-level="4.4.3" data-path="functions-1.html"><a href="functions-1.html#convenient-magrittr-functions"><i class="fa fa-check"></i><b>4.4.3</b> Convenient magrittr functions</a></li>
+</ul></li>
+<li class="chapter" data-level="4.5" data-path="functions-1.html"><a href="functions-1.html#more-talk-about-the-help-files"><i class="fa fa-check"></i><b>4.5</b> More talk about the help files</a></li>
+<li class="chapter" data-level="4.6" data-path="functions-1.html"><a href="functions-1.html#functions-from-other-packages"><i class="fa fa-check"></i><b>4.6</b> Functions from other packages</a></li>
+<li class="chapter" data-level="4.7" data-path="functions-1.html"><a href="functions-1.html#section"><i class="fa fa-check"></i><b>4.7</b> </a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="dataframes-1.html"><a href="dataframes-1.html"><i class="fa fa-check"></i><b>5</b> Dataframes</a><ul>
+<li class="chapter" data-level="5.1" data-path="dataframes-1.html"><a href="dataframes-1.html#storing-rectangular-data"><i class="fa fa-check"></i><b>5.1</b> Storing rectangular data</a><ul>
+<li class="chapter" data-level="5.1.1" data-path="dataframes-1.html"><a href="dataframes-1.html#making-dataframes"><i class="fa fa-check"></i><b>5.1.1</b> Making dataframes</a></li>
+<li class="chapter" data-level="5.1.2" data-path="dataframes-1.html"><a href="dataframes-1.html#strings-as-factors"><i class="fa fa-check"></i><b>5.1.2</b> Strings as factors</a></li>
+</ul></li>
+<li class="chapter" data-level="5.2" data-path="dataframes-1.html"><a href="dataframes-1.html#accessing-data-from-a-dataframe"><i class="fa fa-check"></i><b>5.2</b> Accessing data from a dataframe</a><ul>
+<li class="chapter" data-level="5.2.1" data-path="dataframes-1.html"><a href="dataframes-1.html#basic-framework"><i class="fa fa-check"></i><b>5.2.1</b> Basic framework</a></li>
+<li class="chapter" data-level="5.2.2" data-path="dataframes-1.html"><a href="dataframes-1.html#using-string-column-names"><i class="fa fa-check"></i><b>5.2.2</b> Using string column names</a></li>
+<li class="chapter" data-level="5.2.3" data-path="dataframes-1.html"><a href="dataframes-1.html#using-the-operator"><i class="fa fa-check"></i><b>5.2.3</b> Using the <code>$</code> operator</a></li>
+<li class="chapter" data-level="5.2.4" data-path="dataframes-1.html"><a href="dataframes-1.html#using-booleans"><i class="fa fa-check"></i><b>5.2.4</b> Using booleans</a></li>
+</ul></li>
+<li class="chapter" data-level="5.3" data-path="dataframes-1.html"><a href="dataframes-1.html#manupilating-data"><i class="fa fa-check"></i><b>5.3</b> Manupilating data</a></li>
+<li class="chapter" data-level="5.4" data-path="dataframes-1.html"><a href="dataframes-1.html#using-dplyr-pipelines"><i class="fa fa-check"></i><b>5.4</b> Using <code>dplyr</code> pipelines</a><ul>
+<li class="chapter" data-level="5.4.1" data-path="dataframes-1.html"><a href="dataframes-1.html#how-do-these-functions-work"><i class="fa fa-check"></i><b>5.4.1</b> How do these functions work?</a></li>
+<li class="chapter" data-level="5.4.2" data-path="dataframes-1.html"><a href="dataframes-1.html#group_by"><i class="fa fa-check"></i><b>5.4.2</b> <code>group_by()</code></a></li>
+</ul></li>
+<li class="chapter" data-level="5.5" data-path="dataframes-1.html"><a href="dataframes-1.html#dplyr-pipelines-with-the-magrittr"><i class="fa fa-check"></i><b>5.5</b> <code>dplyr</code> pipelines with the <code>magrittr</code> <code>%&gt;%</code></a></li>
+</ul></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">R Textbook</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="dataframes-1" class="section level1">
+<h1><span class="header-section-number">5</span> Dataframes</h1>
+<p>In this chapter, we will address four issues:</p>
+<ol style="list-style-type: decimal">
+<li>How to store rectanglar data</li>
+<li>How to access the data we have stored</li>
+<li>How to modify an existing dataset</li>
+<li>Using <code>dplyr</code> and <code>magrittr</code> pipes to make these tasks much easier (Praise Hadley Wickam!)</li>
+</ol>
+<div id="storing-rectangular-data" class="section level2">
+<h2><span class="header-section-number">5.1</span> Storing rectangular data</h2>
+<p>Rectangular or “relational” data are the kind with which you are undoubtedly most familiar. In rectangular datasets, rows represent observations (e.g., people, days, soil samples) and columns represent attributes of those observations (e.g., age, temperature, acidity). Because rectangular datasets are so common and so flexible, R has a special framework for storing and manipulating them: the dataframe.</p>
+<p>There are really only two rules:</p>
+<ol style="list-style-type: decimal">
+<li>Columns can have different kinds of data (e.g., strings, numbers), but within a column everything has to be of the same type.</li>
+<li>All columns have to be of exactly equal length. If I have 10 values (including <code>NA</code>) in my first column, I need exactly 10 in all the other columns.</li>
+</ol>
+<div id="making-dataframes" class="section level3">
+<h3><span class="header-section-number">5.1.1</span> Making dataframes</h3>
+<p>You can make a dataframe with the <code>data.frame()</code> command, just feed it some data and assign it to a variable.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">gender_data &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&#39;Male&#39;</span>, <span class="st">&#39;Female&#39;</span>, <span class="st">&#39;Female&#39;</span>, <span class="st">&#39;Male&#39;</span>, <span class="st">&#39;Female&#39;</span>)
+shoe_data &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&#39;Nikes&#39;</span>, <span class="st">&#39;Reebok&#39;</span>, <span class="st">&#39;Adididas&#39;</span>, <span class="st">&#39;Manolos&#39;</span>, <span class="st">&#39;Nikes&#39;</span>)
+age_data &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">18</span>, <span class="ot">NA</span>, <span class="dv">19</span>, <span class="dv">21</span>, <span class="dv">18</span>)
+
+df &lt;-<span class="st"> </span><span class="kw">data.frame</span>(gender_data, shoe_data, age_data)
+
+df</code></pre></div>
+<pre><code>##   gender_data shoe_data age_data
+## 1        Male     Nikes       18
+## 2      Female    Reebok       NA
+## 3      Female  Adididas       19
+## 4        Male   Manolos       21
+## 5      Female     Nikes       18</code></pre>
+<p>If I want to give specific names to my columns, I can do that too.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">df &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">gender =</span> gender_data, <span class="dt">shoe =</span> shoe_data, <span class="dt">age =</span> age_data)
+
+df</code></pre></div>
+<pre><code>##   gender     shoe age
+## 1   Male    Nikes  18
+## 2 Female   Reebok  NA
+## 3 Female Adididas  19
+## 4   Male  Manolos  21
+## 5 Female    Nikes  18</code></pre>
+</div>
+<div id="strings-as-factors" class="section level3">
+<h3><span class="header-section-number">5.1.2</span> Strings as factors</h3>
+<p>In chapter 1, we talked about different kinds of data, including numbers, strings, and booleans. There are a few other kinds too, like <em>factors</em>. These are strings that are being used to represent categorical data (which may or may not be ordinal). For <a href="https://simplystatistics.org/2015/07/24/stringsasfactors-an-unauthorized-biography/">historical reasons</a>, R’s <code>data.frame()</code> function defaults to turning any string variable into a factor. Most of the time, this doesn’t matter. However, if you ever need your strings to stay strings, then simply set the <code>stringsAsFactors</code> argument to false when you are making your dataframe.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">df &lt;-<span class="st"> </span><span class="kw">data.frame</span>(
+  <span class="dt">gender =</span> gender_data, 
+  <span class="dt">shoe =</span> shoe_data, 
+  <span class="dt">age =</span> age_data,
+  <span class="dt">stringsAsFactors =</span> <span class="ot">FALSE</span>)
+
+df</code></pre></div>
+<pre><code>##   gender     shoe age
+## 1   Male    Nikes  18
+## 2 Female   Reebok  NA
+## 3 Female Adididas  19
+## 4   Male  Manolos  21
+## 5 Female    Nikes  18</code></pre>
+</div>
+</div>
+<div id="accessing-data-from-a-dataframe" class="section level2">
+<h2><span class="header-section-number">5.2</span> Accessing data from a dataframe</h2>
+<div id="basic-framework" class="section level3">
+<h3><span class="header-section-number">5.2.1</span> Basic framework</h3>
+<p>I can access specific rows and columns using the <code>df[&lt;rows&gt;, &lt;columns&gt;]</code> framework. For example, if I want the 4th row and 3rd column of the dataframe above, I can enter:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">df[<span class="dv">4</span>, <span class="dv">3</span>]</code></pre></div>
+<pre><code>## [1] 21</code></pre>
+<p>If I leave an entry before or after my comma (<code>,</code>) empty, then R will give me all the rows or all the columns, respectively.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">df[<span class="dv">4</span>, ] <span class="co"># give me row 4, with all the columns</span></code></pre></div>
+<pre><code>##   gender    shoe age
+## 4   Male Manolos  21</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">df[, <span class="dv">3</span>] <span class="co"># give me column 3, with all the rows</span></code></pre></div>
+<pre><code>## [1] 18 NA 19 21 18</code></pre>
+<p>Sometimes, I might want more than one row. In that case, I just enter a vector of values I want. Note, I can even ask for them out of order (and they will be delivered out of order).</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">df[<span class="kw">c</span>(<span class="dv">3</span>, <span class="dv">1</span>, <span class="dv">2</span>), <span class="dv">3</span>]</code></pre></div>
+<pre><code>## [1] 19 18 NA</code></pre>
+<p>The same rules apply for requesting multiple columns. I can ask for a vector of columns (in whatever order I want - notice the code below will rearrange them, compared to the first code block above).</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">df[<span class="kw">c</span>(<span class="dv">3</span>, <span class="dv">1</span>, <span class="dv">2</span>), <span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">1</span>)]</code></pre></div>
+<pre><code>##       shoe age gender
+## 3 Adididas  19 Female
+## 1    Nikes  18   Male
+## 2   Reebok  NA Female</code></pre>
+</div>
+<div id="using-string-column-names" class="section level3">
+<h3><span class="header-section-number">5.2.2</span> Using string column names</h3>
+<p>I can also request columns by their “string” names (e.g., ‘shoe’, ‘age’).</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">df[<span class="kw">c</span>(<span class="dv">3</span>, <span class="dv">1</span>, <span class="dv">2</span>), <span class="kw">c</span>(<span class="st">&#39;shoe&#39;</span>, <span class="st">&#39;age&#39;</span>)]</code></pre></div>
+<pre><code>##       shoe age
+## 3 Adididas  19
+## 1    Nikes  18
+## 2   Reebok  NA</code></pre>
+</div>
+<div id="using-the-operator" class="section level3">
+<h3><span class="header-section-number">5.2.3</span> Using the <code>$</code> operator</h3>
+<p>I can also use the <code>$</code> operator to request a specific column.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">df<span class="op">$</span>gender</code></pre></div>
+<pre><code>## [1] &quot;Male&quot;   &quot;Female&quot; &quot;Female&quot; &quot;Male&quot;   &quot;Female&quot;</code></pre>
+</div>
+<div id="using-booleans" class="section level3">
+<h3><span class="header-section-number">5.2.4</span> Using booleans</h3>
+<p>Note that I can also ask for rows (or columns) with <code>T</code>/<code>F</code> (boolean) values. You can think of this as R asking, “tell me true or false for which rows you want.” For example, if I wanted to analyze the female members of the dataset only, I would put <code>T</code> values for each of their rows, like so.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">is_female &lt;-<span class="st"> </span><span class="kw">c</span>(F, T, T, F, T)
+df[is_female, ]</code></pre></div>
+<pre><code>##   gender     shoe age
+## 2 Female   Reebok  NA
+## 3 Female Adididas  19
+## 5 Female    Nikes  18</code></pre>
+<p>This might look pretty tedious - and it is. However, this same system can be greatly sped up by using other dataframe tricks too, like the <code>$</code> operator.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">is_female &lt;-<span class="st"> </span>df<span class="op">$</span>gender <span class="op">==</span><span class="st"> &#39;Female&#39;</span>
+df[is_female, ]</code></pre></div>
+<pre><code>##   gender     shoe age
+## 2 Female   Reebok  NA
+## 3 Female Adididas  19
+## 5 Female    Nikes  18</code></pre>
+<p>If we wanted to make this even shorter, we could simply write this single-line version below. You can read this in English as “give me my dataframe, but with only the rows where the gender is equal to female”.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">df[df<span class="op">$</span>gender <span class="op">==</span><span class="st"> &#39;Female&#39;</span>, ]</code></pre></div>
+<pre><code>##   gender     shoe age
+## 2 Female   Reebok  NA
+## 3 Female Adididas  19
+## 5 Female    Nikes  18</code></pre>
+</div>
+</div>
+<div id="manupilating-data" class="section level2">
+<h2><span class="header-section-number">5.3</span> Manupilating data</h2>
+<p>Much of what we want to do in R is manipulate data that are net yet in a form where they can be analyzed. We can do that by simply assigning values to the dataframe, using the same access convensions (numbered columns, named columns, or the <code>$</code> operator) above. Lets make a column that tells us how long the participants have been legally an adult (i.e., how many years since they turned 18).</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">df[, <span class="dv">4</span>] &lt;-<span class="st"> </span>df<span class="op">$</span>age <span class="op">-</span><span class="st"> </span><span class="dv">18</span>
+
+df</code></pre></div>
+<pre><code>##   gender     shoe age V4
+## 1   Male    Nikes  18  0
+## 2 Female   Reebok  NA NA
+## 3 Female Adididas  19  1
+## 4   Male  Manolos  21  3
+## 5 Female    Nikes  18  0</code></pre>
+<p>This worked, but it failed to give us a convenient name for our variable because we didn’t give R any way to name our variables.</p>
+<p>Let’s try using the named column approach.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">df[, <span class="st">&#39;years_as_adult&#39;</span>] &lt;-<span class="st"> </span>df<span class="op">$</span>age <span class="op">-</span><span class="st"> </span><span class="dv">18</span>
+
+df</code></pre></div>
+<pre><code>##   gender     shoe age V4 years_as_adult
+## 1   Male    Nikes  18  0              0
+## 2 Female   Reebok  NA NA             NA
+## 3 Female Adididas  19  1              1
+## 4   Male  Manolos  21  3              3
+## 5 Female    Nikes  18  0              0</code></pre>
+<p>That gave us exactly what we needed, a new named column. But we still have that pesky old column that go misnamed. To delete a dataframe column, assign it the value of <code>NULL</code>.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">df[, <span class="dv">4</span>] &lt;-<span class="st"> </span><span class="ot">NULL</span>
+
+df</code></pre></div>
+<pre><code>##   gender     shoe age years_as_adult
+## 1   Male    Nikes  18              0
+## 2 Female   Reebok  NA             NA
+## 3 Female Adididas  19              1
+## 4   Male  Manolos  21              3
+## 5 Female    Nikes  18              0</code></pre>
+<p>That’s better. Now lets try one other method for manipulating our data, using the <code>$</code> operator. Let’s make a new column indicating how long it will be until the participants in our dataset are of the legal age to consume alcohol in the United States.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">df<span class="op">$</span>years_unti_alc &lt;-<span class="st"> </span><span class="dv">21</span> <span class="op">-</span><span class="st"> </span>df<span class="op">$</span>age</code></pre></div>
+</div>
+<div id="using-dplyr-pipelines" class="section level2">
+<h2><span class="header-section-number">5.4</span> Using <code>dplyr</code> pipelines</h2>
+<p>Our Lord and Savior, Hadley Wickham has given us the gift of <code>dplyr</code> in 2014. If you’re new to R and trying to understand how important that is, it was a lot like when Promethius gave humanity the gift of fire, only he wasn’t chained to a rock for doing so - that I know of.</p>
+<p>The general motivation for the <code>dplyr</code> package is that there are only a small number of ways you should be working with rectangular data to achieve 99% of the things you care about. That package makes these very easy to do. The main functions provided by <code>dplyr</code> are:</p>
+<ul>
+<li><code>select()</code> - for selecting columns</li>
+<li><code>mutate()</code> - for changing calumns</li>
+<li><code>filter()</code> - for selecting rows</li>
+<li><code>group_by()</code> - for performing tasks within groups</li>
+<li><code>summarize()</code> - for aggregating data (e.g., group means, variances)</li>
+</ul>
+<p>The <code>dplyr</code> position is generally: if you want to do something other than one of these five things, you are probably behaving irresponsibly. Often this is true, the <code>dplyr</code> framework really has captured the general principles of working with rectangular data well. On the rare instance when you <em>reeeeally</em> need something else, you’ll have to code it yourself with the tools from the first section of this chapter or a custom function with the tools from the previous chapter.</p>
+<div id="how-do-these-functions-work" class="section level3">
+<h3><span class="header-section-number">5.4.1</span> How do these functions work?</h3>
+<p><code>dplyr</code> functions all work by taking at least two inputs: (1) a dataframe and (2) what you want to do to that dataframe. They all return the same thing: another dataframe, with the modifications you requested.</p>
+<div id="select" class="section level4">
+<h4><span class="header-section-number">5.4.1.1</span> <code>select()</code></h4>
+<p>For example, if I use the <code>select()</code> function and list the columns I want, I will get a new dataframe with just those columns. Notice I don’t need to put quotes in <code>dplyr</code> functions. There are some complicated reasons for this that involve black magic from the Tidyverse, which I’ll tell you about when you’re older.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(dplyr)
+
+<span class="kw">select</span>(df, shoe)</code></pre></div>
+<pre><code>##       shoe
+## 1    Nikes
+## 2   Reebok
+## 3 Adididas
+## 4  Manolos
+## 5    Nikes</code></pre>
+<p>I can also just keep asking for more columns, by using more commas.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">select</span>(df, shoe, age)</code></pre></div>
+<pre><code>##       shoe age
+## 1    Nikes  18
+## 2   Reebok  NA
+## 3 Adididas  19
+## 4  Manolos  21
+## 5    Nikes  18</code></pre>
+<p>Most often, is a good idea to save my modified dataframe to another dataframe.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">modified_df &lt;-<span class="st"> </span><span class="kw">select</span>(df, shoe, age)
+
+modified_df</code></pre></div>
+<pre><code>##       shoe age
+## 1    Nikes  18
+## 2   Reebok  NA
+## 3 Adididas  19
+## 4  Manolos  21
+## 5    Nikes  18</code></pre>
+</div>
+<div id="mutate" class="section level4">
+<h4><span class="header-section-number">5.4.1.2</span> <code>mutate()</code></h4>
+<p>To make new columns, I can use the <code>mutate()</code> function and specify what my new columns should be equal to.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">df &lt;-<span class="st"> </span><span class="kw">mutate</span>(df, <span class="dt">age_squared =</span> age<span class="op">^</span><span class="dv">2</span>)
+
+df</code></pre></div>
+<pre><code>##   gender     shoe age years_as_adult years_unti_alc age_squared
+## 1   Male    Nikes  18              0              3         324
+## 2 Female   Reebok  NA             NA             NA          NA
+## 3 Female Adididas  19              1              2         361
+## 4   Male  Manolos  21              3              0         441
+## 5 Female    Nikes  18              0              3         324</code></pre>
+</div>
+<div id="filter" class="section level4">
+<h4><span class="header-section-number">5.4.1.3</span> <code>filter()</code></h4>
+<p>To eliminate anyone who <em>doesn’t</em> meet some condition. Use the filter command and give it a condition that results in either <code>TRUE</code> or <code>FALSE</code>.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">under_19_df &lt;-<span class="st"> </span><span class="kw">filter</span>(df, age <span class="op">&lt;</span><span class="st"> </span><span class="dv">19</span>)
+
+under_19_df</code></pre></div>
+<pre><code>##   gender  shoe age years_as_adult years_unti_alc age_squared
+## 1   Male Nikes  18              0              3         324
+## 2 Female Nikes  18              0              3         324</code></pre>
+</div>
+</div>
+<div id="group_by" class="section level3">
+<h3><span class="header-section-number">5.4.2</span> <code>group_by()</code></h3>
+<p>This function is best used in combination with other <code>dplyr</code> functions, as it doesn’t do much on it’s own. Technically, it creates a “grouped tibble”, which is special kind of dataframe that knows you want to do all your <code>dplyr</code> operations within each group. Notice, however, you can’t see that anything has changed.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">group_by</span>(df, shoe)</code></pre></div>
+<pre><code>## # A tibble: 5 x 6
+## # Groups:   shoe [4]
+##   gender shoe       age years_as_adult years_unti_alc age_squared
+##   &lt;chr&gt;  &lt;chr&gt;    &lt;dbl&gt;          &lt;dbl&gt;          &lt;dbl&gt;       &lt;dbl&gt;
+## 1 Male   Nikes       18              0              3         324
+## 2 Female Reebok      NA             NA             NA          NA
+## 3 Female Adididas    19              1              2         361
+## 4 Male   Manolos     21              3              0         441
+## 5 Female Nikes       18              0              3         324</code></pre>
+<p>But if we use <code>group_by()</code> is the input for a <code>mutate()</code> command, we can compute the mean age of each gender (see last column of the newly created dataframe).</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">df &lt;-<span class="st"> </span><span class="kw">mutate</span>(<span class="kw">group_by</span>(df, gender), <span class="dt">mean_age =</span> <span class="kw">mean</span>(age, <span class="dt">na.rm =</span> T))</code></pre></div>
+<div id="summarize" class="section level4">
+<h4><span class="header-section-number">5.4.2.1</span> <code>summarize()</code></h4>
+<p>This summarizes some feature of your dataframe by applying an aggregate function to a given column (e.g., mean, max, variance).</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">summarise</span>(df, <span class="dt">age_mean =</span> <span class="kw">mean</span>(age, <span class="dt">na.rm =</span> T))</code></pre></div>
+<pre><code>## # A tibble: 2 x 2
+##   gender age_mean
+##   &lt;chr&gt;     &lt;dbl&gt;
+## 1 Female     18.5
+## 2 Male       19.5</code></pre>
+<p>Most often, it is used in combination with <code>group_by()</code>.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">summarise</span>(<span class="kw">group_by</span>(df, gender), <span class="dt">age_mean =</span> <span class="kw">mean</span>(age, <span class="dt">na.rm =</span> T))</code></pre></div>
+<pre><code>## # A tibble: 2 x 2
+##   gender age_mean
+##   &lt;chr&gt;     &lt;dbl&gt;
+## 1 Female     18.5
+## 2 Male       19.5</code></pre>
+</div>
+</div>
+</div>
+<div id="dplyr-pipelines-with-the-magrittr" class="section level2">
+<h2><span class="header-section-number">5.5</span> <code>dplyr</code> pipelines with the <code>magrittr</code> <code>%&gt;%</code></h2>
+<p>All <code>dplyr</code> functions are designed to be used in combination with the <code>magrittr</code> pipe. This makes using several of them in a row easy to write and easy to read.</p>
+<p>Imagine we start with the same dataframe at the beginning of the chapter. Let’s use a pipeline to filter out any missing age values, assign new variable, <em>years_as_adult</em>, and explore the mean and standard deviation of that new variable.</p>
+<p>First, we reset that dataframe</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">df &lt;-<span class="st"> </span><span class="kw">data.frame</span>(
+  <span class="dt">gender =</span> gender_data, 
+  <span class="dt">shoe =</span> shoe_data, 
+  <span class="dt">age =</span> age_data,
+  <span class="dt">stringsAsFactors =</span> <span class="ot">FALSE</span>)
+
+df</code></pre></div>
+<pre><code>##   gender     shoe age
+## 1   Male    Nikes  18
+## 2 Female   Reebok  NA
+## 3 Female Adididas  19
+## 4   Male  Manolos  21
+## 5 Female    Nikes  18</code></pre>
+<p>Then we make a pipeline, performing all of the tasks we just described. After each task, we make sure to use a pipe, so that our result gets fed into the next function.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">df <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">filter</span>(<span class="op">!</span><span class="kw">is.na</span>(age)) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">years_as_adult =</span> age <span class="op">-</span><span class="st"> </span><span class="dv">18</span>) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">group_by</span>(gender) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">summarise</span>(
+    <span class="dt">mean =</span> <span class="kw">mean</span>(years_as_adult),
+    <span class="dt">sd =</span> <span class="kw">sd</span>(years_as_adult))</code></pre></div>
+<pre><code>## # A tibble: 2 x 3
+##   gender  mean    sd
+##   &lt;chr&gt;  &lt;dbl&gt; &lt;dbl&gt;
+## 1 Female   0.5 0.707
+## 2 Male     1.5 2.12</code></pre>
+
+</div>
+</div>
+
+
+
+
+
+
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="functions-1.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"google": false,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"all": ["facebook", "google", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"download": null,
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:" && /^https?:/.test(src))
+      src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

@@ -1,0 +1,289 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+
+# Dataframes
+
+In this chapter, we will address four issues:
+
+1. How to store rectanglar data
+2. How to access the data we have stored
+3. How to modify an existing dataset
+4. Using `dplyr` and `magrittr` pipes to make these tasks much easier (Praise Hadley Wickam!)
+
+
+
+## Storing rectangular data
+
+Rectangular or "relational" data are the kind with which you are undoubtedly most familiar. In rectangular datasets, rows represent observations (e.g., people, days, soil samples) and columns represent attributes of those observations (e.g., age, temperature, acidity). Because rectangular datasets are so common and so flexible, R has a special framework for storing and manipulating them: the dataframe.
+
+There are really only two rules:
+
+1. Columns can have different kinds of data (e.g., strings, numbers), but within a column everything has to be of the same type.
+2. All columns have to be of exactly equal length. If I have 10 values (including `NA`) in my first column, I need exactly 10 in all the other columns.
+
+### Making dataframes
+
+You can make a dataframe with the `data.frame()` command, just feed it some data and assign it to a variable.
+
+```{r}
+gender_data <- c('Male', 'Female', 'Female', 'Male', 'Female')
+shoe_data <- c('Nikes', 'Reebok', 'Adididas', 'Manolos', 'Nikes')
+age_data <- c(18, NA, 19, 21, 18)
+
+df <- data.frame(gender_data, shoe_data, age_data)
+
+df
+```
+
+If I want to give specific names to my columns, I can do that too.
+
+```{r}
+df <- data.frame(gender = gender_data, shoe = shoe_data, age = age_data)
+
+df
+```
+
+### Strings as factors
+
+In chapter 1, we talked about different kinds of data, including numbers, strings, and booleans. There are a few other kinds too, like *factors*. These are strings that are being used to represent categorical data (which may or may not be ordinal). For [historical reasons](https://simplystatistics.org/2015/07/24/stringsasfactors-an-unauthorized-biography/), R's `data.frame()` function defaults to turning any string variable into a factor. Most of the time, this doesn't matter. However, if you ever need your strings to stay strings, then simply set the `stringsAsFactors` argument to false when you are making your dataframe.
+
+```{r}
+df <- data.frame(
+  gender = gender_data, 
+  shoe = shoe_data, 
+  age = age_data,
+  stringsAsFactors = FALSE)
+
+df
+```
+
+## Accessing data from a dataframe
+
+### Basic framework
+
+I can access specific rows and columns using the `df[<rows>, <columns>]` framework. For example, if I want the 4th row and 3rd column of the dataframe above, I can enter:
+
+```{r}
+df[4, 3]
+```
+
+If I leave an entry before or after my comma (`,`) empty, then R will give me all the rows or all the columns, respectively.
+
+```{r}
+df[4, ] # give me row 4, with all the columns
+```
+
+```{r}
+df[, 3] # give me column 3, with all the rows
+```
+
+Sometimes, I might want more than one row. In that case, I just enter a vector of values I want. Note, I can even ask for them out of order (and they will be delivered out of order).
+
+```{r}
+df[c(3, 1, 2), 3]
+```
+
+The same rules apply for requesting multiple columns. I can ask for a vector of columns (in whatever order I want - notice the code below will rearrange them, compared to the first code block above).
+
+```{r}
+df[c(3, 1, 2), c(2, 3, 1)]
+```
+
+### Using string column names
+
+I can also request columns by their "string" names (e.g., 'shoe', 'age').
+
+```{r}
+df[c(3, 1, 2), c('shoe', 'age')]
+```
+
+### Using the `$` operator
+
+I can also use the `$` operator to request a specific column.
+
+```{r}
+df$gender
+```
+
+### Using booleans
+
+Note that I can also ask for rows (or columns) with `T`/`F` (boolean) values. You can think of this as R asking, "tell me true or false for which rows you want." For example, if I wanted to analyze the female members of the dataset only, I would put `T` values for each of their rows, like so.
+
+```{r}
+is_female <- c(F, T, T, F, T)
+df[is_female, ]
+```
+
+This might look pretty tedious - and it is. However, this same system can be greatly sped up by using other dataframe tricks too, like the `$` operator.
+
+```{r}
+is_female <- df$gender == 'Female'
+df[is_female, ]
+```
+
+If we wanted to make this even shorter, we could simply write this single-line version below. You can read this in English as "give me my dataframe, but with only the rows where the gender is equal to female".
+
+```{r}
+df[df$gender == 'Female', ]
+```
+
+## Manupilating data
+
+Much of what we want to do in R is manipulate data that are net yet in a form where they can be analyzed. We can do that by simply assigning values to the dataframe, using the same access convensions (numbered columns, named columns, or the `$` operator) above. Lets make a column that tells us how long the participants have been legally an adult (i.e., how many years since they turned 18).
+
+
+```{r}
+df[, 4] <- df$age - 18
+
+df
+```
+
+This worked, but it failed to give us a convenient name for our variable because we didn't give R any way to name our variables.
+
+Let's try using the named column approach.
+
+```{r}
+df[, 'years_as_adult'] <- df$age - 18
+
+df
+```
+
+That gave us exactly what we needed, a new named column. But we still have that pesky old column that go misnamed. To delete a dataframe column, assign it the value of `NULL`.
+
+```{r}
+df[, 4] <- NULL
+
+df
+```
+
+That's better. Now lets try one other method for manipulating our data, using the `$` operator. Let's make a new column indicating how long it will be until the participants in our dataset are of the legal age to consume alcohol in the United States.
+
+```{r}
+df$years_unti_alc <- 21 - df$age
+```
+
+## Using `dplyr` pipelines
+
+Our Lord and Savior, Hadley Wickham has given us the gift of `dplyr` in 2014. If you're new to R and trying to understand how important that is, it was a lot like when Promethius gave humanity the gift of fire, only he wasn't chained to a rock for doing so - that I know of.
+
+The general motivation for the `dplyr` package is that there are only a small number of ways you should be working with rectangular data to achieve 99% of the things you care about. That package makes these very easy to do. The main functions provided by `dplyr` are:
+
+- `select()` - for selecting columns
+- `mutate()` - for changing calumns
+- `filter()` - for selecting rows
+- `group_by()` - for performing tasks within groups
+- `summarize()` - for aggregating data (e.g., group means, variances)
+
+The `dplyr` position is generally: if you want to do something other than one of these five things, you are probably behaving irresponsibly. Often this is true, the `dplyr` framework really has captured the general principles of working with rectangular data well. On the rare instance when you *reeeeally* need something else, you'll have to code it yourself with the tools from the first section of this chapter or a custom function with the tools from the previous chapter.
+
+### How do these functions work?
+
+`dplyr` functions all work by taking at least two inputs: (1) a dataframe and (2) what you want to do to that dataframe. They all return the same thing: another dataframe, with the modifications you requested.
+
+#### `select()`
+
+For example, if I use the `select()` function and list the columns I want, I will get a new dataframe with just those columns. Notice I don't need to put quotes in `dplyr` functions. There are some complicated reasons for this that involve black magic from the Tidyverse, which I'll tell you about when you're older.
+
+```{r, message=FALSE, warning=FALSE}
+library(dplyr)
+
+select(df, shoe)
+```
+
+I can also just keep asking for more columns, by using more commas.
+
+```{r}
+select(df, shoe, age)
+```
+
+Most often, is a good idea to save my modified dataframe to another dataframe.
+
+```{r}
+modified_df <- select(df, shoe, age)
+
+modified_df
+```
+
+#### `mutate()`
+
+To make new columns, I can use the `mutate()` function and specify what my new columns should be equal to.
+
+```{r}
+df <- mutate(df, age_squared = age^2)
+
+df
+```
+
+
+#### `filter()`
+
+To eliminate anyone who *doesn't* meet some condition. Use the filter command and give it a condition that results in either `TRUE` or `FALSE`.
+
+```{r}
+under_19_df <- filter(df, age < 19)
+
+under_19_df
+```
+
+### `group_by()`
+
+This function is best used in combination with other `dplyr` functions, as it doesn't do much on it's own. Technically, it creates a "grouped tibble", which is special kind of dataframe that knows you want to do all your `dplyr` operations within each group. Notice, however, you can't see that anything has changed.
+
+```{r}
+group_by(df, shoe)
+```
+
+But if we use `group_by()` is the input for a `mutate()` command, we can compute the mean age of each gender (see last column of the newly created dataframe).
+
+```{r}
+df <- mutate(group_by(df, gender), mean_age = mean(age, na.rm = T))
+```
+
+#### `summarize()`
+
+This summarizes some feature of your dataframe by applying an aggregate function to a given column (e.g., mean, max, variance). 
+
+```{r}
+summarise(df, age_mean = mean(age, na.rm = T))
+```
+
+Most often, it is used in combination with `group_by()`.
+
+```{r}
+summarise(group_by(df, gender), age_mean = mean(age, na.rm = T))
+```
+
+
+## `dplyr` pipelines with the `magrittr` `%>%`
+
+All `dplyr` functions are designed to be used in combination with the `magrittr` pipe. This makes using several of them in a row easy to write and easy to read. 
+
+Imagine we start with the same dataframe at the beginning of the chapter. Let's use a pipeline to filter out any missing age values, assign new variable, *years_as_adult*, and explore the mean and standard deviation of that new variable.
+
+First, we reset that dataframe
+
+```{r}
+df <- data.frame(
+  gender = gender_data, 
+  shoe = shoe_data, 
+  age = age_data,
+  stringsAsFactors = FALSE)
+
+df
+```
+
+Then we make a pipeline, performing all of the tasks we just described. After each task, we make sure to use a pipe, so that our result gets fed into the next function. 
+
+```{r}
+df %>%
+  filter(!is.na(age)) %>%
+  mutate(years_as_adult = age - 18) %>%
+  group_by(gender) %>%
+  summarise(
+    mean = mean(years_as_adult),
+    sd = sd(years_as_adult))
+```
+
