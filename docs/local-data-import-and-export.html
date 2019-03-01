@@ -5,11 +5,11 @@
 
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>4 Functions | R Textbook</title>
+  <title>6 Local Data Import and Export | R Textbook</title>
   <meta name="description" content="This is the ‘organic’ textbook created by our class discussions and exercises.">
   <meta name="generator" content="bookdown  and GitBook 2.6.7">
 
-  <meta property="og:title" content="4 Functions | R Textbook" />
+  <meta property="og:title" content="6 Local Data Import and Export | R Textbook" />
   <meta property="og:type" content="book" />
   
   
@@ -17,7 +17,7 @@
   <meta name="github-repo" content="iancero/r-textbook-spring2019" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="4 Functions | R Textbook" />
+  <meta name="twitter:title" content="6 Local Data Import and Export | R Textbook" />
   
   <meta name="twitter:description" content="This is the ‘organic’ textbook created by our class discussions and exercises." />
   
@@ -31,8 +31,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
   
   
-<link rel="prev" href="visualization.html">
-<link rel="next" href="dataframes-1.html">
+<link rel="prev" href="dataframes-1.html">
+
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -202,244 +202,124 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="functions-1" class="section level1">
-<h1><span class="header-section-number">4</span> Functions</h1>
-<p>Functions allow you to automate boring tasks so that you don’t have to keep doing the same thing over and over again. There are several advantages of this.</p>
+<div id="local-data-import-and-export" class="section level1">
+<h1><span class="header-section-number">6</span> Local Data Import and Export</h1>
+<p>In this chapter we will address the following issues:</p>
 <ol style="list-style-type: decimal">
-<li>As stated above, it is faster for you.</li>
-<li>When something changes (e.g., a reviewer wants you to exclude outliers), you only need to change your code in one place, rather than several.</li>
-<li>You eliminate the risk of “copy-and-paste” mistakes.</li>
+<li>How to write data to a spreadsheet (<code>.csv</code> file)</li>
+<li>How to read in a simple spreadsheet as a dataframe</li>
+<li>How to read in SPSS files</li>
 </ol>
-<p>This chapter covers the basics of function construction and use.</p>
-<div id="basic-example" class="section level2">
-<h2><span class="header-section-number">4.1</span> Basic Example</h2>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">x &lt;-<span class="st"> </span><span class="dv">1</span><span class="op">:</span><span class="dv">10</span>
-y &lt;-<span class="st"> </span><span class="dv">2</span><span class="op">:</span><span class="dv">20</span>
-z &lt;-<span class="st"> </span><span class="dv">3</span><span class="op">:</span><span class="dv">34</span>
+<div id="basic-exportation-to-a-.csv-file" class="section level2">
+<h2><span class="header-section-number">6.1</span> Basic exportation to a <code>.csv</code> file</h2>
+<p>As we discussed in the previous chapter, rectangular data (where rows are observations and columns are attributes of those observations) have a special status in data analysis. They are simple to construct, manipulate, and analyze. For those reasons, a vast majority of the time they will be all you need. R knows this, so it has several functions designed specifically for data in this format (e.g., all the special things you can do with a dataframe).</p>
+<p>For example, let’s imagine you wanted to export the data we used in the previous chapter (which we can reload here, for convenience).</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">df &lt;-<span class="st"> </span><span class="kw">data.frame</span>(
+  <span class="dt">gender =</span> <span class="kw">c</span>(<span class="st">&#39;Male&#39;</span>, <span class="st">&#39;Female&#39;</span>, <span class="st">&#39;Female&#39;</span>, <span class="st">&#39;Male&#39;</span>, <span class="st">&#39;Female&#39;</span>), 
+  <span class="dt">shoe =</span> <span class="kw">c</span>(<span class="st">&#39;Nikes&#39;</span>, <span class="st">&#39;Reebok&#39;</span>, <span class="st">&#39;Adididas&#39;</span>, <span class="st">&#39;Manolos&#39;</span>, <span class="st">&#39;Nikes&#39;</span>), 
+  <span class="dt">age =</span> <span class="kw">c</span>(<span class="dv">18</span>, <span class="ot">NA</span>, <span class="dv">19</span>, <span class="dv">21</span>, <span class="dv">18</span>),
+  <span class="dt">stringsAsFactors =</span> <span class="ot">FALSE</span>)
 
-
-<span class="co"># Obscure reviewer request</span>
-x &lt;-<span class="st"> </span>x<span class="op">/</span><span class="dv">2</span>
-x &lt;-<span class="st"> </span><span class="kw">sqrt</span>(x)
-x &lt;-<span class="st"> </span><span class="kw">round</span>(x)
-
-y &lt;-<span class="st"> </span>y<span class="op">/</span><span class="dv">2</span>
-y &lt;-<span class="st"> </span><span class="kw">sqrt</span>(y)
-y &lt;-<span class="st"> </span><span class="kw">round</span>(x)
-
-z &lt;-<span class="st"> </span>z<span class="op">/</span><span class="dv">2</span>
-z &lt;-<span class="st"> </span><span class="kw">sqrt</span>(z)
-z &lt;-<span class="st"> </span><span class="kw">round</span>(z)</code></pre></div>
+df</code></pre></div>
+<pre><code>##   gender     shoe age
+## 1   Male    Nikes  18
+## 2 Female   Reebok  NA
+## 3 Female Adididas  19
+## 4   Male  Manolos  21
+## 5 Female    Nikes  18</code></pre>
+<p>We can write that dataframe to a <em>comma-seperated values (“.csv”)</em> file, using R’s <code>write.csv()</code> function. This function takes two main arguments: the data you want to export and the filename you want your exported data to have (don’t forget to add “.csv” at the end!).</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">write.csv</span>(df, <span class="dt">file =</span> <span class="st">&#39;my_shoe_data.csv&#39;</span>)</code></pre></div>
+<p>To see what this did, go find the file that R created and try to open it with a spreadsheet program (e.g., Excel). If you don’t know where to look, remember you can use the <code>getwd()</code> command to ask R where it is saving files.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">getwd</span>()</code></pre></div>
+<div id="other-options" class="section level3">
+<h3><span class="header-section-number">6.1.1</span> Other options</h3>
+<p>If you’ve looked at the exported file, you’ve probably noticed there is a new column on the left that wasn’t in our original dataframe. Those are the rownames for your dataframe. Usually they are just numbers, but you can change them to whatever you want. Almost always, they just get in the way. To make sure they don’t get exported along with your other data, you can set <code>rownames = F</code> in your <code>write.csv()</code> call.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">write.csv</span>(df, <span class="dt">file =</span> <span class="st">&#39;my_shoe_data.csv&#39;</span>, <span class="dt">row.names =</span> F)</code></pre></div>
+<p>Note that this will over-write the existing file! Of course, that is usually what you want, but just make sure you are not overwriting something you wanted to save.</p>
 </div>
-<div id="anatomy-of-an-r-function" class="section level2">
-<h2><span class="header-section-number">4.2</span> Anatomy of an R function</h2>
-<p>Making functions speeds up the process and makes it safer. To make a function, we need to use the <code>function()</code> command, assign it to a name, provide potential parameters, then give it code to execute.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">reviewer_transformation &lt;-<span class="st"> </span><span class="cf">function</span>(vals) {
-  vals &lt;-<span class="st"> </span>vals<span class="op">/</span><span class="dv">2</span>
-  vals &lt;-<span class="st"> </span><span class="kw">sqrt</span>(vals)
-  vals &lt;-<span class="st"> </span><span class="kw">round</span>(vals)
-  
-  vals 
-}
-
-
-
-<span class="co"># Obscure reviewer request</span>
-x &lt;-<span class="st"> </span><span class="dv">1</span><span class="op">:</span><span class="dv">10</span>
-x &lt;-<span class="st"> </span>x<span class="op">/</span><span class="dv">2</span>
-x &lt;-<span class="st"> </span><span class="kw">sqrt</span>(x)
-x &lt;-<span class="st"> </span><span class="kw">round</span>(x)
-
-x</code></pre></div>
-<pre><code>##  [1] 1 1 1 1 2 2 2 2 2 2</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">other_x &lt;-<span class="st"> </span><span class="dv">1</span><span class="op">:</span><span class="dv">10</span>
-transformed_x &lt;-<span class="st"> </span><span class="kw">reviewer_transformation</span>(other_x)</code></pre></div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">x</code></pre></div>
-<pre><code>##  [1] 1 1 1 1 2 2 2 2 2 2</code></pre>
-<ul>
-<li>Name</li>
-<li>Parameters/Arguments
-<ul>
-<li>Defaults</li>
-</ul></li>
-<li>Code</li>
-<li>Return values</li>
-</ul>
-<p><span class="math display">\[
-r = \frac{\text{cov}(x, y)}{\sigma_x\sigma_y}
-\]</span></p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># set.seed(314159)</span>
-x &lt;-<span class="st"> </span><span class="dv">1</span><span class="op">:</span><span class="dv">10</span>
-y &lt;-<span class="st"> </span>x<span class="op">*</span><span class="kw">rpois</span>(<span class="dt">n =</span> <span class="dv">10</span>, <span class="dt">lambda =</span> <span class="dv">3</span>)
-
-w &lt;-<span class="st"> </span><span class="dv">1</span><span class="op">:</span><span class="dv">20</span>
-u &lt;-<span class="st"> </span><span class="kw">runif</span>(<span class="dt">n =</span> <span class="dv">20</span>)
-
-<span class="kw">cor</span>(x, y)</code></pre></div>
-<pre><code>## [1] 0.8498299</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">cov</span>(x, y)<span class="op">/</span>(<span class="kw">sd</span>(x)<span class="op">*</span><span class="kw">sd</span>(y))</code></pre></div>
-<pre><code>## [1] 0.8498299</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">print</span>(<span class="st">&#39;---&#39;</span>)</code></pre></div>
-<pre><code>## [1] &quot;---&quot;</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">correlation &lt;-<span class="st"> </span><span class="cf">function</span>(a, b) {
-  <span class="kw">cov</span>(a, b)<span class="op">/</span>(<span class="kw">sd</span>(a)<span class="op">*</span><span class="kw">sd</span>(b))
-}
-
-<span class="kw">cor</span>(w, u)</code></pre></div>
-<pre><code>## [1] -0.164409</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">correlation</span>(w, u)</code></pre></div>
-<pre><code>## [1] -0.164409</code></pre>
 </div>
-<div id="base-r-functions" class="section level2">
-<h2><span class="header-section-number">4.3</span> Base R functions</h2>
-<ul>
-<li>Basic stat functions</li>
-<li>Random numbers!</li>
-</ul>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">x &lt;-<span class="st"> </span><span class="kw">rpois</span>(<span class="dv">100</span>, <span class="dv">10</span>)
-y &lt;-<span class="st"> </span><span class="dv">2</span><span class="op">*</span>x <span class="op">+</span><span class="st"> </span><span class="kw">rnorm</span>(<span class="dv">100</span>)
-df &lt;-<span class="st"> </span><span class="kw">data.frame</span>(x, y)
+<div id="reading-in-rectangular-data" class="section level2">
+<h2><span class="header-section-number">6.2</span> Reading in rectangular data</h2>
+<p>Most of the time, rectangular data come in the form of a <code>.csv</code> file. This is the kind of file you just created in the last section. It has a simple structure, where all rows occurr on seperate lines of the file and columns within those rows are seperated by commas. To see what they look like “under the hood”, try opening the <code>.csv</code> file from the last section in a text editor, like Notepad or RStudio’s built in text editor.</p>
+<div id="traditional-importation" class="section level3">
+<h3><span class="header-section-number">6.2.1</span> Traditional importation</h3>
+<p>To read a <code>.csv</code> file into R, we simply use the <code>read.csv()</code> command, storing the result to a dataframe.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">df &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="st">&#39;my_shoe_data.csv&#39;</span>)
 
-<span class="kw">library</span>(ggplot2)
-
-<span class="kw">ggplot</span>(df, <span class="kw">aes</span>(x, y)) <span class="op">+</span>
-<span class="st">  </span><span class="kw">geom_point</span>() <span class="op">+</span>
-<span class="st">  </span><span class="kw">geom_hline</span>(<span class="dt">yintercept =</span> <span class="kw">mean</span>(y), <span class="dt">color =</span> <span class="st">&#39;red&#39;</span>)</code></pre></div>
-<p><img src="_main_files/figure-html/unnamed-chunk-66-1.png" width="672" /></p>
+df</code></pre></div>
+<pre><code>##   gender     shoe age
+## 1   Male    Nikes  18
+## 2 Female   Reebok  NA
+## 3 Female Adididas  19
+## 4   Male  Manolos  21
+## 5 Female    Nikes  18</code></pre>
+</div>
+<div id="importation-options-to-know-about" class="section level3">
+<h3><span class="header-section-number">6.2.2</span> Importation options to know about</h3>
+<p>Note there are a few important parameters to this function we can alter here, if we want. You can see them using the <code>?read.csv</code> help file, but I’ll summarize the big ones here.</p>
 <ul>
-<li><p>Setting the random seed</p></li>
-<li><p><code>paste()</code> and <code>paste0()</code></p></li>
-</ul>
-<div id="scoping" class="section level3">
-<h3><span class="header-section-number">4.3.1</span> Scoping</h3>
-<ul>
-<li>What happens inside a function, stays inside a function</li>
-<li>Discussion of shadow variables</li>
+<li><code>header</code> - should the first line of the incoming file (the “header”) be treated as the variable names? This defaults to <code>TRUE</code> because it is almost always the case, but you should be aware of it, in case your incoming data looks different.</li>
+<li><code>sep</code> - This is the symbol R will use to differentiate columns. It is nearly always a “,” but you can change it if there is something special about your data.</li>
+<li><code>na.strings</code> - The symbol R will use to denote <code>NA</code> (missing) data. Often, people do silly things like using “-999” to code missing data. After you are done feeling ashamed of them for that very irresponsible decision, you can import their data by setting <code>na.strings = '-999'</code>, which will convert all those values to <code>NA</code> during the import.</li>
+<li><code>skip</code> - sometimes your data don’t begin on the first line of the incoming file. You can tell R to “skip” those unimportant lines by incrementing the numeric value of this parameter.</li>
+<li><code>stringsAsFactors</code> - we talked about this during dataframe creation in the previous chapter. R defaults to bringing all string variables in as categorical. This used to make sense, but in the modern world is kind of a nuisance. Most often, it is best to set to <code>FALSE</code>.</li>
 </ul>
 </div>
-<div id="conditional-execution" class="section level3">
-<h3><span class="header-section-number">4.3.2</span> Conditional execution</h3>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">set.seed</span>(<span class="dv">314159</span>)
-x &lt;-<span class="st"> </span><span class="dv">1</span><span class="op">:</span><span class="dv">10</span>
-y &lt;-<span class="st"> </span>x<span class="op">*</span><span class="kw">rpois</span>(<span class="dt">n =</span> <span class="dv">10</span>, <span class="dt">lambda =</span> <span class="dv">3</span>)
+<div id="consider-the-readr-package" class="section level3">
+<h3><span class="header-section-number">6.2.3</span> Consider the <code>readr</code> package</h3>
+<p>As the last section might have implied, there are several options you can change to influence how your <code>.csv</code>s are imported. Some of them default to values that don’t really make sense anymore (e.g., <code>stringsAsFactors = TRUE</code>). The <code>readr</code> package attempts to resolve some of this, by offering the same set of importation functions as <code>base</code> R, but providing more sensible defaults.</p>
+<p>To use this package, install the <code>tidyverse</code>, which contains <code>readr</code> in it.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">install.packages</span>(<span class="st">&#39;tidyverse&#39;</span>)</code></pre></div>
+<p>Then load <code>readr</code> and use the <code>read_csv()</code> function.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(readr)
 
-x[<span class="dv">4</span>] &lt;-<span class="st"> </span><span class="dv">1</span>
-y[<span class="dv">5</span>] &lt;-<span class="st"> </span><span class="dv">2</span>
-
-correlation &lt;-<span class="st"> </span><span class="cf">function</span>(a, b) {
-  
-  <span class="cf">if</span>(<span class="kw">any</span>(<span class="kw">is.na</span>(a)) <span class="op">&amp;</span><span class="st"> </span><span class="op">!</span><span class="kw">any</span>(<span class="kw">is.na</span>(b))){
-    
-    <span class="kw">return</span>(<span class="st">&#39;Only one missing data issue.&#39;</span>)
-  }
-  <span class="cf">else</span> <span class="cf">if</span>(<span class="kw">any</span>(<span class="kw">is.na</span>(a)) <span class="op">&amp;</span><span class="st"> </span><span class="kw">any</span>(<span class="kw">is.na</span>(b))){
-    
-    <span class="kw">return</span>(<span class="st">&#39;You have missing data butthead!&#39;</span>)
-  } <span class="cf">else</span> {
-    
-    <span class="kw">cov</span>(a, b)<span class="op">/</span>(<span class="kw">sd</span>(a)<span class="op">*</span><span class="kw">sd</span>(b))  
-  }
-}
-
-<span class="kw">cor</span>(x, y)</code></pre></div>
-<pre><code>## [1] 0.8438</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">correlation</span>(<span class="dt">a =</span> x, <span class="dt">b =</span> y)</code></pre></div>
-<pre><code>## [1] 0.8438</code></pre>
-<p><code>if()</code></p>
-<p><code>if()</code>/<code>else()</code></p>
-<p><code>else if()</code></p>
-<p><code>ifelse()</code></p>
-</div>
-<div id="the-return-command" class="section level3">
-<h3><span class="header-section-number">4.3.3</span> the <code>return()</code> command</h3>
-<p>————— Part II —————–</p>
+df &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class="st">&#39;my_shoe_data.csv&#39;</span>)</code></pre></div>
+<pre><code>## Parsed with column specification:
+## cols(
+##   gender = col_character(),
+##   shoe = col_character(),
+##   age = col_double()
+## )</code></pre>
+<p>Notice that <code>read_csv()</code> did not need to be told your strings were not factors, as it’s default behavior is to assume you wanted character variables. Both <code>readr</code>’s <code>read_csv()</code> function and <code>base</code> R’s <code>read.csv()</code> will generally work for your purposes, but <code>read_csv()</code> is generally more reliable, so it is worth making your default.</p>
 </div>
 </div>
-<div id="pipes" class="section level2">
-<h2><span class="header-section-number">4.4</span> Pipes</h2>
-<p>Sometimes (often) it is useful to execute several functions in a row, using the answer from the last function as the input for the next function. But this can make your code redundant and a little unclear.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">reviewer_transformation &lt;-<span class="st"> </span><span class="cf">function</span>(vals) {
-  vals &lt;-<span class="st"> </span>vals<span class="op">/</span><span class="dv">2</span>
-  vals &lt;-<span class="st"> </span><span class="kw">sqrt</span>(vals)
-  vals &lt;-<span class="st"> </span><span class="kw">round</span>(vals)
-  
-  vals 
-}
+<div id="importing-data-from-other-programs" class="section level2">
+<h2><span class="header-section-number">6.3</span> Importing data from other programs</h2>
+<p>Sometimes, we want to import data that are more than just simple numbers, letters, and commas. For example, the data might come in SPSS format. To see how this is done, let’s first download some <a href="http://calcnet.mth.cmich.edu/org/spss/Prj_ExamData.htm">example data</a>. In this case, we’ll be looking at some exam scores formatted as a <code>.sav</code> (SPSS) file.</p>
+<p>Note, there are many packages that are designed to import non-R files into R. For example, the most popular one in the past was the <code>foreign</code> package, though it has been replaced by more modern packages. My personal favorite is the <code>memisc</code> package, which offers substantial control over how the importation process occurs. When working with large datasets, this can be very important. However, this package would probably be like using a sledge hammer to pound a nail, when working with a small dataset. For our purposes today, we will use the <code>haven</code> package.</p>
+<p>If you haven’t installed it already, make sure to do so.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">install.packages</span>(<span class="st">&#39;haven&#39;</span>)</code></pre></div>
+<p>Then load the library and use the <code>read_sav()</code> function.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(haven)
 
-reviewer_transformation2 &lt;-<span class="st"> </span><span class="cf">function</span>(vals) {
-  <span class="kw">round</span>(<span class="kw">sqrt</span>(vals<span class="op">/</span><span class="dv">2</span>))
-}
-
-reviewer_transformation_pipe &lt;-<span class="st"> </span><span class="cf">function</span>(vals) {
-  vals <span class="op">%&gt;%</span>
-<span class="st">    </span>magrittr<span class="op">::</span><span class="kw">divide_by</span>(<span class="dv">2</span>) <span class="op">%&gt;%</span>
-<span class="st">    </span><span class="kw">sqrt</span>() <span class="op">%&gt;%</span>
-<span class="st">    </span><span class="kw">round</span>()
-}
-
-x &lt;-<span class="st"> </span><span class="dv">1</span><span class="op">:</span><span class="dv">10</span>
-<span class="kw">reviewer_transformation</span>(x)</code></pre></div>
-<pre><code>##  [1] 1 1 1 1 2 2 2 2 2 2</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">reviewer_transformation2</span>(x)</code></pre></div>
-<pre><code>##  [1] 1 1 1 1 2 2 2 2 2 2</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">reviewer_transformation_pipe</span>(x)</code></pre></div>
-<pre><code>##  [1] 1 1 1 1 2 2 2 2 2 2</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(magrittr)
-
-fun1 &lt;-<span class="st"> </span><span class="cf">function</span>(x){
-  x <span class="op">*</span><span class="dv">2</span>
-}
-
-fun2 &lt;-<span class="st"> </span><span class="cf">function</span>(y) {
-  y <span class="op">-</span><span class="st"> </span><span class="dv">3</span>
-}
-
-<span class="kw">fun2</span>(<span class="kw">fun1</span>(x))</code></pre></div>
-<pre><code>##  [1] -1  1  3  5  7  9 11 13 15 17</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">x <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">fun1</span>() <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">fun2</span>()</code></pre></div>
-<pre><code>##  [1] -1  1  3  5  7  9 11 13 15 17</code></pre>
-<p>To address this, we use pipes.</p>
-<div id="basic-usage" class="section level3">
-<h3><span class="header-section-number">4.4.1</span> Basic usage</h3>
-<p>The <code>%&gt;%</code> operator (pronounced “pipe”) takes whatever is on its left-hand-side (LHS) and applies it to the <em>first parameter</em> of the function listed on the right-hand-side. Install and load the <code>magrittr</code> package to use it.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">install.packages</span>(<span class="st">&#39;magrittr&#39;</span>)
-
-<span class="kw">library</span>(magrittr)</code></pre></div>
-</div>
-<div id="sending-the-lhs-to-another-parameter" class="section level3">
-<h3><span class="header-section-number">4.4.2</span> Sending the LHS to another parameter</h3>
-<p>But what do I do when I need the LHS output to go to another parameter in the RHS function? I use the <code>.</code> to remind the RHS function I want the LHS output to go to a different place.</p>
-<example using paste>
-</div>
-<div id="convenient-magrittr-functions" class="section level3">
-<h3><span class="header-section-number">4.4.3</span> Convenient magrittr functions</h3>
-</div>
-</div>
-<div id="more-talk-about-the-help-files" class="section level2">
-<h2><span class="header-section-number">4.5</span> More talk about the help files</h2>
-</div>
-<div id="functions-from-other-packages" class="section level2">
-<h2><span class="header-section-number">4.6</span> Functions from other packages</h2>
-<ul>
-<li>I can import functions from another package by…</li>
-<li>What if I only want to import once?</li>
-<li>Namespace considerations</li>
-</ul>
-</div>
-<div id="section" class="section level2">
-<h2><span class="header-section-number">4.7</span> </h2>
+df &lt;-<span class="st"> </span><span class="kw">read_sav</span>(<span class="st">&#39;exam.sav&#39;</span>)</code></pre></div>
+<p>Now we can use the <code>head()</code> function to look at the “head” (first six lines) of our newly imported dataset.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">head</span>(df)</code></pre></div>
+<pre><code>## # A tibble: 6 x 4
+##      ID gender  exam scores
+##   &lt;dbl&gt; &lt;chr&gt;  &lt;dbl&gt;  &lt;dbl&gt;
+## 1     1 f          1   45  
+## 2     1 f          2   33  
+## 3     1 f          3   29.5
+## 4     2 f          1   44  
+## 5     2 f          2   33  
+## 6     2 f          3   27</code></pre>
 
 </div>
 </div>
+
+
+
+
+
+
             </section>
 
           </div>
         </div>
       </div>
-<a href="visualization.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="dataframes-1.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="dataframes-1.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>

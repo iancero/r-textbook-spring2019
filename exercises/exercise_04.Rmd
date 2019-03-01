@@ -1,0 +1,36 @@
+---
+title: 'CSP 518 - Exercises: 04 - Import/Export'
+date: 'Due: 2019-03-08 @ 11:59pm'
+output:
+  pdf_document: default
+---
+
+## Instructions
+
+1. Make a .Rmd file to complete these exercises.
+
+  - Title it "CSP 518 - Exercises: Intro to R" (in quotes)
+  - Add your name(s) in the author slot (in quotes)
+  - The output can be either be `pdf_document` or `html_document` (no quotes)
+
+2. Turn in just your .Rmd file on Blackboard. Note, I will need to be able to `knit` it myself, so make sure everything runs the way you intend, before you turn it in.
+
+3. For clarity, write "## Question <number>" befor each question to signal which one you are answering.
+
+## Exercises
+
+1. Here is an example dataframe. Export it to a `.csv` file (make sure there are no rownames in the exported file).
+
+```{r}
+df <- data.frame(
+  gender = c('m', 'f', 'f', 'f', 'm'),
+  race = c('b', 'w', 'b', 'w', 'b'),
+  age = c(11, 12, 13, 12, 11),
+  height = c(5.1, 6.1, 5.5, 5.3, 6.0))
+```
+
+2. Now import that same file you just exported and save it under the variable name `df2`. Use the `readr` package.
+
+3. Download one of [these datasets](http://calcnet.mth.cmich.edu/org/spss/Prjs_DataSets.htm) in SPSS (`.sav`) format. Then import it using the `haven` package.
+
+

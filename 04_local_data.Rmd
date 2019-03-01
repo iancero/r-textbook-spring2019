@@ -1,0 +1,122 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+
+# Local Data Import and Export
+
+In this chapter we will address the following issues:
+
+1. How to write data to a spreadsheet (`.csv` file)
+2. How to read in a simple spreadsheet as a dataframe
+3. How to read in SPSS files
+
+## Basic exportation to a `.csv` file
+
+As we discussed in the previous chapter, rectangular data (where rows are observations and columns are attributes of those observations) have a special status in data analysis. They are simple to construct, manipulate, and analyze. For those reasons, a vast majority of the time they will be all you need. R knows this, so it has several functions designed specifically for data in this format (e.g., all the special things you can do with a dataframe).
+
+For example, let's imagine you wanted to export the data we used in the previous chapter (which we can reload here, for convenience).
+
+```{r}
+df <- data.frame(
+  gender = c('Male', 'Female', 'Female', 'Male', 'Female'), 
+  shoe = c('Nikes', 'Reebok', 'Adididas', 'Manolos', 'Nikes'), 
+  age = c(18, NA, 19, 21, 18),
+  stringsAsFactors = FALSE)
+
+df
+```
+
+We can write that dataframe to a *comma-seperated values (".csv")* file, using R's `write.csv()` function. This function takes two main arguments: the data you want to export and the filename you want your exported data to have (don't forget to add ".csv" at the end!). 
+
+```{r}
+write.csv(df, file = 'my_shoe_data.csv')
+```
+
+To see what this did, go find the file that R created and try to open it with a spreadsheet program (e.g., Excel). If you don't know where to look, remember you can use the `getwd()` command to ask R where it is saving files.
+
+```{r, eval=FALSE}
+getwd()
+```
+
+### Other options
+
+If you've looked at the exported file, you've probably noticed there is a new column on the left that wasn't in our original dataframe. Those are the rownames for your dataframe. Usually they are just numbers, but you can change them to whatever you want. Almost always, they just get in the way. To make sure they don't get exported along with your other data, you can set `rownames = F` in your `write.csv()` call.
+
+
+```{r}
+write.csv(df, file = 'my_shoe_data.csv', row.names = F)
+```
+
+Note that this will over-write the existing file! Of course, that is usually what you want, but just make sure you are not overwriting something you wanted to save.
+
+## Reading in rectangular data
+
+Most of the time, rectangular data come in the form of a `.csv` file. This is the kind of file you just created in the last section. It has a simple structure, where all rows occurr on seperate lines of the file and columns within those rows are seperated by commas. To see what they look like "under the hood", try opening the `.csv` file from the last section in a text editor, like Notepad or RStudio's built in text editor.
+
+### Traditional importation
+
+To read a `.csv` file into R, we simply use the `read.csv()` command, storing the result to a dataframe.
+
+```{r}
+df <- read.csv('my_shoe_data.csv')
+
+df
+```
+
+### Importation options to know about
+
+Note there are a few important parameters to this function we can alter here, if we want. You can see them using the `?read.csv` help file, but I'll summarize the big ones here.
+
++ `header` - should the first line of the incoming file (the "header") be treated as the variable names? This defaults to `TRUE` because it is almost always the case, but you should be aware of it, in case your incoming data looks different.
++ `sep` - This is the symbol R will use to differentiate columns. It is nearly always a "," but you can change it if there is something special about your data.
++ `na.strings` - The symbol R will use to denote `NA` (missing) data. Often, people do silly things like using "-999" to code missing data. After you are done feeling ashamed of them for that very irresponsible decision, you can import their data by setting `na.strings = '-999'`, which will convert all those values to `NA` during the import.
++ `skip` - sometimes your data don't begin on the first line of the incoming file. You can tell R to "skip" those unimportant lines by incrementing the numeric value of this parameter.
++ `stringsAsFactors` - we talked about this during dataframe creation in the previous chapter. R defaults to bringing all string variables in as categorical. This used to make sense, but in the modern world is kind of a nuisance. Most often, it is best to set to `FALSE`.
+
+### Consider the `readr` package
+
+As the last section might have implied, there are several options you can change to influence how your `.csv`s are imported. Some of them default to values that don't really make sense anymore (e.g., `stringsAsFactors = TRUE`). The `readr` package attempts to resolve some of this, by offering the same set of importation functions as `base` R, but providing more sensible defaults. 
+
+To use this package, install the `tidyverse`, which contains `readr` in it.
+
+```{r, eval=FALSE}
+install.packages('tidyverse')
+```
+
+Then load `readr` and use the `read_csv()` function.
+
+```{r}
+library(readr)
+
+df <- read_csv('my_shoe_data.csv')
+```
+
+Notice that `read_csv()` did not need to be told your strings were not factors, as it's default behavior is to assume you wanted character variables. Both `readr`'s `read_csv()` function and `base` R's `read.csv()` will generally work for your purposes, but `read_csv()` is generally more reliable, so it is worth making your default.
+
+## Importing data from other programs
+
+Sometimes, we want to import data that are more than just simple numbers, letters, and commas. For example, the data might come in SPSS format. To see how this is done, let's first download some [example data](http://calcnet.mth.cmich.edu/org/spss/Prj_ExamData.htm). In this case, we'll be looking at some exam scores formatted as a `.sav` (SPSS) file.
+
+Note, there are many packages that are designed to import non-R files into R. For example, the most popular one in the past was the `foreign` package, though it has been replaced by more modern packages. My personal favorite is the `memisc` package, which offers substantial control over how the importation process occurs. When working with large datasets, this can be very important. However, this package would probably be like using a sledge hammer to pound a nail, when working with a small dataset. For our purposes today, we will use the `haven` package.
+
+If you haven't installed it already, make sure to do so.
+
+```{r, eval=FALSE}
+install.packages('haven')
+```
+
+Then load the library and use the `read_sav()` function.
+
+```{r}
+library(haven)
+
+df <- read_sav('exam.sav')
+```
+
+Now we can use the `head()` function to look at the "head" (first six lines) of our newly imported dataset.
+
+```{r}
+head(df)
+```
