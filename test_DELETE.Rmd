@@ -1,0 +1,12 @@
+
+```{r, message=FALSE, warning=FALSE}
+library(tidyverse)
+
+df <- expand.grid(
+  id = c('Alice', 'Bob', 'Chantal'), 
+  time = c('a', 'b', 'c')) %>%
+  arrange(id, time)
+df$score <- sample(1:nrow(df))
+
+df
+```

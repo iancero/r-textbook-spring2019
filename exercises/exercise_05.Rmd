@@ -28,46 +28,17 @@ time1_df <- data.frame(id = 1:10, baseline = rpois(10, 10))
 time2_df <- data.frame(id = 5:14, followup = rpois(10, 10))
 ```
 
-```{r}
-library(tidyverse)
-
-full_join(time1_df, time2_df, by = 'id')
-```
-
 2. Using the same two initial dataframes above, make a new dataframe that includes only people who have data from both time points (baseline and followup).
-
-```{r}
-inner_join(time1_df, time2_df, by = 'id')
-```
 
 3. I want to keep everyone who showed up at time 1 (baseline), but I don't want to analyze anyone without a baseline score. Make a new dataset that has everyone from baseline (regardless of whether they have a followup score), but *only* followup scores from people who were present at baseline.
 
-```{r}
-left_join(time1_df, time2_df, by = 'id')
-```
-
 4. I'd really like to know if there is something atypical about people who only completed one time point. Make a new dataframe that includes all the people who completed time 1, but not time 2.
-
-```{r}
-anti_join(time1_df, time2_df, by = 'id')
-```
 
 5. The data from #2 are in a wide format, but my analysis needs them to be in long format. Use the `gather()` function to make a convert the dataframe from #2 into a new one that has three columns, "id", "time", and "score". In this dataframe, each participant should have two rows, one for each of their scores.
 
-```{r}
-gathered_df <- inner_join(time1_df, time2_df, by = 'id') %>%
-  gather(time, score, -id)
 
-gathered_df
-```
 
 
 6. Actually, I changed my mind. Use the `spread()` command to change the dataframe from #5 back into its original format.
 
-```{r}
-spread_df <- gathered_df %>%
-  spread(time, score)
-
-spread_df
-```
 
