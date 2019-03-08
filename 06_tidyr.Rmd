@@ -63,3 +63,41 @@ long_df
 ```
 
 Now, our data are returned to their original form.
+
+## Other examples we talked about
+
+
+
+
+```{r}
+library(tidyverse)
+
+df <- expand.grid(
+  id = c('Alice', 'Bob', 'Chantal'), 
+  time = c('a', 'b', 'c')) %>%
+  arrange(id, time) %>%
+  mutate(score = sample(1:nrow(df)))
+
+df
+```
+
+```{r}
+spread_df <- df %>%
+  spread(time, score, sep = '_')
+
+spread_df
+```
+
+```{r}
+spread_df %>%
+  gather(time, score, -id) %>%
+  group_by(id) %>%
+  mutate(center_score  = score - mean(score)) %>%
+  ungroup() %>%
+  arrange(id, time)
+```
+
+
+
+
+
