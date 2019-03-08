@@ -5,11 +5,11 @@
 
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>R Textbook</title>
+  <title>7 Data joins | R Textbook</title>
   <meta name="description" content="This is the ‘organic’ textbook created by our class discussions and exercises.">
   <meta name="generator" content="bookdown  and GitBook 2.6.7">
 
-  <meta property="og:title" content="R Textbook" />
+  <meta property="og:title" content="7 Data joins | R Textbook" />
   <meta property="og:type" content="book" />
   
   
@@ -17,7 +17,7 @@
   <meta name="github-repo" content="iancero/r-textbook-spring2019" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="R Textbook" />
+  <meta name="twitter:title" content="7 Data joins | R Textbook" />
   
   <meta name="twitter:description" content="This is the ‘organic’ textbook created by our class discussions and exercises." />
   
@@ -31,8 +31,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
   
   
-
-<link rel="next" href="basic-r.html">
+<link rel="prev" href="local-data-import-and-export.html">
+<link rel="next" href="reshaping-data-with-tidyr.html">
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -212,23 +212,103 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="header">
-<h1 class="title">R Textbook</h1>
-<p class="author"><em>Ian Cero’s CSP 518 Class</em></p>
-<p class="date"><em>Spring 2019</em></p>
-</div>
-<div id="preface" class="section level1">
-<h1><span class="header-section-number">1</span> Preface</h1>
-<p>What follows is an “organic” textbook. It is the product of class discussions and exercises, each of which was recorded as it was presented in class.</p>
+<div id="data-joins" class="section level1">
+<h1><span class="header-section-number">7</span> Data joins</h1>
+<p>In this chapter we work to make one of the most tedious parts of data manipulation easier: merging (“joining”) datasets. We will cover four kinds of merges.</p>
+<ol style="list-style-type: decimal">
+<li>Left joins</li>
+<li>Inner joins</li>
+<li>Full joins</li>
+<li>Anti joins</li>
+</ol>
+<p>Over the course of the chapter, we’ll be working with the following data. At various point’s we’ll add and subtract from these basic values to show what happens for each type of join when information is missing from one or the other of the datasets.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">participants &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&#39;Alice&#39;</span>, <span class="st">&#39;Bob&#39;</span>, <span class="st">&#39;Charlie&#39;</span>, <span class="st">&#39;Dayvon&#39;</span>, <span class="st">&#39;Eve&#39;</span>)
+ages &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">25</span>, <span class="dv">26</span>, <span class="dv">27</span>, <span class="dv">28</span>, <span class="dv">29</span>)
+incomes &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">10000</span>, <span class="dv">20000</span>, <span class="dv">30000</span>, <span class="dv">40000</span>, <span class="dv">50000</span>)</code></pre></div>
+<div id="left-joins" class="section level2">
+<h2><span class="header-section-number">7.1</span> Left joins</h2>
+<p>These are likely the most common joins. If you have two datasets (call them “a” and “b”), a left join looks for all the records on right (b) that match records on the left (a), then inserts the matches into the left dataset (a).</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(tidyverse)
 
+df_a &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">name =</span> participants, <span class="dt">age =</span> ages)
+
+<span class="co"># Eve is missing from the second dataframe</span>
+df_b &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">name =</span> participants[<span class="dv">1</span><span class="op">:</span><span class="dv">4</span>], <span class="dt">income =</span> incomes[<span class="dv">1</span><span class="op">:</span><span class="dv">4</span>])
+
+df_left_joined &lt;-<span class="st"> </span><span class="kw">left_join</span>(df_a, df_b, <span class="dt">by =</span> <span class="st">&#39;name&#39;</span>)</code></pre></div>
+<pre><code>## Warning: Column `name` joining factors with different levels, coercing to
+## character vector</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">df_left_joined</code></pre></div>
+<pre><code>##      name age income
+## 1   Alice  25  10000
+## 2     Bob  26  20000
+## 3 Charlie  27  30000
+## 4  Dayvon  28  40000
+## 5     Eve  29     NA</code></pre>
+</div>
+<div id="inner-joins" class="section level2">
+<h2><span class="header-section-number">7.2</span> Inner joins</h2>
+<p>Inner joins look for records that match in both A and B, then return only the rows that match both.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">df_a &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">name =</span> participants, <span class="dt">age =</span> ages)
+
+<span class="co"># Eve is missing from the second dataframe</span>
+df_b &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">name =</span> participants[<span class="dv">1</span><span class="op">:</span><span class="dv">4</span>], <span class="dt">income =</span> incomes[<span class="dv">1</span><span class="op">:</span><span class="dv">4</span>])
+
+df_inner_joined &lt;-<span class="st"> </span><span class="kw">inner_join</span>(df_a, df_b, <span class="dt">by =</span> <span class="st">&#39;name&#39;</span>)</code></pre></div>
+<pre><code>## Warning: Column `name` joining factors with different levels, coercing to
+## character vector</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">df_inner_joined</code></pre></div>
+<pre><code>##      name age income
+## 1   Alice  25  10000
+## 2     Bob  26  20000
+## 3 Charlie  27  30000
+## 4  Dayvon  28  40000</code></pre>
+</div>
+<div id="full-joins" class="section level2">
+<h2><span class="header-section-number">7.3</span> Full joins</h2>
+<p>Full joins look for records that match in both A and B. They then match everything they can, but return all the rows.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Alice is missing from the first</span>
+df_a &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">name =</span> participants[<span class="dv">2</span><span class="op">:</span><span class="dv">5</span>], <span class="dt">age =</span> ages[<span class="dv">2</span><span class="op">:</span><span class="dv">5</span>])
+
+<span class="co"># Eve is missing from the second dataframe</span>
+df_b &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">name =</span> participants[<span class="dv">1</span><span class="op">:</span><span class="dv">4</span>], <span class="dt">income =</span> incomes[<span class="dv">1</span><span class="op">:</span><span class="dv">4</span>])
+
+df_full_joined &lt;-<span class="st"> </span><span class="kw">full_join</span>(df_a, df_b, <span class="dt">by =</span> <span class="st">&#39;name&#39;</span>)</code></pre></div>
+<pre><code>## Warning: Column `name` joining factors with different levels, coercing to
+## character vector</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">df_full_joined</code></pre></div>
+<pre><code>##      name age income
+## 1     Bob  26  20000
+## 2 Charlie  27  30000
+## 3  Dayvon  28  40000
+## 4     Eve  29     NA
+## 5   Alice  NA  10000</code></pre>
+</div>
+<div id="anti-joins" class="section level2">
+<h2><span class="header-section-number">7.4</span> Anti joins</h2>
+<p>These are a type of “filtering” join, named such because they are usually used to filter rows you want to find, rather than to create a new dataset. Anti joins look for all of the rows in A that <em>don’t</em> match in B, then return only non-matching rows. This is useful if you want, for example, to find people who hadn’t completed the second part of a data collection study yet.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Alice is missing from the first</span>
+df_a &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">name =</span> participants, <span class="dt">age =</span> ages)
+
+<span class="co"># Eve is missing from the second dataframe</span>
+df_b &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">name =</span> participants[<span class="dv">1</span><span class="op">:</span><span class="dv">4</span>], <span class="dt">income =</span> incomes[<span class="dv">1</span><span class="op">:</span><span class="dv">4</span>])
+
+df_anti_joined &lt;-<span class="st"> </span><span class="kw">anti_join</span>(df_a, df_b, <span class="dt">by =</span> <span class="st">&#39;name&#39;</span>)</code></pre></div>
+<pre><code>## Warning: Column `name` joining factors with different levels, coercing to
+## character vector</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">df_anti_joined</code></pre></div>
+<pre><code>##   name age
+## 1  Eve  29</code></pre>
+
+</div>
 </div>
             </section>
 
           </div>
         </div>
       </div>
-
-<a href="basic-r.html" class="navigation navigation-next navigation-unique" aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="local-data-import-and-export.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="reshaping-data-with-tidyr.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>

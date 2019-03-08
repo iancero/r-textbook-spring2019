@@ -5,11 +5,11 @@
 
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>R Textbook</title>
+  <title>8 Reshaping data with tidyr | R Textbook</title>
   <meta name="description" content="This is the ‘organic’ textbook created by our class discussions and exercises.">
   <meta name="generator" content="bookdown  and GitBook 2.6.7">
 
-  <meta property="og:title" content="R Textbook" />
+  <meta property="og:title" content="8 Reshaping data with tidyr | R Textbook" />
   <meta property="og:type" content="book" />
   
   
@@ -17,7 +17,7 @@
   <meta name="github-repo" content="iancero/r-textbook-spring2019" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="R Textbook" />
+  <meta name="twitter:title" content="8 Reshaping data with tidyr | R Textbook" />
   
   <meta name="twitter:description" content="This is the ‘organic’ textbook created by our class discussions and exercises." />
   
@@ -31,8 +31,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
   
   
+<link rel="prev" href="data-joins.html">
 
-<link rel="next" href="basic-r.html">
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -212,23 +212,124 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="header">
-<h1 class="title">R Textbook</h1>
-<p class="author"><em>Ian Cero’s CSP 518 Class</em></p>
-<p class="date"><em>Spring 2019</em></p>
+<div id="reshaping-data-with-tidyr" class="section level1">
+<h1><span class="header-section-number">8</span> Reshaping data with <code>tidyr</code></h1>
+<p>One of the most common problems in data management that lies just beyond most people’s grasp is reshaping data. In this chapter, we will cover two basic issues.</p>
+<ol style="list-style-type: decimal">
+<li>Turning “long” data into “wide” data</li>
+<li>Turning “wide” data into “long” data</li>
+</ol>
+<p>If you are interested in a deeper understanding of how the shape of your data can improve the way you think about your analysis, <a href="https://vita.had.co.nz/papers/tidy-data.pdf">Hadley Wickam’s paper on the subject</a> is an excellent read.</p>
+<div id="turning-long-data-into-wide" class="section level2">
+<h2><span class="header-section-number">8.1</span> Turning long data into wide</h2>
+<p>Imagine you have an undergraduate research assistant who is trying to make life easy in a longitudinal study. In that study, participants return for a total of 3 times to retake the same test. You will eventually need each participant to have four columns - one for their name and three for each of their scores. However, the assistant has simply added a new row each time a participant returns, resulting in a dataset that looks like this:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(tidyverse)
+
+df &lt;-<span class="st"> </span><span class="kw">expand.grid</span>(<span class="dt">id =</span> <span class="kw">c</span>(<span class="st">&#39;Alice&#39;</span>, <span class="st">&#39;Bob&#39;</span>, <span class="st">&#39;Chantal&#39;</span>), <span class="dt">time =</span> <span class="kw">c</span>(<span class="st">&#39;a&#39;</span>, <span class="st">&#39;b&#39;</span>, <span class="st">&#39;c&#39;</span>)) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">arrange</span>(id, time)
+df<span class="op">$</span>score &lt;-<span class="st"> </span><span class="kw">sample</span>(<span class="dv">1</span><span class="op">:</span><span class="kw">nrow</span>(df))
+
+df</code></pre></div>
+<pre><code>##        id time score
+## 1   Alice    a     5
+## 2   Alice    b     3
+## 3   Alice    c     7
+## 4     Bob    a     9
+## 5     Bob    b     2
+## 6     Bob    c     4
+## 7 Chantal    a     1
+## 8 Chantal    b     8
+## 9 Chantal    c     6</code></pre>
+<p>To turn them into the format we want, we use the <code>spread()</code> function from the <code>tidyverse</code> sub-package “<code>tidyr</code>”.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">spread_df &lt;-<span class="st"> </span>df <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">spread</span>(time, score)
+
+spread_df</code></pre></div>
+<pre><code>##        id a b c
+## 1   Alice 5 3 7
+## 2     Bob 9 2 4
+## 3 Chantal 1 8 6</code></pre>
+<p>If I want to add the names of my key variable to my new column variables, I simply set the <code>sep</code> parameter (check the help files) to add the name of my variable to the new columns.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">df <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">spread</span>(time, score, <span class="dt">sep =</span> <span class="st">&#39;_&#39;</span>)</code></pre></div>
+<pre><code>##        id time_a time_b time_c
+## 1   Alice      5      3      7
+## 2     Bob      9      2      4
+## 3 Chantal      1      8      6</code></pre>
 </div>
-<div id="preface" class="section level1">
-<h1><span class="header-section-number">1</span> Preface</h1>
-<p>What follows is an “organic” textbook. It is the product of class discussions and exercises, each of which was recorded as it was presented in class.</p>
+<div id="turning-wide-data-into-long" class="section level2">
+<h2><span class="header-section-number">8.2</span> Turning wide data into long</h2>
+<p>To turn wide data back into long data, we use the <code>gather()</code> function from the same package. Note that <code>gather()</code> and <code>spread()</code> are exact opposites.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">long_df &lt;-<span class="st"> </span>spread_df <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">gather</span>(time, score)</code></pre></div>
+<pre><code>## Warning: attributes are not identical across measure variables;
+## they will be dropped</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">long_df</code></pre></div>
+<pre><code>##    time   score
+## 1    id   Alice
+## 2    id     Bob
+## 3    id Chantal
+## 4     a       5
+## 5     a       9
+## 6     a       1
+## 7     b       3
+## 8     b       2
+## 9     b       8
+## 10    c       7
+## 11    c       4
+## 12    c       6</code></pre>
+<p>Uh oh! We accidentally folded too much information into long format. We lost our id’s into the time and score variables. This is because we forgot to tell <code>gather()</code> whether there were any columns that we <em>didn’t</em> want to be involved in the process. In this case, we want our id’s to stay our of the affair, so we add a <code>-</code> symbol in front of them.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">long_df &lt;-<span class="st"> </span>spread_df <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">gather</span>(time, score, <span class="op">-</span>id)
+
+long_df</code></pre></div>
+<pre><code>##        id time score
+## 1   Alice    a     5
+## 2     Bob    a     9
+## 3 Chantal    a     1
+## 4   Alice    b     3
+## 5     Bob    b     2
+## 6 Chantal    b     8
+## 7   Alice    c     7
+## 8     Bob    c     4
+## 9 Chantal    c     6</code></pre>
+<p>Now, our data are returned to their original form.</p>
+
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(tidyverse)
+
+df &lt;-<span class="st"> </span><span class="kw">expand.grid</span>(
+  <span class="dt">id =</span> <span class="kw">c</span>(<span class="st">&#39;Alice&#39;</span>, <span class="st">&#39;Bob&#39;</span>, <span class="st">&#39;Chantal&#39;</span>), 
+  <span class="dt">time =</span> <span class="kw">c</span>(<span class="st">&#39;a&#39;</span>, <span class="st">&#39;b&#39;</span>, <span class="st">&#39;c&#39;</span>)) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">arrange</span>(id, time)
+df<span class="op">$</span>score &lt;-<span class="st"> </span><span class="kw">sample</span>(<span class="dv">1</span><span class="op">:</span><span class="kw">nrow</span>(df))
+
+df</code></pre></div>
+<pre><code>##        id time score
+## 1   Alice    a     7
+## 2   Alice    b     1
+## 3   Alice    c     9
+## 4     Bob    a     5
+## 5     Bob    b     2
+## 6     Bob    c     8
+## 7 Chantal    a     3
+## 8 Chantal    b     4
+## 9 Chantal    c     6</code></pre>
 
 </div>
+</div>
+
+
+
+
+
+
             </section>
 
           </div>
         </div>
       </div>
+<a href="data-joins.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
 
-<a href="basic-r.html" class="navigation navigation-next navigation-unique" aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
