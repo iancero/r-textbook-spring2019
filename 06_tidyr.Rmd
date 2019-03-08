@@ -1,0 +1,65 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+# Reshaping data with `tidyr`
+
+One of the most common problems in data management that lies just beyond most people's grasp is reshaping data. In this chapter, we will cover two basic issues.
+
+1. Turning "long" data into "wide" data
+2. Turning "wide" data into "long" data
+
+If you are interested in a deeper understanding of how the shape of your data can improve the way you think about your analysis, [Hadley Wickam's paper on the subject](https://vita.had.co.nz/papers/tidy-data.pdf) is an excellent read.
+
+## Turning long data into wide
+
+Imagine you have an undergraduate research assistant who is trying to make life easy in a longitudinal study. In that study, participants return for a total of 3 times to retake the same test. You will eventually need each participant to have four columns - one for their name and three for each of their scores. However, the assistant has simply added a new row each time a participant returns, resulting in a dataset that looks like this:
+
+```{r, message=FALSE, warning=FALSE}
+library(tidyverse)
+
+df <- expand.grid(id = c('Alice', 'Bob', 'Chantal'), time = c('a', 'b', 'c')) %>%
+  arrange(id, time)
+df$score <- sample(1:nrow(df))
+
+df
+```
+
+To turn them into the format we want, we use the `spread()` function from the `tidyverse` sub-package "`tidyr`".
+
+```{r}
+spread_df <- df %>%
+  spread(time, score)
+
+spread_df
+```
+
+If I want to add the names of my key variable to my new column variables, I simply set the `sep` parameter (check the help files) to add the name of my variable to the new columns.
+
+```{r}
+df %>%
+  spread(time, score, sep = '_')
+```
+
+## Turning wide data into long
+
+To turn wide data back into long data, we use the `gather()` function from the same package. Note that `gather()` and `spread()` are exact opposites.
+
+```{r}
+long_df <- spread_df %>%
+  gather(time, score)
+
+long_df
+```
+
+Uh oh! We accidentally folded too much information into long format. We lost our id's into the time and score variables. This is because we forgot to tell `gather()` whether there were any columns that we *didn't* want to be involved in the process. In this case, we want our id's to stay our of the affair, so we add a `-` symbol in front of them.
+
+```{r}
+long_df <- spread_df %>%
+  gather(time, score, -id)
+
+long_df
+```
+
+Now, our data are returned to their original form.

@@ -1,0 +1,87 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+# Data joins
+
+In this chapter we work to make one of the most tedious parts of data manipulation easier: merging ("joining") datasets. We will cover four kinds of merges.
+
+1. Left joins
+2. Inner joins
+3. Full joins
+4. Anti joins
+
+Over the course of the chapter, we'll be working with the following data. At various point's we'll add and subtract from these basic values to show what happens for each type of join when information is missing from one or the other of the datasets.
+
+```{r}
+participants <- c('Alice', 'Bob', 'Charlie', 'Dayvon', 'Eve')
+ages <- c(25, 26, 27, 28, 29)
+incomes <- c(10000, 20000, 30000, 40000, 50000)
+```
+
+## Left joins
+
+These are likely the most common joins. If you have two datasets (call them "a" and "b"), a left join looks for all the records on right (b) that match records on the left (a), then inserts the matches into the left dataset (a).
+
+```{r}
+library(tidyverse)
+
+df_a <- data.frame(name = participants, age = ages)
+
+# Eve is missing from the second dataframe
+df_b <- data.frame(name = participants[1:4], income = incomes[1:4])
+
+df_left_joined <- left_join(df_a, df_b, by = 'name')
+
+df_left_joined
+```
+
+## Inner joins
+
+Inner joins look for records that match in both A and B, then return only the rows that match both.
+
+```{r}
+df_a <- data.frame(name = participants, age = ages)
+
+# Eve is missing from the second dataframe
+df_b <- data.frame(name = participants[1:4], income = incomes[1:4])
+
+df_inner_joined <- inner_join(df_a, df_b, by = 'name')
+
+df_inner_joined
+```
+
+## Full joins
+
+Full joins look for records that match in both A and B. They then match everything they can, but return all the rows.
+
+```{r}
+
+# Alice is missing from the first
+df_a <- data.frame(name = participants[2:5], age = ages[2:5])
+
+# Eve is missing from the second dataframe
+df_b <- data.frame(name = participants[1:4], income = incomes[1:4])
+
+df_full_joined <- full_join(df_a, df_b, by = 'name')
+
+df_full_joined
+```
+
+## Anti joins
+
+These are a type of "filtering" join, named such because they are usually used to filter rows you want to find, rather than to create a new dataset. Anti joins look for all of the rows in A that *don't* match in B, then return only non-matching rows. This is useful if you want, for example, to find people who hadn't completed the second part of a data collection study yet.
+
+```{r}
+# Alice is missing from the first
+df_a <- data.frame(name = participants, age = ages)
+
+# Eve is missing from the second dataframe
+df_b <- data.frame(name = participants[1:4], income = incomes[1:4])
+
+df_anti_joined <- anti_join(df_a, df_b, by = 'name')
+
+df_anti_joined
+```
+
