@@ -1,0 +1,160 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+# Regression Models
+
+Now that we have a grasp on data manipulation, it's time to turn to data analysis. In this chapter, we focus on some of the most common statistical models in use today: linear regression and logistic regression. To get a sense for how to estimate these models, we will...
+
+1. Simulate fake data to analyze
+1. Fit (estimate) both linear and logistic regression models
+1. Look at different ways to view the results, using `base R` and `broom`
+1. Using the tidyverse to fit several models simultaneously
+
+## Simulating fake data
+
+Before we fit our first regression model, lets simulate some data to analyze. We'll do that by first simulating two normally distributed predictors. Then, we'll choose some slopes for those predictors and make an outcome variable equal to the predictors times their slopes, plus some random error. To give us a binary outcome, we will also make a seperate variable in which our original *y* is dichotomized at the median with a little bit of error(*y_dichot*).
+
+```{r, message=FALSE, error=FALSE}
+library(tidyverse)
+set.seed(314159)
+n_cases <- 1000
+df <- data.frame(id = 1:n_cases) %>%
+  mutate(
+    x1 = rnorm(n_cases, mean = 10, sd = 1),
+    x2 = rnorm(n_cases, mean = 20, sd = 2),
+    y = 5.00 + .30*x1 + .60*x2 + rnorm(n_cases, mean = 0, sd = 1),
+    y_dichot = as.numeric(y > median(y) + rnorm(n_cases)))
+```
+
+Here, we have an intercept of $5.00$, a slope of $.30$ for $x_1$, slope of $.60$ for $x_2$. Our outcome $y$ has an error variance of $1.0$. Note that there is nothing special about these numbers, I just made them up because we needed some. If our linear regression model does a good job, it should find an intercept and slopes close (though not exactly equal) to these. When we use our *y_dichot* outcome in a logistic regression, note that the numbers won't be exactly the same because the slopes will be on a logrithmic scale.
+
+Our resulting data look like this.
+
+```{r}
+head(df)
+```
+
+## Fitting regression models
+
+### Linear regression
+
+Now that we've got our data, we can fit our first regression model. In R, we fit linear regression models that using the `lm()` function ("lm" for "linear model"). This function takes two main parameters: a regression formula and the data to which you want that formula applied.
+
+The formula is specified using the `<outcome> ~ <predictor1> + <predictor2> + ...` format. Your outcome goes on the left side of the formula, followed by a squiggle (`~`), followed by each of your predictors seperated by a `+`. The data is just your dataframe of interest.
+
+```{r}
+lm(formula = y ~ x1 + x2, data = df)
+```
+
+Notice that our output is pretty close to what we would have predicted, especially for the two slope coefficients for *x1* and *x2*. But where are our standard errors and p-values? To get them, we need to use the `summary()` command. To make sure we can call summary again without needing to re-estimate the model, we'll first save it in a variable called `fit`.
+
+```{r}
+fit <- lm(formula = y ~ x1 + x2, data = df)
+summary(fit)
+```
+
+There we go! Now I have all the usual information I would need for a regression table. Note that in this case, our p-values (in the column labelled "Pr(>|t|)") are so small that they need to be given in scientific notation - that's because our simulated data have very little error in them. Under more normal circumstances, your p-values will likely be much larger.
+
+### Logistic regression
+
+Fitting a logistic regression model is *almost* exactly the same, except for a few important differences. First, we will use our dichotomized variable (*y_dichot*) as the outcome in our regression formula. Additionally, we will use the `glm()` function ("glm" for "generalized linear model") and we need to specify what family of generalized linear model we are using in that function. For a logistic regression that `family = 'binomial'`.
+
+```{r}
+glm(y_dichot ~ x1 + x2, data = df, family = 'binomial')
+```
+
+Once again, calling the model function alone gives us *some* important information, but not very much. So, we'll follow the same trick above and use the summary function.
+
+```{r}
+fit2 <- glm(y_dichot ~ x1 + x2, data = df, family = 'binomial')
+summary(fit2)
+```
+
+That's once again much better! Now we have all of the information we would normally need to report in a regression table.
+
+## Other ways of viewing the output
+
+The `summary()` function from R is nice for looking at our results in real time, but it can be a real pain if I want to modify or export the output. For example, what if I wanted to test whether my results were still significant after Bonferroni correction? For a small number of variables, we could just eyeball it. But for any reasonably large regression, we should be using code to do it instead.
+
+To get your output in a more code-friendly format, you can install and use the `broom` package.
+
+```{r, eval=FALSE}
+install.packages('broom')
+```
+
+This package has 3 major functions designed to help you out with standard regression models: `glance()`, `tidy()`, and `augment()`.
+
+### `glance()`
+
+If I want to see some basic model information (e.g., model sum of squares, $R^2$), I call `glance()` on my `fit` object. This function takes my `fit` object and gives me model summary information in a one-row dataframe.  
+
+```{r}
+library(broom)
+glance(fit)
+```
+
+If I want to see some more specific information about the coefficients in my model, I call `tidy()`.
+
+```{r}
+tidy(fit)
+```
+
+Now if I want to adjust my p-values, I can easily do so with the `tidyverse`
+
+```{r, warning=FALSE, message=FALSE}
+library(tidyverse)
+fit %>%
+  tidy() %>%
+  mutate(adj_p = p.adjust(p.value, method = 'bonferroni'))
+```
+
+
+Lastly, if I want to see some participant-level information about my model (e.g., predicted values), I can use `augment()`. This gives me a ton of useful information, including predicted values and standardized residuals.
+
+```{r}
+augment(fit)
+```
+
+## Fitting multiple regressions simultaneously
+
+Sometimes, we'll have a bunch of groups that we want to analyze seperately. For one or two groups, this isn't so bad to do individually. However, for larger numbers of groups, we'll need something more advanced. For example, let's assign people to some groups in our existing dataset.
+
+```{r}
+df <- df %>%
+  mutate(grp = sample(letters, size = nrow(.), replace = T))
+head(df)
+```
+
+Here, we've assigned people to one of 26 groups (a group for each letter of the alphabet). How can we fit all these regressions separately? With the `tidyverse`'s `group_by()` and  `do()` functions.
+
+```{r}
+model_df <- df %>%
+  group_by(grp) %>%
+  do(model = lm(y ~ x1 + x2, data = .))
+head(model_df)
+```
+
+If we want to unpack those models, we can once again use `broom`'s functions. We just need to make sure to specify the column where our models are, which in this case is "*model*".
+
+```{r}
+coef_table <- model_df %>%
+  tidy(model)
+head(coef_table, n = 10)
+```
+
+We can do the same thing for summary model information with the `glance()` function. 
+
+```{r}
+model_table <- model_df %>%
+  glance(model)
+head(model_table)
+```
+
+If we want, we can even see the distribution of things we care about, like $R^2$.
+
+```{r}
+ggplot(model_table, aes(r.squared)) +
+  geom_density(fill = 'grey', alpha = .50)
+```
