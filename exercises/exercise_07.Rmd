@@ -1,0 +1,36 @@
+---
+title: "CSP 518 - Exercises: 7 - Regression"
+author: "YOUR NAME"
+date: "Due: 2019-03-29 @ 11:59pm"
+output: pdf_document
+---
+
+## Instructions
+
+1. Make a .Rmd file to complete these exercises.
+
+  - Title it "CSP 518 - Exercises: Intro to R" (in quotes)
+  - Add your name(s) in the author slot (in quotes)
+  - The output can be either be `pdf_document` or `html_document` (no quotes)
+
+2. Turn in just your .Rmd file on Blackboard. Note, I will need to be able to `knit` it myself, so make sure everything runs the way you intend, before you turn it in.
+
+3. For clarity, write "## Question <number>" befor each question to signal which one you are answering.
+
+## Exercises
+
+1. Simulate a dataset with two continuous predictors and one outcome, which follows a standard regression form ($y = b_0 + b_1x_1 + b_2x_2 + \text{some error}$). Save the results to a variable named `df`. Make sure the dataset has exactly $100$ cases.
+
+2. Fit a regression model (your outcome predicted by both of your predictors) and save it to a variable named `fit`. Then summarize `fit` using the `summary()` function.
+
+3. Make a new variable in `df`. This variable should be binary, so you can use it in a logistic regression. HINT: an easy way to do this would be to dichotomize your existing outcome variable.
+
+4. Fit and summarize (with `summary()`) a logistic regression model of your new binary outcome, predicted by your two predictors. Hint: call your new fit object `fit2`, so that you don't overwrite your old one. Another hint: don't forget to specify `family = 'binomial'` in the `glm()` function.
+
+5. Now lets get a little fancier. Summarize your coefficients using the `tidy()` function from the `broom` package (instead of using `summary()`). Then add a new column to the resulting coefficient dataframe made of up of Bonferroni corrected p-values.
+
+6. Add a grouping column to your data frame (imagine it being something like race or gender), with people randomly assigned to each group. Make sure you have at least two groups.
+
+7. Make a new dataframe with a column of fitted regression models, using the `do()` function.
+
+8. Summarize your new dataframe with the `tidy()` function from `broom`.
