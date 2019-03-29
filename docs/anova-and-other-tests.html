@@ -5,11 +5,11 @@
 
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>3 Visualization | R Textbook</title>
+  <title>11 ANOVA and other tests | R Textbook</title>
   <meta name="description" content="This is the ‘organic’ textbook created by our class discussions and exercises.">
   <meta name="generator" content="bookdown  and GitBook 2.6.7">
 
-  <meta property="og:title" content="3 Visualization | R Textbook" />
+  <meta property="og:title" content="11 ANOVA and other tests | R Textbook" />
   <meta property="og:type" content="book" />
   
   
@@ -17,7 +17,7 @@
   <meta name="github-repo" content="iancero/r-textbook-spring2019" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="3 Visualization | R Textbook" />
+  <meta name="twitter:title" content="11 ANOVA and other tests | R Textbook" />
   
   <meta name="twitter:description" content="This is the ‘organic’ textbook created by our class discussions and exercises." />
   
@@ -31,8 +31,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
   
   
-<link rel="prev" href="basic-r.html">
-<link rel="next" href="functions-1.html">
+<link rel="prev" href="regression-models-1.html">
+
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -249,152 +249,270 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="visualization" class="section level1">
-<h1><span class="header-section-number">3</span> Visualization</h1>
-<p>There are many ways to visualize data in R. Two of the most common include Base R’s built-in functions and the <code>ggplot2</code> package.</p>
-<div id="base-r" class="section level2">
-<h2><span class="header-section-number">3.1</span> Base R</h2>
-<p>The term “Base R” refers to the set of packages and functions that R loads into each session by default. These packages include several statistical and plotting functions you will probably use a lot. Some of the most common plotting functions are given below.</p>
-<p><strong>hist()</strong></p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">rpois</span>(<span class="dv">100</span>, <span class="dt">lambda =</span> <span class="dv">3</span>)</code></pre></div>
-<pre><code>##   [1] 2 1 4 2 2 5 1 3 3 1 3 3 4 5 2 3 0 4 5 2 5 8 6 5 2 0 2 4 3 5 1 0 5 1 4
-##  [36] 4 3 5 3 3 3 1 3 1 2 3 0 3 3 1 1 5 4 2 6 0 2 5 1 2 6 5 4 2 3 3 2 1 4 4
-##  [71] 3 5 1 1 4 0 5 5 0 1 3 2 1 0 3 5 2 3 6 1 1 4 3 7 5 3 3 2 2 4</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">my_vals &lt;-<span class="st"> </span><span class="kw">rexp</span>(<span class="dv">100</span>, <span class="dv">10</span>)
-
-<span class="kw">hist</span>(
-  my_vals, 
-  <span class="dt">breaks =</span> <span class="dv">20</span>, 
-  <span class="dt">main =</span> <span class="st">&#39;Plot of Exponential Dis.&#39;</span>, 
-  <span class="dt">xlab =</span> <span class="st">&#39;X Values&#39;</span>, 
-  <span class="dt">ylab =</span> <span class="st">&#39;Y values&#39;</span>,
-  <span class="dt">col =</span> <span class="st">&#39;cyan&#39;</span>)</code></pre></div>
-<p><img src="_main_files/figure-html/unnamed-chunk-52-1.png" width="672" /></p>
-<p><strong>barplot()</strong></p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">heights &lt;-<span class="st"> </span><span class="dv">1</span><span class="op">:</span><span class="dv">10</span>
-<span class="kw">barplot</span>(heights)</code></pre></div>
-<p><img src="_main_files/figure-html/unnamed-chunk-53-1.png" width="672" /></p>
-<p><strong>plot()</strong></p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">x_vals &lt;-<span class="st"> </span><span class="dv">1</span><span class="op">:</span><span class="dv">10</span>
-y_values &lt;-<span class="st"> </span><span class="kw">rnorm</span>(<span class="dv">10</span>)
-
-<span class="kw">plot</span>(x_vals, y_values, <span class="dt">main =</span> <span class="st">&#39;Banana&#39;</span>, <span class="dt">xlab =</span> <span class="st">&#39;My X&#39;</span>)</code></pre></div>
-<p><img src="_main_files/figure-html/unnamed-chunk-54-1.png" width="672" /></p>
-</div>
-<div id="ggplot" class="section level2">
-<h2><span class="header-section-number">3.2</span> <code>ggplot</code></h2>
-<p>All statistical graphics share the same deep structure, a “Grammar of Graphics”. This means that any given plot can be uniquely identified (reproduced), given the following inputs.</p>
-<ul>
-<li>A dataset</li>
-<li>A coordinate system (2d Cartesian plane, 3d spherical coordinates, even quaternions!<a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a>)</li>
-<li>A facet specification (panel arrangement)</li>
-<li>Mappings from variables to aesthetic features</li>
-<li>One scale for each aesthetic mapping</li>
-<li>One or more layers of geometic objects (“geoms”), statistical functions, and position adjustments</li>
-</ul>
-<p>The most popular graphics package in R to date (maybe even accross all programming languages) is <code>ggplot2</code>. An update of the original <code>ggplot</code> package, <code>ggplot2</code> is based on the Grammar of Graphics above. It functions are designed specifically to behave like a grammar, in which you add plot elements together like a sentence.</p>
-<p>Lets explore how to build a plot.</p>
-<p>We’ll start by loading the <code>ggplot2</code> package and one of its built-in datasets (called <code>mpg</code>). This dataset includes information on 234 cars that will be convenient for us to plot.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">install.packages</span>(<span class="st">&#39;ggplot2&#39;</span>)</code></pre></div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(ggplot2)
-
-<span class="kw">data</span>(mpg)
-
-mpg</code></pre></div>
-<pre><code>## # A tibble: 234 x 11
-##    manufacturer model displ  year   cyl trans drv     cty   hwy fl    class
-##    &lt;chr&gt;        &lt;chr&gt; &lt;dbl&gt; &lt;int&gt; &lt;int&gt; &lt;chr&gt; &lt;chr&gt; &lt;int&gt; &lt;int&gt; &lt;chr&gt; &lt;chr&gt;
-##  1 audi         a4      1.8  1999     4 auto… f        18    29 p     comp…
-##  2 audi         a4      1.8  1999     4 manu… f        21    29 p     comp…
-##  3 audi         a4      2    2008     4 manu… f        20    31 p     comp…
-##  4 audi         a4      2    2008     4 auto… f        21    30 p     comp…
-##  5 audi         a4      2.8  1999     6 auto… f        16    26 p     comp…
-##  6 audi         a4      2.8  1999     6 manu… f        18    26 p     comp…
-##  7 audi         a4      3.1  2008     6 auto… f        18    27 p     comp…
-##  8 audi         a4 q…   1.8  1999     4 manu… 4        18    26 p     comp…
-##  9 audi         a4 q…   1.8  1999     4 auto… 4        16    25 p     comp…
-## 10 audi         a4 q…   2    2008     4 manu… 4        20    28 p     comp…
-## # … with 224 more rows</code></pre>
-<div id="blank-ggplot-plot" class="section level3">
-<h3><span class="header-section-number">3.2.1</span> Blank ggplot plot</h3>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(mpg)</code></pre></div>
-<p><img src="_main_files/figure-html/unnamed-chunk-57-1.png" width="672" /></p>
-</div>
-<div id="geoms" class="section level3">
-<h3><span class="header-section-number">3.2.2</span> Geoms</h3>
-<p>Getting points to display (displ, hwy)</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(mpg) <span class="op">+</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">mapping =</span> <span class="kw">aes</span>(<span class="dt">x =</span> displ, <span class="dt">y =</span> cty))</code></pre></div>
-<p><img src="_main_files/figure-html/unnamed-chunk-58-1.png" width="672" /></p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(mpg, <span class="dt">mapping =</span> <span class="kw">aes</span>(<span class="dt">x =</span> displ)) <span class="op">+</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">mapping =</span> <span class="kw">aes</span>(<span class="dt">y =</span> cty), <span class="dt">color =</span> <span class="st">&#39;steelblue&#39;</span>) <span class="op">+</span>
-<span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">mapping =</span> <span class="kw">aes</span>(<span class="dt">y =</span> hwy), <span class="dt">color =</span> <span class="st">&#39;tomato&#39;</span>)</code></pre></div>
-<p><img src="_main_files/figure-html/unnamed-chunk-59-1.png" width="672" /></p>
-<p>Other features of points we can change (size = cyl, color = class)</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(mpg, <span class="dt">mapping =</span> <span class="kw">aes</span>(<span class="dt">x =</span> displ, <span class="dt">shape =</span> drv, <span class="dt">color =</span> drv)) <span class="op">+</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">mapping =</span> <span class="kw">aes</span>(<span class="dt">y =</span> cty)) <span class="op">+</span>
-<span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">mapping =</span> <span class="kw">aes</span>(<span class="dt">y =</span> hwy))</code></pre></div>
-<p><img src="_main_files/figure-html/unnamed-chunk-60-1.png" width="672" /></p>
-<p>Smoothed line</p>
-<p>—— (2nd block)</p>
-<p>Lines</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">data</span>(beavers)
-
-<span class="kw">ggplot</span>(beaver1, <span class="dt">mapping =</span> <span class="kw">aes</span>(<span class="dt">x =</span> time, <span class="dt">y =</span> temp)) <span class="op">+</span>
-<span class="st">  </span><span class="kw">geom_point</span>() <span class="op">+</span>
-<span class="st">  </span><span class="kw">geom_line</span>()</code></pre></div>
-<p><img src="_main_files/figure-html/unnamed-chunk-61-1.png" width="672" /></p>
-<p>Vlines and Hlines</p>
-<p>Density plots</p>
-<p>Histograms</p>
-<p>Boxplots</p>
-</div>
-<div id="stat-functions" class="section level3">
-<h3><span class="header-section-number">3.2.3</span> Stat Functions</h3>
-</div>
-<div id="themes" class="section level3">
-<h3><span class="header-section-number">3.2.4</span> Themes</h3>
-</div>
-<div id="labels" class="section level3">
-<h3><span class="header-section-number">3.2.5</span> Labels</h3>
-</div>
-<div id="scales" class="section level3">
-<h3><span class="header-section-number">3.2.6</span> Scales</h3>
-</div>
-<div id="saving-your-plot" class="section level3">
-<h3><span class="header-section-number">3.2.7</span> Saving your plot**</h3>
-<ul>
-<li>File type</li>
-<li>Quality</li>
-<li>Dimensions</li>
-</ul>
-</div>
-<div id="facets" class="section level3">
-<h3><span class="header-section-number">3.2.8</span> Facets</h3>
-<p>&lt;<Use drv as faceting variable>&gt;</p>
-</div>
-<div id="where-to-learn-more" class="section level3">
-<h3><span class="header-section-number">3.2.9</span> Where to learn more</h3>
-<p>The <code>ggplot</code> <a href="https://github.com/rstudio/cheatsheets/blob/master/data-visualization-2.1.pdf">cheatsheet is available here</a> as is the quickest way to look up something you might have briefly forgotten.</p>
-<p>For more complex questions, <a href="https://ggplot2.tidyverse.org/index.html" class="uri">https://ggplot2.tidyverse.org/index.html</a> contains numerous worked examples that will bring your plots from plain old publishable to down right beautiful.</p>
-<p>If you have a really specific question, the “ggplot” tag on <a href="https://stackoverflow.com/questions/tagged/ggplot2?sort=frequent&amp;pageSize=50">Stack Overflow</a> is your best friend. Ask and you shall receive (help)!</p>
-
-</div>
-</div>
-</div>
-<div class="footnotes">
-<hr />
-<ol start="1">
-<li id="fn1"><p>Quaternions are… hard to describe. They are basically 4-part complex numbers that satisfy certain conditions. This allows them to elegently represent space in higher than 3-dimensions. However, they have been despised for much of their history. In fact, William Thomson, first baron Kelvin, note in 1892 “quaternions..though beautifully ingenious, have been an unmixed evil to those who have touched them in any way…”<a href="visualization.html#fnref1">↩</a></p></li>
+<div id="anova-and-other-tests" class="section level1">
+<h1><span class="header-section-number">11</span> ANOVA and other tests</h1>
+<p>In this chapter, we cover other common tests you will have run in other programs. In the later part of the chapter, we will focus specifically on Analysis of Variance (ANOVA). At the outset, let me begin with an apology: R’s ANOVA capabilities are <em>much</em> less intuitive and user friendly than in other programs. What I provide below is my best attempt to make the system understandable. Our agenda includes…</p>
+<ol style="list-style-type: decimal">
+<li><em>t</em>-Tests</li>
+<li>Correlation</li>
+<li>ANOVA - one-way and two-way</li>
 </ol>
+<p>We’ll start by simulating a dataset to use throughout our analyses. Because we have so many tests to run, this dataset will be a little more complex than in past chapters.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(tidyverse)
+
+<span class="kw">set.seed</span>(<span class="dv">314159</span>)
+
+n_obs &lt;-<span class="st"> </span><span class="dv">350</span>
+df &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">id =</span> <span class="dv">1</span><span class="op">:</span>n_obs) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">mutate</span>(
+    <span class="dt">gender =</span> <span class="kw">as.factor</span>(<span class="kw">sample</span>(<span class="kw">c</span>(<span class="st">&#39;male&#39;</span>, <span class="st">&#39;female&#39;</span>), <span class="dt">size =</span> n_obs, <span class="dt">replace =</span> T)),
+    <span class="dt">race =</span> <span class="kw">as.factor</span>(<span class="kw">sample</span>(<span class="kw">c</span>(<span class="st">&#39;Black&#39;</span>, <span class="st">&#39;White&#39;</span>, <span class="st">&#39;Asian&#39;</span>), <span class="dt">size =</span> n_obs, <span class="dt">replace =</span> T))) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">group_by</span>(gender, race) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">mutate</span>(
+    <span class="dt">group_age_mean =</span> <span class="kw">rnorm</span>(<span class="dv">1</span>, <span class="dt">sd =</span> <span class="dv">3</span>),
+    <span class="dt">age =</span> <span class="kw">round</span>(group_age_mean <span class="op">+</span><span class="st"> </span><span class="kw">rnorm</span>(<span class="kw">n</span>(), <span class="dt">mean =</span> <span class="dv">22</span>, <span class="dt">sd =</span> <span class="dv">2</span>), <span class="dv">4</span>),
+    <span class="dt">gpa1 =</span> <span class="kw">round</span>(<span class="kw">runif</span>(<span class="kw">n</span>(), <span class="dv">2</span>, <span class="dv">4</span>), <span class="dv">1</span>),
+    <span class="dt">gpa2 =</span> <span class="kw">round</span>(gpa1 <span class="op">+</span><span class="st"> </span>(<span class="dv">4</span> <span class="op">-</span><span class="st"> </span>gpa1)<span class="op">*</span><span class="kw">runif</span>(<span class="kw">n</span>(), <span class="dt">min =</span> <span class="op">-</span>.<span class="dv">50</span>, <span class="dt">max =</span> .<span class="dv">75</span>), <span class="dv">1</span>),
+    <span class="dt">gpa3 =</span> <span class="kw">round</span>(gpa2 <span class="op">+</span><span class="st"> </span>(<span class="dv">4</span> <span class="op">-</span><span class="st"> </span>gpa2)<span class="op">*</span><span class="kw">runif</span>(<span class="kw">n</span>(), <span class="dt">min =</span> <span class="op">-</span>.<span class="dv">50</span>, <span class="dt">max =</span> .<span class="dv">75</span>), <span class="dv">1</span>)) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">ungroup</span>()
+
+<span class="kw">head</span>(df)</code></pre></div>
+<pre><code>## # A tibble: 6 x 8
+##      id gender race  group_age_mean   age  gpa1  gpa2  gpa3
+##   &lt;int&gt; &lt;fct&gt;  &lt;fct&gt;          &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+## 1     1 male   Asian         -3.48   22.9   3.7   3.9   4  
+## 2     2 female Asian          0.728  21.8   3.1   2.7   2.4
+## 3     3 male   White          4.18   26.5   3.2   3.1   3.7
+## 4     4 male   White          4.18   26.1   2.5   2.2   3.4
+## 5     5 female White         -1.27   18.7   3.2   3     3.1
+## 6     6 female Black         -1.10   21.8   2     2.1   2.4</code></pre>
+<p>Here, we’ve created a few categorical variables (this time leaving them as factors!) and two continuous variables we might treat as outcomes (i.e., age and GPA at 3 time points.) In this case, a person’s age in this sample is related to both their gender and race, so we should see a two-way interaction (or close to it) with these variables.</p>
+<div id="t-tests" class="section level2">
+<h2><span class="header-section-number">11.1</span> <em>t</em>-Tests</h2>
+<p>To run an independant-samples <em>t</em>-test, we can use the <code>t.test()</code> function. This function expects us to have two columns of data, one for each sample. If we want to compare men and women’s ages in our sample, we’ll simply need to extract those columns of data.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">t.test</span>(df<span class="op">$</span>age[df<span class="op">$</span>gender <span class="op">==</span><span class="st"> &#39;female&#39;</span>], df<span class="op">$</span>age[df<span class="op">$</span>gender <span class="op">==</span><span class="st"> &#39;male&#39;</span>])</code></pre></div>
+<pre><code>## 
+##  Welch Two Sample t-test
+## 
+## data:  df$age[df$gender == &quot;female&quot;] and df$age[df$gender == &quot;male&quot;]
+## t = -5.8366, df = 287.72, p-value = 1.435e-08
+## alternative hypothesis: true difference in means is not equal to 0
+## 95 percent confidence interval:
+##  -2.682701 -1.329635
+## sample estimates:
+## mean of x mean of y 
+##  21.23809  23.24426</code></pre>
+<p>To run a paired <em>t</em>-test, we just set <code>paired = TRUE</code>. Let’s try this on the first two columns of GPA.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">t.test</span>(df<span class="op">$</span>gpa1, df<span class="op">$</span>gpa2, <span class="dt">paired =</span> T)</code></pre></div>
+<pre><code>## 
+##  Paired t-test
+## 
+## data:  df$gpa1 and df$gpa2
+## t = -5.7344, df = 349, p-value = 2.121e-08
+## alternative hypothesis: true difference in means is not equal to 0
+## 95 percent confidence interval:
+##  -0.17765731 -0.08691412
+## sample estimates:
+## mean of the differences 
+##              -0.1322857</code></pre>
+<p>Note that <code>t.tes()</code> in R defaults to using the unequal variances formula, as you can see in the help file, where <code>var.equal = FALSE</code> is diplayed in the USAGE section.</p>
 </div>
+<div id="correlation" class="section level2">
+<h2><span class="header-section-number">11.2</span> Correlation</h2>
+<p>To view a set of correlations, all we need is to feed our data to the <code>cor()</code> function.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">cor</span>(df[, <span class="kw">c</span>(<span class="st">&#39;age&#39;</span>, <span class="st">&#39;gpa1&#39;</span>, <span class="st">&#39;gpa2&#39;</span>, <span class="st">&#39;gpa3&#39;</span>)])</code></pre></div>
+<pre><code>##              age        gpa1       gpa2       gpa3
+## age   1.00000000 -0.02528349 0.03152321 0.07817196
+## gpa1 -0.02528349  1.00000000 0.75606217 0.63319613
+## gpa2  0.03152321  0.75606217 1.00000000 0.83085250
+## gpa3  0.07817196  0.63319613 0.83085250 1.00000000</code></pre>
+<p>But what if I have missing data? In that case, consult the help fil for which of the following otions you want to use for computing your correlations. Set <code>use</code> equal to one of: “everything”, “all.obs”, “complete.obs”, “na.or.complete”, or “pairwise.complete.obs”.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">missing_df &lt;-<span class="st"> </span>df[, <span class="kw">c</span>(<span class="st">&#39;age&#39;</span>, <span class="st">&#39;gpa1&#39;</span>, <span class="st">&#39;gpa2&#39;</span>, <span class="st">&#39;gpa3&#39;</span>)] <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">age =</span> <span class="kw">ifelse</span>(<span class="kw">runif</span>(<span class="kw">nrow</span>(.)) <span class="op">&lt;</span><span class="st"> </span>.<span class="dv">50</span>, <span class="ot">NA</span>, age)) <span class="co"># 50% of scores randomly missing</span>
+
+<span class="kw">cor</span>(missing_df)</code></pre></div>
+<pre><code>##      age      gpa1      gpa2      gpa3
+## age    1        NA        NA        NA
+## gpa1  NA 1.0000000 0.7560622 0.6331961
+## gpa2  NA 0.7560622 1.0000000 0.8308525
+## gpa3  NA 0.6331961 0.8308525 1.0000000</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">cor</span>(missing_df, <span class="dt">use =</span> <span class="st">&#39;complete.obs&#39;</span>)</code></pre></div>
+<pre><code>##              age        gpa1        gpa2       gpa3
+## age   1.00000000 -0.02571405 -0.03134333 0.01158888
+## gpa1 -0.02571405  1.00000000  0.74597217 0.63061236
+## gpa2 -0.03134333  0.74597217  1.00000000 0.83205760
+## gpa3  0.01158888  0.63061236  0.83205760 1.00000000</code></pre>
+<div id="rank-correlations" class="section level3">
+<h3><span class="header-section-number">11.2.1</span> Rank correlations</h3>
+<p>You can also change the <code>method</code> argument of <code>cor()</code> to one of “pearson”, “kendall”, or “spearman”. Pearson is the default, but both Kendall and Spearman correlations are easy to compute.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">cor</span>(missing_df, <span class="dt">use =</span> <span class="st">&#39;complete.obs&#39;</span>, <span class="dt">method =</span> <span class="st">&#39;spearman&#39;</span>)</code></pre></div>
+<pre><code>##               age        gpa1        gpa2        gpa3
+## age   1.000000000 0.001222439 -0.05115086 -0.01818023
+## gpa1  0.001222439 1.000000000  0.76137738  0.68085668
+## gpa2 -0.051150856 0.761377383  1.00000000  0.84375110
+## gpa3 -0.018180229 0.680856678  0.84375110  1.00000000</code></pre>
+</div>
+<div id="significance-testing" class="section level3">
+<h3><span class="header-section-number">11.2.2</span> Significance testing</h3>
+<p>There is no quick base R solution for computing significance values for your correlations. However, the <code>rcorr()</code> function of the <code>Hmisc</code> package will compute them if you want. Note that you need to use <code>as.matrix()</code> to convert your dataframe to a matrix before <code>rcorr()</code> will understand it.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># If you need to, install the package</span>
+<span class="co"># install.packages(&#39;Hmisc&#39;) </span>
+
+df <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">select</span>(gpa1, gpa2, gpa3) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">as.matrix</span>() <span class="op">%&gt;%</span><span class="st"> </span><span class="co"># convert to matrix</span>
+<span class="st">  </span>Hmisc<span class="op">::</span><span class="kw">rcorr</span>()</code></pre></div>
+<pre><code>##      gpa1 gpa2 gpa3
+## gpa1 1.00 0.76 0.63
+## gpa2 0.76 1.00 0.83
+## gpa3 0.63 0.83 1.00
+## 
+## n= 350 
+## 
+## 
+## P
+##      gpa1 gpa2 gpa3
+## gpa1       0    0  
+## gpa2  0         0  
+## gpa3  0    0</code></pre>
+</div>
+</div>
+<div id="anova" class="section level2">
+<h2><span class="header-section-number">11.3</span> ANOVA</h2>
+<p>For analysis of variance, we use the same “formula” model specification that we did for regression: <code>&lt;outcome&gt; ~ &lt;predictor1&gt; + &lt;predictor2&gt; ...</code>.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">aov</span>(age <span class="op">~</span><span class="st"> </span>race, <span class="dt">data =</span> df)</code></pre></div>
+<pre><code>## Call:
+##    aov(formula = age ~ race, data = df)
+## 
+## Terms:
+##                     race Residuals
+## Sum of Squares   471.767  3497.170
+## Deg. of Freedom        2       347
+## 
+## Residual standard error: 3.174634
+## Estimated effects may be unbalanced</code></pre>
+<p>Like regression, we get <em>some</em> useful information from the <code>aov()</code> function alone, but it is usually more helpful to save it to a variable (often named <code>fit</code>, but you can call it whatever you want). Then, we use the <code>summary()</code> function to get a little more detail.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">fit &lt;-<span class="st"> </span><span class="kw">aov</span>(age <span class="op">~</span><span class="st"> </span>race, <span class="dt">data =</span> df)
+<span class="kw">summary</span>(fit)</code></pre></div>
+<pre><code>##              Df Sum Sq Mean Sq F value   Pr(&gt;F)    
+## race          2    472  235.88   23.41 2.92e-10 ***
+## Residuals   347   3497   10.08                     
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<p><strong>WARNING</strong>: The default Sum of Squares that R uses is Type I, which is different from SAS and SPSS (which default to Type III). If you want your results to be consistent with SPSS, then try using the <code>drop1()</code> command.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">drop1</span>(fit)</code></pre></div>
+<pre><code>## Single term deletions
+## 
+## Model:
+## age ~ race
+##        Df Sum of Sq    RSS    AIC
+## &lt;none&gt;              3497.2 811.62
+## race    2    471.77 3968.9 851.91</code></pre>
+<div id="post-hoc-testing" class="section level3">
+<h3><span class="header-section-number">11.3.1</span> Post hoc testing</h3>
+<p>To perform post hoc testing of group differences, the most common choice is the <code>TukeyHSD()</code> function, which takes your fit object and performs the HSD post hoc test.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">TukeyHSD</span>(fit)</code></pre></div>
+<pre><code>##   Tukey multiple comparisons of means
+##     95% family-wise confidence level
+## 
+## Fit: aov(formula = age ~ race, data = df)
+## 
+## $race
+##                  diff        lwr      upr     p adj
+## Black-Asian 1.8986587  0.8932565 2.904061 0.0000352
+## White-Asian 2.7659408  1.8008446 3.731037 0.0000000
+## White-Black 0.8672821 -0.1048972 1.839461 0.0913371</code></pre>
+<p>Here, we see that there are significant differences in two of three possible cases.</p>
+</div>
+<div id="two-factors" class="section level3">
+<h3><span class="header-section-number">11.3.2</span> Two-factors</h3>
+<p>If we want to test two factors at once (e.g., race and gender), we simply add them both to the formula.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">fit &lt;-<span class="st"> </span><span class="kw">aov</span>(age <span class="op">~</span><span class="st"> </span>race <span class="op">+</span><span class="st"> </span>gender, <span class="dt">data =</span> df)
+<span class="kw">summary</span>(fit)</code></pre></div>
+<pre><code>##              Df Sum Sq Mean Sq F value   Pr(&gt;F)    
+## race          2  471.8   235.9   26.05 2.89e-11 ***
+## gender        1  364.1   364.1   40.21 7.12e-10 ***
+## Residuals   346 3133.1     9.1                     
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<p><strong>WARNING</strong>: Notice again that because the default here is Type I Sum of Squares, variable order matters! To get your SPSS-consistent values, use <code>drop1()</code>.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">fit &lt;-<span class="st"> </span><span class="kw">aov</span>(age <span class="op">~</span><span class="st"> </span>gender <span class="op">+</span><span class="st"> </span>race, <span class="dt">data =</span> df)
+<span class="kw">summary</span>(fit)</code></pre></div>
+<pre><code>##              Df Sum Sq Mean Sq F value   Pr(&gt;F)    
+## gender        1  352.2   352.2   38.89 1.31e-09 ***
+## race          2  483.7   241.9   26.71 1.63e-11 ***
+## Residuals   346 3133.1     9.1                     
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">fit &lt;-<span class="st"> </span><span class="kw">aov</span>(age <span class="op">~</span><span class="st"> </span>gender <span class="op">+</span><span class="st"> </span>race, <span class="dt">data =</span> df)
+<span class="kw">drop1</span>(fit)</code></pre></div>
+<pre><code>## Single term deletions
+## 
+## Model:
+## age ~ gender + race
+##        Df Sum of Sq    RSS    AIC
+## &lt;none&gt;              3133.1 775.14
+## gender  1    364.11 3497.2 811.62
+## race    2    483.73 3616.8 821.39</code></pre>
+</div>
+<div id="p-values" class="section level3">
+<h3><span class="header-section-number">11.3.3</span> P-values</h3>
+<p>Unfortunately, to get p-values for the <code>drop1()</code> command, you need to do the extra leg work yourself. Here is a demo of how you would do it.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ss &lt;-<span class="st"> </span>fit <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">drop1</span>() <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">as.data.frame</span>()
+
+
+residual_df &lt;-<span class="st"> </span>fit<span class="op">$</span>df.residual
+residual_ms &lt;-<span class="st"> </span>ss[<span class="st">&#39;&lt;none&gt;&#39;</span>, <span class="st">&#39;RSS&#39;</span>]<span class="op">/</span>residual_df
+
+ss <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">mutate</span>(
+    <span class="dt">mean_squares =</span> <span class="st">`</span><span class="dt">Sum of Sq</span><span class="st">`</span><span class="op">/</span>Df,
+    <span class="dt">f_stat =</span> mean_squares<span class="op">/</span>residual_ms,
+    <span class="dt">p =</span> <span class="kw">pf</span>(f_stat, Df, residual_df, <span class="dt">lower.tail =</span> F))</code></pre></div>
+<pre><code>##   Df Sum of Sq      RSS      AIC mean_squares   f_stat            p
+## 1 NA        NA 3133.056 775.1409           NA       NA           NA
+## 2  1  364.1139 3497.170 811.6217     364.1139 40.21103 7.123237e-10
+## 3  2  483.7302 3616.787 821.3928     241.8651 26.71044 1.631703e-11</code></pre>
+</div>
+<div id="interactions" class="section level3">
+<h3><span class="header-section-number">11.3.4</span> Interactions</h3>
+<p>Interactions can be specified by the <code>&lt;va1&gt;*&lt;var2&gt;</code> command in the formula.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">fit &lt;-<span class="st"> </span><span class="kw">aov</span>(age <span class="op">~</span><span class="st"> </span>gender <span class="op">+</span><span class="st"> </span>race <span class="op">+</span><span class="st"> </span>gender<span class="op">:</span>race, <span class="dt">data =</span> df)
+<span class="kw">summary</span>(fit)</code></pre></div>
+<pre><code>##              Df Sum Sq Mean Sq F value Pr(&gt;F)    
+## gender        1  352.2   352.2   76.28 &lt;2e-16 ***
+## race          2  483.7   241.9   52.39 &lt;2e-16 ***
+## gender:race   2 1545.0   772.5  167.33 &lt;2e-16 ***
+## Residuals   344 1588.1     4.6                   
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<p>Here, we can see both a significant interaction and significant main effects for gender and race, predicting age in our sample.</p>
+</div>
+<div id="plots" class="section level3">
+<h3><span class="header-section-number">11.3.5</span> Plots</h3>
+<p>Using <code>ggplot</code> is likely your most useful way of comparing groups.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(df, <span class="kw">aes</span>(<span class="dt">x =</span> race, <span class="dt">y =</span> age, <span class="dt">fill =</span> gender)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_boxplot</span>()</code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-171-1.png" width="672" /></p>
+
+</div>
+</div>
+</div>
+
+
+
+
+
+
             </section>
 
           </div>
         </div>
       </div>
-<a href="basic-r.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="functions-1.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="regression-models-1.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>

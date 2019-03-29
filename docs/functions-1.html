@@ -207,6 +207,31 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 </ul></li>
 <li class="chapter" data-level="9.4" data-path="regression-models.html"><a href="regression-models.html#fitting-multiple-regressions-simultaneously"><i class="fa fa-check"></i><b>9.4</b> Fitting multiple regressions simultaneously</a></li>
 </ul></li>
+<li class="chapter" data-level="10" data-path="regression-models-1.html"><a href="regression-models-1.html"><i class="fa fa-check"></i><b>10</b> Regression Models</a><ul>
+<li class="chapter" data-level="10.1" data-path="regression-models-1.html"><a href="regression-models-1.html#simulating-fake-data-1"><i class="fa fa-check"></i><b>10.1</b> Simulating fake data</a></li>
+<li class="chapter" data-level="10.2" data-path="regression-models-1.html"><a href="regression-models-1.html#fitting-regression-models-1"><i class="fa fa-check"></i><b>10.2</b> Fitting regression models</a><ul>
+<li class="chapter" data-level="10.2.1" data-path="regression-models-1.html"><a href="regression-models-1.html#linear-regression-1"><i class="fa fa-check"></i><b>10.2.1</b> Linear regression</a></li>
+<li class="chapter" data-level="10.2.2" data-path="regression-models-1.html"><a href="regression-models-1.html#logistic-regression-1"><i class="fa fa-check"></i><b>10.2.2</b> Logistic regression</a></li>
+</ul></li>
+<li class="chapter" data-level="10.3" data-path="regression-models-1.html"><a href="regression-models-1.html#other-ways-of-viewing-the-output-1"><i class="fa fa-check"></i><b>10.3</b> Other ways of viewing the output</a><ul>
+<li class="chapter" data-level="10.3.1" data-path="regression-models-1.html"><a href="regression-models-1.html#glance-1"><i class="fa fa-check"></i><b>10.3.1</b> <code>glance()</code></a></li>
+</ul></li>
+<li class="chapter" data-level="10.4" data-path="regression-models-1.html"><a href="regression-models-1.html#fitting-multiple-regressions-simultaneously-1"><i class="fa fa-check"></i><b>10.4</b> Fitting multiple regressions simultaneously</a></li>
+</ul></li>
+<li class="chapter" data-level="11" data-path="anova-and-other-tests.html"><a href="anova-and-other-tests.html"><i class="fa fa-check"></i><b>11</b> ANOVA and other tests</a><ul>
+<li class="chapter" data-level="11.1" data-path="anova-and-other-tests.html"><a href="anova-and-other-tests.html#t-tests"><i class="fa fa-check"></i><b>11.1</b> <em>t</em>-Tests</a></li>
+<li class="chapter" data-level="11.2" data-path="anova-and-other-tests.html"><a href="anova-and-other-tests.html#correlation"><i class="fa fa-check"></i><b>11.2</b> Correlation</a><ul>
+<li class="chapter" data-level="11.2.1" data-path="anova-and-other-tests.html"><a href="anova-and-other-tests.html#rank-correlations"><i class="fa fa-check"></i><b>11.2.1</b> Rank correlations</a></li>
+<li class="chapter" data-level="11.2.2" data-path="anova-and-other-tests.html"><a href="anova-and-other-tests.html#significance-testing"><i class="fa fa-check"></i><b>11.2.2</b> Significance testing</a></li>
+</ul></li>
+<li class="chapter" data-level="11.3" data-path="anova-and-other-tests.html"><a href="anova-and-other-tests.html#anova"><i class="fa fa-check"></i><b>11.3</b> ANOVA</a><ul>
+<li class="chapter" data-level="11.3.1" data-path="anova-and-other-tests.html"><a href="anova-and-other-tests.html#post-hoc-testing"><i class="fa fa-check"></i><b>11.3.1</b> Post hoc testing</a></li>
+<li class="chapter" data-level="11.3.2" data-path="anova-and-other-tests.html"><a href="anova-and-other-tests.html#two-factors"><i class="fa fa-check"></i><b>11.3.2</b> Two-factors</a></li>
+<li class="chapter" data-level="11.3.3" data-path="anova-and-other-tests.html"><a href="anova-and-other-tests.html#p-values"><i class="fa fa-check"></i><b>11.3.3</b> P-values</a></li>
+<li class="chapter" data-level="11.3.4" data-path="anova-and-other-tests.html"><a href="anova-and-other-tests.html#interactions"><i class="fa fa-check"></i><b>11.3.4</b> Interactions</a></li>
+<li class="chapter" data-level="11.3.5" data-path="anova-and-other-tests.html"><a href="anova-and-other-tests.html#plots"><i class="fa fa-check"></i><b>11.3.5</b> Plots</a></li>
+</ul></li>
+</ul></li>
 </ul>
 
       </nav>
@@ -298,9 +323,9 @@ w &lt;-<span class="st"> </span><span class="dv">1</span><span class="op">:</spa
 u &lt;-<span class="st"> </span><span class="kw">runif</span>(<span class="dt">n =</span> <span class="dv">20</span>)
 
 <span class="kw">cor</span>(x, y)</code></pre></div>
-<pre><code>## [1] 0.5058844</code></pre>
+<pre><code>## [1] 0.9342257</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">cov</span>(x, y)<span class="op">/</span>(<span class="kw">sd</span>(x)<span class="op">*</span><span class="kw">sd</span>(y))</code></pre></div>
-<pre><code>## [1] 0.5058844</code></pre>
+<pre><code>## [1] 0.9342257</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">print</span>(<span class="st">&#39;---&#39;</span>)</code></pre></div>
 <pre><code>## [1] &quot;---&quot;</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">correlation &lt;-<span class="st"> </span><span class="cf">function</span>(a, b) {
@@ -308,9 +333,9 @@ u &lt;-<span class="st"> </span><span class="kw">runif</span>(<span class="dt">n
 }
 
 <span class="kw">cor</span>(w, u)</code></pre></div>
-<pre><code>## [1] 0.2011664</code></pre>
+<pre><code>## [1] -0.5143874</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">correlation</span>(w, u)</code></pre></div>
-<pre><code>## [1] 0.2011664</code></pre>
+<pre><code>## [1] -0.5143874</code></pre>
 </div>
 <div id="base-r-functions" class="section level2">
 <h2><span class="header-section-number">4.3</span> Base R functions</h2>
@@ -327,7 +352,7 @@ df &lt;-<span class="st"> </span><span class="kw">data.frame</span>(x, y)
 <span class="kw">ggplot</span>(df, <span class="kw">aes</span>(x, y)) <span class="op">+</span>
 <span class="st">  </span><span class="kw">geom_point</span>() <span class="op">+</span>
 <span class="st">  </span><span class="kw">geom_hline</span>(<span class="dt">yintercept =</span> <span class="kw">mean</span>(y), <span class="dt">color =</span> <span class="st">&#39;red&#39;</span>)</code></pre></div>
-<p><img src="_main_files/figure-html/unnamed-chunk-72-1.png" width="672" /></p>
+<p><img src="_main_files/figure-html/unnamed-chunk-66-1.png" width="672" /></p>
 <ul>
 <li><p>Setting the random seed</p></li>
 <li><p><code>paste()</code> and <code>paste0()</code></p></li>
@@ -406,16 +431,9 @@ x &lt;-<span class="st"> </span><span class="dv">1</span><span class="op">:</spa
 <pre><code>##  [1] 1 1 1 1 2 2 2 2 2 2</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">reviewer_transformation_pipe</span>(x)</code></pre></div>
 <pre><code>##  [1] 1 1 1 1 2 2 2 2 2 2</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(magrittr)</code></pre></div>
-<pre><code>## 
-## Attaching package: &#39;magrittr&#39;</code></pre>
-<pre><code>## The following object is masked from &#39;package:purrr&#39;:
-## 
-##     set_names</code></pre>
-<pre><code>## The following object is masked from &#39;package:tidyr&#39;:
-## 
-##     extract</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">fun1 &lt;-<span class="st"> </span><span class="cf">function</span>(x){
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(magrittr)
+
+fun1 &lt;-<span class="st"> </span><span class="cf">function</span>(x){
   x <span class="op">*</span><span class="dv">2</span>
 }
 

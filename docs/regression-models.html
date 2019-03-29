@@ -32,7 +32,7 @@
   
   
 <link rel="prev" href="reshaping-data-with-tidyr.html">
-
+<link rel="next" href="regression-models-1.html">
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -207,6 +207,31 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 </ul></li>
 <li class="chapter" data-level="9.4" data-path="regression-models.html"><a href="regression-models.html#fitting-multiple-regressions-simultaneously"><i class="fa fa-check"></i><b>9.4</b> Fitting multiple regressions simultaneously</a></li>
 </ul></li>
+<li class="chapter" data-level="10" data-path="regression-models-1.html"><a href="regression-models-1.html"><i class="fa fa-check"></i><b>10</b> Regression Models</a><ul>
+<li class="chapter" data-level="10.1" data-path="regression-models-1.html"><a href="regression-models-1.html#simulating-fake-data-1"><i class="fa fa-check"></i><b>10.1</b> Simulating fake data</a></li>
+<li class="chapter" data-level="10.2" data-path="regression-models-1.html"><a href="regression-models-1.html#fitting-regression-models-1"><i class="fa fa-check"></i><b>10.2</b> Fitting regression models</a><ul>
+<li class="chapter" data-level="10.2.1" data-path="regression-models-1.html"><a href="regression-models-1.html#linear-regression-1"><i class="fa fa-check"></i><b>10.2.1</b> Linear regression</a></li>
+<li class="chapter" data-level="10.2.2" data-path="regression-models-1.html"><a href="regression-models-1.html#logistic-regression-1"><i class="fa fa-check"></i><b>10.2.2</b> Logistic regression</a></li>
+</ul></li>
+<li class="chapter" data-level="10.3" data-path="regression-models-1.html"><a href="regression-models-1.html#other-ways-of-viewing-the-output-1"><i class="fa fa-check"></i><b>10.3</b> Other ways of viewing the output</a><ul>
+<li class="chapter" data-level="10.3.1" data-path="regression-models-1.html"><a href="regression-models-1.html#glance-1"><i class="fa fa-check"></i><b>10.3.1</b> <code>glance()</code></a></li>
+</ul></li>
+<li class="chapter" data-level="10.4" data-path="regression-models-1.html"><a href="regression-models-1.html#fitting-multiple-regressions-simultaneously-1"><i class="fa fa-check"></i><b>10.4</b> Fitting multiple regressions simultaneously</a></li>
+</ul></li>
+<li class="chapter" data-level="11" data-path="anova-and-other-tests.html"><a href="anova-and-other-tests.html"><i class="fa fa-check"></i><b>11</b> ANOVA and other tests</a><ul>
+<li class="chapter" data-level="11.1" data-path="anova-and-other-tests.html"><a href="anova-and-other-tests.html#t-tests"><i class="fa fa-check"></i><b>11.1</b> <em>t</em>-Tests</a></li>
+<li class="chapter" data-level="11.2" data-path="anova-and-other-tests.html"><a href="anova-and-other-tests.html#correlation"><i class="fa fa-check"></i><b>11.2</b> Correlation</a><ul>
+<li class="chapter" data-level="11.2.1" data-path="anova-and-other-tests.html"><a href="anova-and-other-tests.html#rank-correlations"><i class="fa fa-check"></i><b>11.2.1</b> Rank correlations</a></li>
+<li class="chapter" data-level="11.2.2" data-path="anova-and-other-tests.html"><a href="anova-and-other-tests.html#significance-testing"><i class="fa fa-check"></i><b>11.2.2</b> Significance testing</a></li>
+</ul></li>
+<li class="chapter" data-level="11.3" data-path="anova-and-other-tests.html"><a href="anova-and-other-tests.html#anova"><i class="fa fa-check"></i><b>11.3</b> ANOVA</a><ul>
+<li class="chapter" data-level="11.3.1" data-path="anova-and-other-tests.html"><a href="anova-and-other-tests.html#post-hoc-testing"><i class="fa fa-check"></i><b>11.3.1</b> Post hoc testing</a></li>
+<li class="chapter" data-level="11.3.2" data-path="anova-and-other-tests.html"><a href="anova-and-other-tests.html#two-factors"><i class="fa fa-check"></i><b>11.3.2</b> Two-factors</a></li>
+<li class="chapter" data-level="11.3.3" data-path="anova-and-other-tests.html"><a href="anova-and-other-tests.html#p-values"><i class="fa fa-check"></i><b>11.3.3</b> P-values</a></li>
+<li class="chapter" data-level="11.3.4" data-path="anova-and-other-tests.html"><a href="anova-and-other-tests.html#interactions"><i class="fa fa-check"></i><b>11.3.4</b> Interactions</a></li>
+<li class="chapter" data-level="11.3.5" data-path="anova-and-other-tests.html"><a href="anova-and-other-tests.html#plots"><i class="fa fa-check"></i><b>11.3.5</b> Plots</a></li>
+</ul></li>
+</ul></li>
 </ul>
 
       </nav>
@@ -237,9 +262,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <h2><span class="header-section-number">9.1</span> Simulating fake data</h2>
 <p>Before we fit our first regression model, lets simulate some data to analyze. We’ll do that by first simulating two normally distributed predictors. Then, we’ll choose some slopes for those predictors and make an outcome variable equal to the predictors times their slopes, plus some random error. To give us a binary outcome, we will also make a seperate variable in which our original <em>y</em> is dichotomized at the median with a little bit of error(<em>y_dichot</em>).</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(tidyverse)
-
 <span class="kw">set.seed</span>(<span class="dv">314159</span>)
-
 n_cases &lt;-<span class="st"> </span><span class="dv">1000</span>
 df &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">id =</span> <span class="dv">1</span><span class="op">:</span>n_cases) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">mutate</span>(
@@ -349,7 +372,6 @@ df &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class=
 <h3><span class="header-section-number">9.3.1</span> <code>glance()</code></h3>
 <p>If I want to see some basic model information (e.g., model sum of squares, <span class="math inline">\(R^2\)</span>), I call <code>glance()</code> on my <code>fit</code> object. This function takes my <code>fit</code> object and gives me model summary information in a one-row dataframe.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(broom)
-
 <span class="kw">glance</span>(fit)</code></pre></div>
 <pre><code>## # A tibble: 1 x 11
 ##   r.squared adj.r.squared sigma statistic   p.value    df logLik   AIC
@@ -366,7 +388,6 @@ df &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class=
 ## 3 x2             0.610    0.0152      40.0 1.63e-209</code></pre>
 <p>Now if I want to adjust my p-values, I can easily do so with the <code>tidyverse</code></p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(tidyverse)
-
 fit <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">tidy</span>() <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">mutate</span>(<span class="dt">adj_p =</span> <span class="kw">p.adjust</span>(p.value, <span class="dt">method =</span> <span class="st">&#39;bonferroni&#39;</span>))</code></pre></div>
@@ -399,7 +420,6 @@ fit <span class="op">%&gt;%</span>
 <p>Sometimes, we’ll have a bunch of groups that we want to analyze seperately. For one or two groups, this isn’t so bad to do individually. However, for larger numbers of groups, we’ll need something more advanced. For example, let’s assign people to some groups in our existing dataset.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">df &lt;-<span class="st"> </span>df <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">mutate</span>(<span class="dt">grp =</span> <span class="kw">sample</span>(letters, <span class="dt">size =</span> <span class="kw">nrow</span>(.), <span class="dt">replace =</span> T))
-
 <span class="kw">head</span>(df)</code></pre></div>
 <pre><code>##   id        x1       x2        y y_dichot grp
 ## 1  1  9.200711 23.56806 21.54965        1   c
@@ -412,7 +432,6 @@ fit <span class="op">%&gt;%</span>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">model_df &lt;-<span class="st"> </span>df <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">group_by</span>(grp) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">do</span>(<span class="dt">model =</span> <span class="kw">lm</span>(y <span class="op">~</span><span class="st"> </span>x1 <span class="op">+</span><span class="st"> </span>x2, <span class="dt">data =</span> .))
-
 <span class="kw">head</span>(model_df)</code></pre></div>
 <pre><code>## Source: local data frame [6 x 2]
 ## Groups: &lt;by row&gt;
@@ -429,7 +448,6 @@ fit <span class="op">%&gt;%</span>
 <p>If we want to unpack those models, we can once again use <code>broom</code>’s functions. We just need to make sure to specify the column where our models are, which in this case is “<em>model</em>”.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">coef_table &lt;-<span class="st"> </span>model_df <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">tidy</span>(model)
-
 <span class="kw">head</span>(coef_table, <span class="dt">n =</span> <span class="dv">10</span>)</code></pre></div>
 <pre><code>## # A tibble: 10 x 6
 ## # Groups:   grp [4]
@@ -448,7 +466,6 @@ fit <span class="op">%&gt;%</span>
 <p>We can do the same thing for summary model information with the <code>glance()</code> function.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">model_table &lt;-<span class="st"> </span>model_df <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">glance</span>(model)
-
 <span class="kw">head</span>(model_table)</code></pre></div>
 <pre><code>## # A tibble: 6 x 12
 ## # Groups:   grp [6]
@@ -464,43 +481,17 @@ fit <span class="op">%&gt;%</span>
 <p>If we want, we can even see the distribution of things we care about, like <span class="math inline">\(R^2\)</span>.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(model_table, <span class="kw">aes</span>(r.squared)) <span class="op">+</span>
 <span class="st">  </span><span class="kw">geom_density</span>(<span class="dt">fill =</span> <span class="st">&#39;grey&#39;</span>, <span class="dt">alpha =</span> .<span class="dv">50</span>)</code></pre></div>
-<p><img src="_main_files/figure-html/unnamed-chunk-143-1.png" width="672" /></p>
-
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(tidyverse)
-
-df &lt;-<span class="st"> </span><span class="kw">expand.grid</span>(
-  <span class="dt">id =</span> <span class="kw">c</span>(<span class="st">&#39;Alice&#39;</span>, <span class="st">&#39;Bob&#39;</span>, <span class="st">&#39;Chantal&#39;</span>), 
-  <span class="dt">time =</span> <span class="kw">c</span>(<span class="st">&#39;a&#39;</span>, <span class="st">&#39;b&#39;</span>, <span class="st">&#39;c&#39;</span>)) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">arrange</span>(id, time)
-df<span class="op">$</span>score &lt;-<span class="st"> </span><span class="kw">sample</span>(<span class="dv">1</span><span class="op">:</span><span class="kw">nrow</span>(df))
-
-df</code></pre></div>
-<pre><code>##        id time score
-## 1   Alice    a     7
-## 2   Alice    b     8
-## 3   Alice    c     5
-## 4     Bob    a     6
-## 5     Bob    b     1
-## 6     Bob    c     3
-## 7 Chantal    a     4
-## 8 Chantal    b     2
-## 9 Chantal    c     9</code></pre>
+<p><img src="_main_files/figure-html/unnamed-chunk-137-1.png" width="672" /></p>
 
 </div>
 </div>
-
-
-
-
-
-
             </section>
 
           </div>
         </div>
       </div>
-<a href="reshaping-data-with-tidyr.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-
+<a href="reshaping-data-with-tidyr.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="regression-models-1.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>

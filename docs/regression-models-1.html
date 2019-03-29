@@ -5,11 +5,11 @@
 
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>3 Visualization | R Textbook</title>
+  <title>10 Regression Models | R Textbook</title>
   <meta name="description" content="This is the ‘organic’ textbook created by our class discussions and exercises.">
   <meta name="generator" content="bookdown  and GitBook 2.6.7">
 
-  <meta property="og:title" content="3 Visualization | R Textbook" />
+  <meta property="og:title" content="10 Regression Models | R Textbook" />
   <meta property="og:type" content="book" />
   
   
@@ -17,7 +17,7 @@
   <meta name="github-repo" content="iancero/r-textbook-spring2019" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="3 Visualization | R Textbook" />
+  <meta name="twitter:title" content="10 Regression Models | R Textbook" />
   
   <meta name="twitter:description" content="This is the ‘organic’ textbook created by our class discussions and exercises." />
   
@@ -31,8 +31,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
   
   
-<link rel="prev" href="basic-r.html">
-<link rel="next" href="functions-1.html">
+<link rel="prev" href="regression-models.html">
+<link rel="next" href="anova-and-other-tests.html">
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -249,152 +249,257 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="visualization" class="section level1">
-<h1><span class="header-section-number">3</span> Visualization</h1>
-<p>There are many ways to visualize data in R. Two of the most common include Base R’s built-in functions and the <code>ggplot2</code> package.</p>
-<div id="base-r" class="section level2">
-<h2><span class="header-section-number">3.1</span> Base R</h2>
-<p>The term “Base R” refers to the set of packages and functions that R loads into each session by default. These packages include several statistical and plotting functions you will probably use a lot. Some of the most common plotting functions are given below.</p>
-<p><strong>hist()</strong></p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">rpois</span>(<span class="dv">100</span>, <span class="dt">lambda =</span> <span class="dv">3</span>)</code></pre></div>
-<pre><code>##   [1] 2 1 4 2 2 5 1 3 3 1 3 3 4 5 2 3 0 4 5 2 5 8 6 5 2 0 2 4 3 5 1 0 5 1 4
-##  [36] 4 3 5 3 3 3 1 3 1 2 3 0 3 3 1 1 5 4 2 6 0 2 5 1 2 6 5 4 2 3 3 2 1 4 4
-##  [71] 3 5 1 1 4 0 5 5 0 1 3 2 1 0 3 5 2 3 6 1 1 4 3 7 5 3 3 2 2 4</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">my_vals &lt;-<span class="st"> </span><span class="kw">rexp</span>(<span class="dv">100</span>, <span class="dv">10</span>)
-
-<span class="kw">hist</span>(
-  my_vals, 
-  <span class="dt">breaks =</span> <span class="dv">20</span>, 
-  <span class="dt">main =</span> <span class="st">&#39;Plot of Exponential Dis.&#39;</span>, 
-  <span class="dt">xlab =</span> <span class="st">&#39;X Values&#39;</span>, 
-  <span class="dt">ylab =</span> <span class="st">&#39;Y values&#39;</span>,
-  <span class="dt">col =</span> <span class="st">&#39;cyan&#39;</span>)</code></pre></div>
-<p><img src="_main_files/figure-html/unnamed-chunk-52-1.png" width="672" /></p>
-<p><strong>barplot()</strong></p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">heights &lt;-<span class="st"> </span><span class="dv">1</span><span class="op">:</span><span class="dv">10</span>
-<span class="kw">barplot</span>(heights)</code></pre></div>
-<p><img src="_main_files/figure-html/unnamed-chunk-53-1.png" width="672" /></p>
-<p><strong>plot()</strong></p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">x_vals &lt;-<span class="st"> </span><span class="dv">1</span><span class="op">:</span><span class="dv">10</span>
-y_values &lt;-<span class="st"> </span><span class="kw">rnorm</span>(<span class="dv">10</span>)
-
-<span class="kw">plot</span>(x_vals, y_values, <span class="dt">main =</span> <span class="st">&#39;Banana&#39;</span>, <span class="dt">xlab =</span> <span class="st">&#39;My X&#39;</span>)</code></pre></div>
-<p><img src="_main_files/figure-html/unnamed-chunk-54-1.png" width="672" /></p>
-</div>
-<div id="ggplot" class="section level2">
-<h2><span class="header-section-number">3.2</span> <code>ggplot</code></h2>
-<p>All statistical graphics share the same deep structure, a “Grammar of Graphics”. This means that any given plot can be uniquely identified (reproduced), given the following inputs.</p>
-<ul>
-<li>A dataset</li>
-<li>A coordinate system (2d Cartesian plane, 3d spherical coordinates, even quaternions!<a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a>)</li>
-<li>A facet specification (panel arrangement)</li>
-<li>Mappings from variables to aesthetic features</li>
-<li>One scale for each aesthetic mapping</li>
-<li>One or more layers of geometic objects (“geoms”), statistical functions, and position adjustments</li>
-</ul>
-<p>The most popular graphics package in R to date (maybe even accross all programming languages) is <code>ggplot2</code>. An update of the original <code>ggplot</code> package, <code>ggplot2</code> is based on the Grammar of Graphics above. It functions are designed specifically to behave like a grammar, in which you add plot elements together like a sentence.</p>
-<p>Lets explore how to build a plot.</p>
-<p>We’ll start by loading the <code>ggplot2</code> package and one of its built-in datasets (called <code>mpg</code>). This dataset includes information on 234 cars that will be convenient for us to plot.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">install.packages</span>(<span class="st">&#39;ggplot2&#39;</span>)</code></pre></div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(ggplot2)
-
-<span class="kw">data</span>(mpg)
-
-mpg</code></pre></div>
-<pre><code>## # A tibble: 234 x 11
-##    manufacturer model displ  year   cyl trans drv     cty   hwy fl    class
-##    &lt;chr&gt;        &lt;chr&gt; &lt;dbl&gt; &lt;int&gt; &lt;int&gt; &lt;chr&gt; &lt;chr&gt; &lt;int&gt; &lt;int&gt; &lt;chr&gt; &lt;chr&gt;
-##  1 audi         a4      1.8  1999     4 auto… f        18    29 p     comp…
-##  2 audi         a4      1.8  1999     4 manu… f        21    29 p     comp…
-##  3 audi         a4      2    2008     4 manu… f        20    31 p     comp…
-##  4 audi         a4      2    2008     4 auto… f        21    30 p     comp…
-##  5 audi         a4      2.8  1999     6 auto… f        16    26 p     comp…
-##  6 audi         a4      2.8  1999     6 manu… f        18    26 p     comp…
-##  7 audi         a4      3.1  2008     6 auto… f        18    27 p     comp…
-##  8 audi         a4 q…   1.8  1999     4 manu… 4        18    26 p     comp…
-##  9 audi         a4 q…   1.8  1999     4 auto… 4        16    25 p     comp…
-## 10 audi         a4 q…   2    2008     4 manu… 4        20    28 p     comp…
-## # … with 224 more rows</code></pre>
-<div id="blank-ggplot-plot" class="section level3">
-<h3><span class="header-section-number">3.2.1</span> Blank ggplot plot</h3>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(mpg)</code></pre></div>
-<p><img src="_main_files/figure-html/unnamed-chunk-57-1.png" width="672" /></p>
-</div>
-<div id="geoms" class="section level3">
-<h3><span class="header-section-number">3.2.2</span> Geoms</h3>
-<p>Getting points to display (displ, hwy)</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(mpg) <span class="op">+</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">mapping =</span> <span class="kw">aes</span>(<span class="dt">x =</span> displ, <span class="dt">y =</span> cty))</code></pre></div>
-<p><img src="_main_files/figure-html/unnamed-chunk-58-1.png" width="672" /></p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(mpg, <span class="dt">mapping =</span> <span class="kw">aes</span>(<span class="dt">x =</span> displ)) <span class="op">+</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">mapping =</span> <span class="kw">aes</span>(<span class="dt">y =</span> cty), <span class="dt">color =</span> <span class="st">&#39;steelblue&#39;</span>) <span class="op">+</span>
-<span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">mapping =</span> <span class="kw">aes</span>(<span class="dt">y =</span> hwy), <span class="dt">color =</span> <span class="st">&#39;tomato&#39;</span>)</code></pre></div>
-<p><img src="_main_files/figure-html/unnamed-chunk-59-1.png" width="672" /></p>
-<p>Other features of points we can change (size = cyl, color = class)</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(mpg, <span class="dt">mapping =</span> <span class="kw">aes</span>(<span class="dt">x =</span> displ, <span class="dt">shape =</span> drv, <span class="dt">color =</span> drv)) <span class="op">+</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">mapping =</span> <span class="kw">aes</span>(<span class="dt">y =</span> cty)) <span class="op">+</span>
-<span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">mapping =</span> <span class="kw">aes</span>(<span class="dt">y =</span> hwy))</code></pre></div>
-<p><img src="_main_files/figure-html/unnamed-chunk-60-1.png" width="672" /></p>
-<p>Smoothed line</p>
-<p>—— (2nd block)</p>
-<p>Lines</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">data</span>(beavers)
-
-<span class="kw">ggplot</span>(beaver1, <span class="dt">mapping =</span> <span class="kw">aes</span>(<span class="dt">x =</span> time, <span class="dt">y =</span> temp)) <span class="op">+</span>
-<span class="st">  </span><span class="kw">geom_point</span>() <span class="op">+</span>
-<span class="st">  </span><span class="kw">geom_line</span>()</code></pre></div>
-<p><img src="_main_files/figure-html/unnamed-chunk-61-1.png" width="672" /></p>
-<p>Vlines and Hlines</p>
-<p>Density plots</p>
-<p>Histograms</p>
-<p>Boxplots</p>
-</div>
-<div id="stat-functions" class="section level3">
-<h3><span class="header-section-number">3.2.3</span> Stat Functions</h3>
-</div>
-<div id="themes" class="section level3">
-<h3><span class="header-section-number">3.2.4</span> Themes</h3>
-</div>
-<div id="labels" class="section level3">
-<h3><span class="header-section-number">3.2.5</span> Labels</h3>
-</div>
-<div id="scales" class="section level3">
-<h3><span class="header-section-number">3.2.6</span> Scales</h3>
-</div>
-<div id="saving-your-plot" class="section level3">
-<h3><span class="header-section-number">3.2.7</span> Saving your plot**</h3>
-<ul>
-<li>File type</li>
-<li>Quality</li>
-<li>Dimensions</li>
-</ul>
-</div>
-<div id="facets" class="section level3">
-<h3><span class="header-section-number">3.2.8</span> Facets</h3>
-<p>&lt;<Use drv as faceting variable>&gt;</p>
-</div>
-<div id="where-to-learn-more" class="section level3">
-<h3><span class="header-section-number">3.2.9</span> Where to learn more</h3>
-<p>The <code>ggplot</code> <a href="https://github.com/rstudio/cheatsheets/blob/master/data-visualization-2.1.pdf">cheatsheet is available here</a> as is the quickest way to look up something you might have briefly forgotten.</p>
-<p>For more complex questions, <a href="https://ggplot2.tidyverse.org/index.html" class="uri">https://ggplot2.tidyverse.org/index.html</a> contains numerous worked examples that will bring your plots from plain old publishable to down right beautiful.</p>
-<p>If you have a really specific question, the “ggplot” tag on <a href="https://stackoverflow.com/questions/tagged/ggplot2?sort=frequent&amp;pageSize=50">Stack Overflow</a> is your best friend. Ask and you shall receive (help)!</p>
-
-</div>
-</div>
-</div>
-<div class="footnotes">
-<hr />
-<ol start="1">
-<li id="fn1"><p>Quaternions are… hard to describe. They are basically 4-part complex numbers that satisfy certain conditions. This allows them to elegently represent space in higher than 3-dimensions. However, they have been despised for much of their history. In fact, William Thomson, first baron Kelvin, note in 1892 “quaternions..though beautifully ingenious, have been an unmixed evil to those who have touched them in any way…”<a href="visualization.html#fnref1">↩</a></p></li>
+<div id="regression-models-1" class="section level1">
+<h1><span class="header-section-number">10</span> Regression Models</h1>
+<p>Now that we have a grasp on data manipulation, it’s time to turn to data analysis. In this chapter, we focus on some of the most common statistical models in use today: linear regression and logistic regression. To get a sense for how to estimate these models, we will…</p>
+<ol style="list-style-type: decimal">
+<li>Simulate fake data to analyze</li>
+<li>Fit (estimate) both linear and logistic regression models</li>
+<li>Look at different ways to view the results, using <code>base R</code> and <code>broom</code></li>
+<li>Using the tidyverse to fit several models simultaneously</li>
 </ol>
+<div id="simulating-fake-data-1" class="section level2">
+<h2><span class="header-section-number">10.1</span> Simulating fake data</h2>
+<p>Before we fit our first regression model, lets simulate some data to analyze. We’ll do that by first simulating two normally distributed predictors. Then, we’ll choose some slopes for those predictors and make an outcome variable equal to the predictors times their slopes, plus some random error. To give us a binary outcome, we will also make a seperate variable in which our original <em>y</em> is dichotomized at the median with a little bit of error(<em>y_dichot</em>).</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(tidyverse)
+
+<span class="kw">set.seed</span>(<span class="dv">314159</span>)
+
+n_cases &lt;-<span class="st"> </span><span class="dv">1000</span>
+df &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">id =</span> <span class="dv">1</span><span class="op">:</span>n_cases) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">mutate</span>(
+    <span class="dt">x1 =</span> <span class="kw">rnorm</span>(n_cases, <span class="dt">mean =</span> <span class="dv">10</span>, <span class="dt">sd =</span> <span class="dv">1</span>),
+    <span class="dt">x2 =</span> <span class="kw">rnorm</span>(n_cases, <span class="dt">mean =</span> <span class="dv">20</span>, <span class="dt">sd =</span> <span class="dv">2</span>),
+    <span class="dt">y =</span> <span class="fl">5.00</span> <span class="op">+</span><span class="st"> </span>.<span class="dv">30</span><span class="op">*</span>x1 <span class="op">+</span><span class="st"> </span>.<span class="dv">60</span><span class="op">*</span>x2 <span class="op">+</span><span class="st"> </span><span class="kw">rnorm</span>(n_cases, <span class="dt">mean =</span> <span class="dv">0</span>, <span class="dt">sd =</span> <span class="dv">1</span>),
+    <span class="dt">y_dichot =</span> <span class="kw">as.numeric</span>(y <span class="op">&gt;</span><span class="st"> </span><span class="kw">median</span>(y) <span class="op">+</span><span class="st"> </span><span class="kw">rnorm</span>(n_cases)))</code></pre></div>
+<p>Here, we have an intercept of <span class="math inline">\(5.00\)</span>, a slope of <span class="math inline">\(.30\)</span> for <span class="math inline">\(x_1\)</span>, slope of <span class="math inline">\(.60\)</span> for <span class="math inline">\(x_2\)</span>. Our outcome <span class="math inline">\(y\)</span> has an error variance of <span class="math inline">\(1.0\)</span>. Note that there is nothing special about these numbers, I just made them up because we needed some. If our linear regression model does a good job, it should find an intercept and slopes close (though not exactly equal) to these. When we use our <em>y_dichot</em> outcome in a logistic regression, note that the numbers won’t be exactly the same because the slopes will be on a logrithmic scale.</p>
+<p>Our resulting data look like this.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">head</span>(df)</code></pre></div>
+<pre><code>##   id        x1       x2        y y_dichot
+## 1  1  9.200711 23.56806 21.54965        1
+## 2  2  9.269903 21.93050 22.15515        1
+## 3  3 11.436877 21.96769 21.18828        1
+## 4  4 10.305023 21.97102 21.87011        1
+## 5  5  9.602716 21.86214 20.25078        0
+## 6  6 10.088890 17.72826 18.98869        0</code></pre>
+</div>
+<div id="fitting-regression-models-1" class="section level2">
+<h2><span class="header-section-number">10.2</span> Fitting regression models</h2>
+<div id="linear-regression-1" class="section level3">
+<h3><span class="header-section-number">10.2.1</span> Linear regression</h3>
+<p>Now that we’ve got our data, we can fit our first regression model. In R, we fit linear regression models that using the <code>lm()</code> function (“lm” for “linear model”). This function takes two main parameters: a regression formula and the data to which you want that formula applied.</p>
+<p>The formula is specified using the <code>&lt;outcome&gt; ~ &lt;predictor1&gt; + &lt;predictor2&gt; + ...</code> format. Your outcome goes on the left side of the formula, followed by a squiggle (<code>~</code>), followed by each of your predictors seperated by a <code>+</code>. The data is just your dataframe of interest.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">lm</span>(<span class="dt">formula =</span> y <span class="op">~</span><span class="st"> </span>x1 <span class="op">+</span><span class="st"> </span>x2, <span class="dt">data =</span> df)</code></pre></div>
+<pre><code>## 
+## Call:
+## lm(formula = y ~ x1 + x2, data = df)
+## 
+## Coefficients:
+## (Intercept)           x1           x2  
+##      4.5117       0.3334       0.6096</code></pre>
+<p>Notice that our output is pretty close to what we would have predicted, especially for the two slope coefficients for <em>x1</em> and <em>x2</em>. But where are our standard errors and p-values? To get them, we need to use the <code>summary()</code> command. To make sure we can call summary again without needing to re-estimate the model, we’ll first save it in a variable called <code>fit</code>.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">fit &lt;-<span class="st"> </span><span class="kw">lm</span>(<span class="dt">formula =</span> y <span class="op">~</span><span class="st"> </span>x1 <span class="op">+</span><span class="st"> </span>x2, <span class="dt">data =</span> df)
+<span class="kw">summary</span>(fit)</code></pre></div>
+<pre><code>## 
+## Call:
+## lm(formula = y ~ x1 + x2, data = df)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -3.7600 -0.6472 -0.0365  0.6566  2.9302 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)  4.51175    0.42996   10.49   &lt;2e-16 ***
+## x1           0.33342    0.03065   10.88   &lt;2e-16 ***
+## x2           0.60961    0.01524   40.00   &lt;2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 0.9812 on 997 degrees of freedom
+## Multiple R-squared:  0.6342, Adjusted R-squared:  0.6335 
+## F-statistic: 864.4 on 2 and 997 DF,  p-value: &lt; 2.2e-16</code></pre>
+<p>There we go! Now I have all the usual information I would need for a regression table. Note that in this case, our p-values (in the column labelled “Pr(&gt;|t|)”) are so small that they need to be given in scientific notation - that’s because our simulated data have very little error in them. Under more normal circumstances, your p-values will likely be much larger.</p>
+</div>
+<div id="logistic-regression-1" class="section level3">
+<h3><span class="header-section-number">10.2.2</span> Logistic regression</h3>
+<p>Fitting a logistic regression model is <em>almost</em> exactly the same, except for a few important differences. First, we will use our dichotomized variable (<em>y_dichot</em>) as the outcome in our regression formula. Additionally, we will use the <code>glm()</code> function (“glm” for “generalized linear model”) and we need to specify what family of generalized linear model we are using in that function. For a logistic regression that <code>family = 'binomial'</code>.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">glm</span>(y_dichot <span class="op">~</span><span class="st"> </span>x1 <span class="op">+</span><span class="st"> </span>x2, <span class="dt">data =</span> df, <span class="dt">family =</span> <span class="st">&#39;binomial&#39;</span>)</code></pre></div>
+<pre><code>## 
+## Call:  glm(formula = y_dichot ~ x1 + x2, family = &quot;binomial&quot;, data = df)
+## 
+## Coefficients:
+## (Intercept)           x1           x2  
+##    -20.4650       0.4857       0.7832  
+## 
+## Degrees of Freedom: 999 Total (i.e. Null);  997 Residual
+## Null Deviance:       1386 
+## Residual Deviance: 999.3     AIC: 1005</code></pre>
+<p>Once again, calling the model function alone gives us <em>some</em> important information, but not very much. So, we’ll follow the same trick above and use the summary function.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">fit2 &lt;-<span class="st"> </span><span class="kw">glm</span>(y_dichot <span class="op">~</span><span class="st"> </span>x1 <span class="op">+</span><span class="st"> </span>x2, <span class="dt">data =</span> df, <span class="dt">family =</span> <span class="st">&#39;binomial&#39;</span>)
+<span class="kw">summary</span>(fit2)</code></pre></div>
+<pre><code>## 
+## Call:
+## glm(formula = y_dichot ~ x1 + x2, family = &quot;binomial&quot;, data = df)
+## 
+## Deviance Residuals: 
+##     Min       1Q   Median       3Q      Max  
+## -2.2937  -0.7904   0.1182   0.8190   2.4370  
+## 
+## Coefficients:
+##              Estimate Std. Error z value Pr(&gt;|z|)    
+## (Intercept) -20.46501    1.43852 -14.226  &lt; 2e-16 ***
+## x1            0.48566    0.07961   6.101 1.06e-09 ***
+## x2            0.78319    0.05252  14.912  &lt; 2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## (Dispersion parameter for binomial family taken to be 1)
+## 
+##     Null deviance: 1386.29  on 999  degrees of freedom
+## Residual deviance:  999.32  on 997  degrees of freedom
+## AIC: 1005.3
+## 
+## Number of Fisher Scoring iterations: 5</code></pre>
+<p>That’s once again much better! Now we have all of the information we would normally need to report in a regression table.</p>
+</div>
+</div>
+<div id="other-ways-of-viewing-the-output-1" class="section level2">
+<h2><span class="header-section-number">10.3</span> Other ways of viewing the output</h2>
+<p>The <code>summary()</code> function from R is nice for looking at our results in real time, but it can be a real pain if I want to modify or export the output. For example, what if I wanted to test whether my results were still significant after Bonferroni correction? For a small number of variables, we could just eyeball it. But for any reasonably large regression, we should be using code to do it instead.</p>
+<p>To get your output in a more code-friendly format, you can install and use the <code>broom</code> package.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">install.packages</span>(<span class="st">&#39;broom&#39;</span>)</code></pre></div>
+<p>This package has 3 major functions designed to help you out with standard regression models: <code>glance()</code>, <code>tidy()</code>, and <code>augment()</code>.</p>
+<div id="glance-1" class="section level3">
+<h3><span class="header-section-number">10.3.1</span> <code>glance()</code></h3>
+<p>If I want to see some basic model information (e.g., model sum of squares, <span class="math inline">\(R^2\)</span>), I call <code>glance()</code> on my <code>fit</code> object. This function takes my <code>fit</code> object and gives me model summary information in a one-row dataframe.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(broom)
+
+<span class="kw">glance</span>(fit)</code></pre></div>
+<pre><code>## # A tibble: 1 x 11
+##   r.squared adj.r.squared sigma statistic   p.value    df logLik   AIC
+##       &lt;dbl&gt;         &lt;dbl&gt; &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt; &lt;int&gt;  &lt;dbl&gt; &lt;dbl&gt;
+## 1     0.634         0.634 0.981      864. 1.77e-218     3 -1398. 2805.
+## # … with 3 more variables: BIC &lt;dbl&gt;, deviance &lt;dbl&gt;, df.residual &lt;int&gt;</code></pre>
+<p>If I want to see some more specific information about the coefficients in my model, I call <code>tidy()</code>.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">tidy</span>(fit)</code></pre></div>
+<pre><code>## # A tibble: 3 x 5
+##   term        estimate std.error statistic   p.value
+##   &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;
+## 1 (Intercept)    4.51     0.430       10.5 1.66e- 24
+## 2 x1             0.333    0.0306      10.9 3.95e- 26
+## 3 x2             0.610    0.0152      40.0 1.63e-209</code></pre>
+<p>Now if I want to adjust my p-values, I can easily do so with the <code>tidyverse</code></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(tidyverse)
+
+fit <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">tidy</span>() <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">adj_p =</span> <span class="kw">p.adjust</span>(p.value, <span class="dt">method =</span> <span class="st">&#39;bonferroni&#39;</span>))</code></pre></div>
+<pre><code>## # A tibble: 3 x 6
+##   term        estimate std.error statistic   p.value     adj_p
+##   &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;
+## 1 (Intercept)    4.51     0.430       10.5 1.66e- 24 4.98e- 24
+## 2 x1             0.333    0.0306      10.9 3.95e- 26 1.18e- 25
+## 3 x2             0.610    0.0152      40.0 1.63e-209 4.90e-209</code></pre>
+<p>Lastly, if I want to see some participant-level information about my model (e.g., predicted values), I can use <code>augment()</code>. This gives me a ton of useful information, including predicted values and standardized residuals.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">augment</span>(fit)</code></pre></div>
+<pre><code>## # A tibble: 1,000 x 10
+##        y    x1    x2 .fitted .se.fit  .resid    .hat .sigma .cooksd
+##    &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt;
+##  1  21.5  9.20  23.6    21.9  0.0679 -0.397  0.00478  0.982 2.64e-4
+##  2  22.2  9.27  21.9    21.0  0.0486  1.18   0.00246  0.981 1.20e-3
+##  3  21.2 11.4   22.0    21.7  0.0621 -0.528  0.00401  0.982 3.91e-4
+##  4  21.9 10.3   22.0    21.3  0.0447  0.529  0.00208  0.982 2.02e-4
+##  5  20.3  9.60  21.9    21.0  0.0442 -0.790  0.00203  0.981 4.40e-4
+##  6  19.0 10.1   17.7    18.7  0.0461  0.306  0.00221  0.982 7.18e-5
+##  7  20.1 11.2   20.1    20.5  0.0478 -0.384  0.00237  0.982 1.22e-4
+##  8  20.5  9.22  19.4    19.4  0.0395  1.10   0.00162  0.981 6.77e-4
+##  9  24.3  8.24  23.2    21.4  0.0791  2.93   0.00649  0.977 1.96e-2
+## 10  20.0  7.70  21.0    19.9  0.0784  0.0792 0.00638  0.982 1.40e-5
+## # … with 990 more rows, and 1 more variable: .std.resid &lt;dbl&gt;</code></pre>
+</div>
+</div>
+<div id="fitting-multiple-regressions-simultaneously-1" class="section level2">
+<h2><span class="header-section-number">10.4</span> Fitting multiple regressions simultaneously</h2>
+<p>Sometimes, we’ll have a bunch of groups that we want to analyze seperately. For one or two groups, this isn’t so bad to do individually. However, for larger numbers of groups, we’ll need something more advanced. For example, let’s assign people to some groups in our existing dataset.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">df &lt;-<span class="st"> </span>df <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">grp =</span> <span class="kw">sample</span>(letters, <span class="dt">size =</span> <span class="kw">nrow</span>(.), <span class="dt">replace =</span> T))
+
+<span class="kw">head</span>(df)</code></pre></div>
+<pre><code>##   id        x1       x2        y y_dichot grp
+## 1  1  9.200711 23.56806 21.54965        1   c
+## 2  2  9.269903 21.93050 22.15515        1   v
+## 3  3 11.436877 21.96769 21.18828        1   l
+## 4  4 10.305023 21.97102 21.87011        1   y
+## 5  5  9.602716 21.86214 20.25078        0   i
+## 6  6 10.088890 17.72826 18.98869        0   t</code></pre>
+<p>Here, we’ve assigned people to one of 26 groups (a group for each letter of the alphabet). How can we fit all these regressions separately? With the <code>tidyverse</code>’s <code>group_by()</code> and <code>do()</code> functions.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">model_df &lt;-<span class="st"> </span>df <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">group_by</span>(grp) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">do</span>(<span class="dt">model =</span> <span class="kw">lm</span>(y <span class="op">~</span><span class="st"> </span>x1 <span class="op">+</span><span class="st"> </span>x2, <span class="dt">data =</span> .))
+
+<span class="kw">head</span>(model_df)</code></pre></div>
+<pre><code>## Source: local data frame [6 x 2]
+## Groups: &lt;by row&gt;
+## 
+## # A tibble: 6 x 2
+##   grp   model   
+##   &lt;chr&gt; &lt;list&gt;  
+## 1 a     &lt;S3: lm&gt;
+## 2 b     &lt;S3: lm&gt;
+## 3 c     &lt;S3: lm&gt;
+## 4 d     &lt;S3: lm&gt;
+## 5 e     &lt;S3: lm&gt;
+## 6 f     &lt;S3: lm&gt;</code></pre>
+<p>If we want to unpack those models, we can once again use <code>broom</code>’s functions. We just need to make sure to specify the column where our models are, which in this case is “<em>model</em>”.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">coef_table &lt;-<span class="st"> </span>model_df <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">tidy</span>(model)
+
+<span class="kw">head</span>(coef_table, <span class="dt">n =</span> <span class="dv">10</span>)</code></pre></div>
+<pre><code>## # A tibble: 10 x 6
+## # Groups:   grp [4]
+##    grp   term        estimate std.error statistic  p.value
+##    &lt;chr&gt; &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
+##  1 a     (Intercept)    8.16     2.52        3.24 2.94e- 3
+##  2 a     x1             0.231    0.164       1.41 1.69e- 1
+##  3 a     x2             0.486    0.0793      6.13 9.80e- 7
+##  4 b     (Intercept)    4.72     2.35        2.00 5.17e- 2
+##  5 b     x1             0.209    0.141       1.48 1.48e- 1
+##  6 b     x2             0.682    0.0789      8.64 9.05e-11
+##  7 c     (Intercept)    5.05     2.43        2.08 4.31e- 2
+##  8 c     x1             0.425    0.149       2.86 6.53e- 3
+##  9 c     x2             0.539    0.0978      5.52 1.72e- 6
+## 10 d     (Intercept)    6.56     2.10        3.12 3.16e- 3</code></pre>
+<p>We can do the same thing for summary model information with the <code>glance()</code> function.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">model_table &lt;-<span class="st"> </span>model_df <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">glance</span>(model)
+
+<span class="kw">head</span>(model_table)</code></pre></div>
+<pre><code>## # A tibble: 6 x 12
+## # Groups:   grp [6]
+##   grp   r.squared adj.r.squared sigma statistic  p.value    df logLik   AIC
+##   &lt;chr&gt;     &lt;dbl&gt;         &lt;dbl&gt; &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt; &lt;int&gt;  &lt;dbl&gt; &lt;dbl&gt;
+## 1 a         0.556         0.526 0.883      18.8 5.18e- 6     3  -41.1  90.3
+## 2 b         0.646         0.629 0.983      37.4 5.72e-10     3  -60.1 128. 
+## 3 c         0.464         0.440 1.03       19.1 1.09e- 6     3  -66.4 141. 
+## 4 d         0.551         0.531 1.01       27.6 1.48e- 8     3  -67.1 142. 
+## 5 e         0.814         0.801 0.763      63.3 2.63e-11     3  -35.2  78.4
+## 6 f         0.693         0.677 0.900      41.8 3.20e-10     3  -51.0 110. 
+## # … with 3 more variables: BIC &lt;dbl&gt;, deviance &lt;dbl&gt;, df.residual &lt;int&gt;</code></pre>
+<p>If we want, we can even see the distribution of things we care about, like <span class="math inline">\(R^2\)</span>.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(model_table, <span class="kw">aes</span>(r.squared)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_density</span>(<span class="dt">fill =</span> <span class="st">&#39;grey&#39;</span>, <span class="dt">alpha =</span> .<span class="dv">50</span>)</code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-153-1.png" width="672" /></p>
+
+</div>
 </div>
             </section>
 
           </div>
         </div>
       </div>
-<a href="basic-r.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="functions-1.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="regression-models.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="anova-and-other-tests.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>

@@ -1,0 +1,189 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+# ANOVA and other tests
+
+In this chapter, we cover other common tests you will have run in other programs. In the later part of the chapter, we will focus specifically on Analysis of Variance (ANOVA). At the outset, let me begin with an apology: R's ANOVA capabilities are *much* less intuitive and user friendly than in other programs. What I provide below is my best attempt to make the system understandable. Our agenda includes...
+
+1. *t*-Tests
+2. Correlation
+3. ANOVA - one-way and two-way
+
+We'll start by simulating a dataset to use throughout our analyses. Because we have so many tests to run, this dataset will be a little more complex than in past chapters.
+
+```{r, message=FALSE, warning=FALSE}
+library(tidyverse)
+
+set.seed(314159)
+
+n_obs <- 350
+df <- data.frame(id = 1:n_obs) %>%
+  mutate(
+    gender = as.factor(sample(c('male', 'female'), size = n_obs, replace = T)),
+    race = as.factor(sample(c('Black', 'White', 'Asian'), size = n_obs, replace = T))) %>%
+  group_by(gender, race) %>%
+  mutate(
+    group_age_mean = rnorm(1, sd = 3),
+    age = round(group_age_mean + rnorm(n(), mean = 22, sd = 2), 4),
+    gpa1 = round(runif(n(), 2, 4), 1),
+    gpa2 = round(gpa1 + (4 - gpa1)*runif(n(), min = -.50, max = .75), 1),
+    gpa3 = round(gpa2 + (4 - gpa2)*runif(n(), min = -.50, max = .75), 1)) %>%
+  ungroup()
+
+head(df)
+```
+
+Here, we've created a few categorical variables (this time leaving them as factors!) and two continuous variables we might treat as outcomes (i.e., age and GPA at 3 time points.) In this case, a person's age in this sample is related to both their gender and race, so we should see a two-way interaction (or close to it) with these variables. 
+
+## *t*-Tests
+
+To run an independant-samples *t*-test, we can use the `t.test()` function. This function expects us to have two columns of data, one for each sample. If we want to compare men and women's ages in our sample, we'll simply need to extract those columns of data.
+
+```{r}
+t.test(df$age[df$gender == 'female'], df$age[df$gender == 'male'])
+```
+
+To run a paired *t*-test, we just set `paired = TRUE`. Let's try this on the first two columns of GPA.
+
+```{r}
+t.test(df$gpa1, df$gpa2, paired = T)
+```
+
+Note that `t.tes()` in R defaults to using the unequal variances formula, as you can see in the help file, where `var.equal = FALSE` is diplayed in the USAGE section.
+
+## Correlation
+
+To view a set of correlations, all we need is to feed our data to the `cor()` function.
+
+```{r}
+cor(df[, c('age', 'gpa1', 'gpa2', 'gpa3')])
+```
+
+But what if I have missing data? In that case, consult the help fil for which of the following otions you want to use for computing your correlations. Set `use` equal to one of: "everything", "all.obs", "complete.obs", "na.or.complete", or "pairwise.complete.obs".
+
+```{r, error=TRUE}
+missing_df <- df[, c('age', 'gpa1', 'gpa2', 'gpa3')] %>%
+  mutate(age = ifelse(runif(nrow(.)) < .50, NA, age)) # 50% of scores randomly missing
+
+cor(missing_df)
+```
+
+```{r}
+cor(missing_df, use = 'complete.obs')
+```
+
+### Rank correlations
+
+You can also change the `method` argument of `cor()` to one of "pearson", "kendall", or "spearman". Pearson is the default, but both Kendall and Spearman correlations are easy to compute.
+
+```{r}
+cor(missing_df, use = 'complete.obs', method = 'spearman')
+```
+
+### Significance testing
+
+There is no quick base R solution for computing significance values for your correlations. However, the `rcorr()` function of the `Hmisc` package will compute them if you want. Note that you need to use `as.matrix()` to convert your dataframe to a matrix before `rcorr()` will understand it.
+
+```{r}
+# If you need to, install the package
+# install.packages('Hmisc') 
+
+df %>%
+  select(gpa1, gpa2, gpa3) %>%
+  as.matrix() %>% # convert to matrix
+  Hmisc::rcorr()
+```
+
+## ANOVA
+
+For analysis of variance, we use the same "formula" model specification that we did for regression: `<outcome> ~ <predictor1> + <predictor2> ...`. 
+
+```{r}
+aov(age ~ race, data = df)
+```
+
+Like regression, we get *some* useful information from the `aov()` function alone, but it is usually more helpful to save it to a variable (often named `fit`, but you can call it whatever you want). Then, we use the `summary()` function to get a little more detail.
+
+```{r}
+fit <- aov(age ~ race, data = df)
+summary(fit)
+```
+
+**WARNING**: The default Sum of Squares that R uses is Type I, which is different from SAS and SPSS (which default to Type III). If you want your results to be consistent with SPSS, then try using the `drop1()` command.
+
+```{r}
+drop1(fit)
+```
+
+### Post hoc testing
+
+To perform post hoc testing of group differences, the most common choice is the `TukeyHSD()` function, which takes your fit object and performs the HSD post hoc test.
+
+```{r}
+TukeyHSD(fit)
+```
+
+Here, we see that there are significant differences in two of three possible cases.
+
+### Two-factors
+
+If we want to test two factors at once (e.g., race and gender), we simply add them both to the formula.
+
+```{r}
+fit <- aov(age ~ race + gender, data = df)
+summary(fit)
+```
+
+**WARNING**: Notice again that because the default here is Type I Sum of Squares, variable order matters! To get your SPSS-consistent values, use `drop1()`.
+
+```{r}
+fit <- aov(age ~ gender + race, data = df)
+summary(fit)
+```
+
+```{r}
+fit <- aov(age ~ gender + race, data = df)
+drop1(fit)
+```
+
+### P-values 
+
+Unfortunately, to get p-values for the `drop1()` command, you need to do the extra leg work yourself. Here is a demo of how you would do it.
+
+```{r}
+ss <- fit %>%
+  drop1() %>%
+  as.data.frame()
+
+
+residual_df <- fit$df.residual
+residual_ms <- ss['<none>', 'RSS']/residual_df
+
+ss %>%
+  mutate(
+    mean_squares = `Sum of Sq`/Df,
+    f_stat = mean_squares/residual_ms,
+    p = pf(f_stat, Df, residual_df, lower.tail = F))
+```
+
+### Interactions
+
+Interactions can be specified by the `<va1>*<var2>` command in the formula. 
+
+```{r}
+fit <- aov(age ~ gender + race + gender:race, data = df)
+summary(fit)
+```
+
+Here, we can see both a significant interaction and significant main effects for gender and race, predicting age in our sample.
+
+### Plots
+
+Using `ggplot` is likely your most useful way of comparing groups.
+
+```{r}
+ggplot(df, aes(x = race, y = age, fill = gender)) +
+  geom_boxplot()
+```

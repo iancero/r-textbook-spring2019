@@ -1,0 +1,36 @@
+---
+title: "CSP 518 - Exercises: 1a - Intro to R"
+author: "Key"
+date: "Due: 2019-02-01 @ 11:59pm"
+output: pdf_document
+---
+
+## Instructions
+
+1. Make a .Rmd file to complete these exercises.
+
+  - Title it "CSP 518 - Exercises: Intro to R" (in quotes)
+  - Add your name(s) in the author slot (in quotes)
+  - The output can be either be `pdf_document` or `html_document` (no quotes)
+
+2. Turn in just your .Rmd file on Blackboard. Note, I will need to be able to `knit` it myself, so make sure everything runs the way you intend, before you turn it in.
+
+3. For clarity, write "## Question <number>" befor each question to signal which one you are answering.
+
+## Exercises
+
+1. Simulate a dataset that has at least two categorical group variables (e.g., gender, race) and at least two continuous variables (e.g., age, income). Although your variables don't need to be related to each other - they can be completely random - you will likely find the exercise more interesting if you build some relationships into your simulation. For examples of how to do this, see the beginning of the current chapter, as well as the regression chapter. When you're done, use `head()` to display the first few rows of your simulated data.
+
+2. Run an independant samples t-test with one of your grouping variables and one of your continuous variables. Is the result significant?
+
+3. Dichotomize and dummy-code one of your categorical grouping variables, coding the result as 0 and 1. Now compute both the Pearson and Spearman correlations for your new dichotomized variable and one of your continuous outcomes.
+
+4. Use the `rcorr()` function of the `Hmisc` package to compute p-values for one or more correlations in your dataset.
+
+5. Run a one-way ANOVA, getting the Type I sum of squares with the `summary()` function.
+
+6. Run a Tukey's HSD post hoc test to compare group means from the ANOVA you just ran.
+
+7. Now use `drop1()` to compute the Type III sum of squares.
+
+8. BONUS: compute F and p-values for the Type III sum of squares you generated in the previous question.
