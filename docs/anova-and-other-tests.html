@@ -32,7 +32,7 @@
   
   
 <link rel="prev" href="regression-models-1.html">
-
+<link rel="next" href="structural-equation-modeling.html">
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -230,6 +230,16 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="11.3.3" data-path="anova-and-other-tests.html"><a href="anova-and-other-tests.html#p-values"><i class="fa fa-check"></i><b>11.3.3</b> P-values</a></li>
 <li class="chapter" data-level="11.3.4" data-path="anova-and-other-tests.html"><a href="anova-and-other-tests.html#interactions"><i class="fa fa-check"></i><b>11.3.4</b> Interactions</a></li>
 <li class="chapter" data-level="11.3.5" data-path="anova-and-other-tests.html"><a href="anova-and-other-tests.html#plots"><i class="fa fa-check"></i><b>11.3.5</b> Plots</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="12" data-path="structural-equation-modeling.html"><a href="structural-equation-modeling.html"><i class="fa fa-check"></i><b>12</b> Structural Equation Modeling</a><ul>
+<li class="chapter" data-level="12.1" data-path="structural-equation-modeling.html"><a href="structural-equation-modeling.html#confirmatory-factor-analysis"><i class="fa fa-check"></i><b>12.1</b> Confirmatory Factor Analysis</a><ul>
+<li class="chapter" data-level="12.1.1" data-path="structural-equation-modeling.html"><a href="structural-equation-modeling.html#cfa-syntax"><i class="fa fa-check"></i><b>12.1.1</b> CFA syntax</a></li>
+</ul></li>
+<li class="chapter" data-level="12.2" data-path="structural-equation-modeling.html"><a href="structural-equation-modeling.html#full-structural-equation-models"><i class="fa fa-check"></i><b>12.2</b> Full Structural Equation Models</a></li>
+<li class="chapter" data-level="12.3" data-path="structural-equation-modeling.html"><a href="structural-equation-modeling.html#additional-tricks"><i class="fa fa-check"></i><b>12.3</b> Additional tricks</a><ul>
+<li class="chapter" data-level="12.3.1" data-path="structural-equation-modeling.html"><a href="structural-equation-modeling.html#missing-data"><i class="fa fa-check"></i><b>12.3.1</b> Missing data</a></li>
+<li class="chapter" data-level="12.3.2" data-path="structural-equation-modeling.html"><a href="structural-equation-modeling.html#robus-estimators"><i class="fa fa-check"></i><b>12.3.2</b> Robus estimators</a></li>
 </ul></li>
 </ul></li>
 </ul>
@@ -466,15 +476,18 @@ df <span class="op">%&gt;%</span>
 residual_df &lt;-<span class="st"> </span>fit<span class="op">$</span>df.residual
 residual_ms &lt;-<span class="st"> </span>ss[<span class="st">&#39;&lt;none&gt;&#39;</span>, <span class="st">&#39;RSS&#39;</span>]<span class="op">/</span>residual_df
 
+ss[<span class="st">&#39;&lt;none&gt;&#39;</span>, <span class="st">&#39;Df&#39;</span>] &lt;-<span class="st"> </span>fit<span class="op">$</span>df.residual
+ss[<span class="st">&#39;&lt;none&gt;&#39;</span>, <span class="st">&#39;Sum of Sq&#39;</span>] &lt;-<span class="st"> </span><span class="kw">sum</span>(fit<span class="op">$</span>residuals<span class="op">^</span><span class="dv">2</span>)
+
 ss <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">mutate</span>(
     <span class="dt">mean_squares =</span> <span class="st">`</span><span class="dt">Sum of Sq</span><span class="st">`</span><span class="op">/</span>Df,
     <span class="dt">f_stat =</span> mean_squares<span class="op">/</span>residual_ms,
     <span class="dt">p =</span> <span class="kw">pf</span>(f_stat, Df, residual_df, <span class="dt">lower.tail =</span> F))</code></pre></div>
-<pre><code>##   Df Sum of Sq      RSS      AIC mean_squares   f_stat            p
-## 1 NA        NA 3133.056 775.1409           NA       NA           NA
-## 2  1  364.1139 3497.170 811.6217     364.1139 40.21103 7.123237e-10
-## 3  2  483.7302 3616.787 821.3928     241.8651 26.71044 1.631703e-11</code></pre>
+<pre><code>##    Df Sum of Sq      RSS      AIC mean_squares   f_stat            p
+## 1 346 3133.0564 3133.056 775.1409     9.055076  1.00000 5.000000e-01
+## 2   1  364.1139 3497.170 811.6217   364.113945 40.21103 7.123237e-10
+## 3   2  483.7302 3616.787 821.3928   241.865110 26.71044 1.631703e-11</code></pre>
 </div>
 <div id="interactions" class="section level3">
 <h3><span class="header-section-number">11.3.4</span> Interactions</h3>
@@ -500,19 +513,13 @@ ss <span class="op">%&gt;%</span>
 </div>
 </div>
 </div>
-
-
-
-
-
-
             </section>
 
           </div>
         </div>
       </div>
-<a href="regression-models-1.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-
+<a href="regression-models-1.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="structural-equation-modeling.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>

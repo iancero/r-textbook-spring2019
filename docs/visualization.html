@@ -232,6 +232,16 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="11.3.5" data-path="anova-and-other-tests.html"><a href="anova-and-other-tests.html#plots"><i class="fa fa-check"></i><b>11.3.5</b> Plots</a></li>
 </ul></li>
 </ul></li>
+<li class="chapter" data-level="12" data-path="structural-equation-modeling.html"><a href="structural-equation-modeling.html"><i class="fa fa-check"></i><b>12</b> Structural Equation Modeling</a><ul>
+<li class="chapter" data-level="12.1" data-path="structural-equation-modeling.html"><a href="structural-equation-modeling.html#confirmatory-factor-analysis"><i class="fa fa-check"></i><b>12.1</b> Confirmatory Factor Analysis</a><ul>
+<li class="chapter" data-level="12.1.1" data-path="structural-equation-modeling.html"><a href="structural-equation-modeling.html#cfa-syntax"><i class="fa fa-check"></i><b>12.1.1</b> CFA syntax</a></li>
+</ul></li>
+<li class="chapter" data-level="12.2" data-path="structural-equation-modeling.html"><a href="structural-equation-modeling.html#full-structural-equation-models"><i class="fa fa-check"></i><b>12.2</b> Full Structural Equation Models</a></li>
+<li class="chapter" data-level="12.3" data-path="structural-equation-modeling.html"><a href="structural-equation-modeling.html#additional-tricks"><i class="fa fa-check"></i><b>12.3</b> Additional tricks</a><ul>
+<li class="chapter" data-level="12.3.1" data-path="structural-equation-modeling.html"><a href="structural-equation-modeling.html#missing-data"><i class="fa fa-check"></i><b>12.3.1</b> Missing data</a></li>
+<li class="chapter" data-level="12.3.2" data-path="structural-equation-modeling.html"><a href="structural-equation-modeling.html#robus-estimators"><i class="fa fa-check"></i><b>12.3.2</b> Robus estimators</a></li>
+</ul></li>
+</ul></li>
 </ul>
 
       </nav>
@@ -257,9 +267,9 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <p>The term “Base R” refers to the set of packages and functions that R loads into each session by default. These packages include several statistical and plotting functions you will probably use a lot. Some of the most common plotting functions are given below.</p>
 <p><strong>hist()</strong></p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">rpois</span>(<span class="dv">100</span>, <span class="dt">lambda =</span> <span class="dv">3</span>)</code></pre></div>
-<pre><code>##   [1] 2 1 4 2 2 5 1 3 3 1 3 3 4 5 2 3 0 4 5 2 5 8 6 5 2 0 2 4 3 5 1 0 5 1 4
-##  [36] 4 3 5 3 3 3 1 3 1 2 3 0 3 3 1 1 5 4 2 6 0 2 5 1 2 6 5 4 2 3 3 2 1 4 4
-##  [71] 3 5 1 1 4 0 5 5 0 1 3 2 1 0 3 5 2 3 6 1 1 4 3 7 5 3 3 2 2 4</code></pre>
+<pre><code>##   [1] 2 1 1 3 4 1 6 2 5 3 3 2 0 2 3 2 4 3 3 5 8 3 3 3 3 3 3 2 4 5 1 2 4 4 1
+##  [36] 4 2 7 4 1 4 1 3 6 2 3 3 1 4 6 5 3 1 1 6 3 4 3 0 3 3 1 1 3 1 3 6 3 4 0
+##  [71] 2 7 3 2 2 3 4 4 4 7 1 5 1 2 3 2 0 4 1 3 2 1 5 4 1 2 1 4 1 2</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">my_vals &lt;-<span class="st"> </span><span class="kw">rexp</span>(<span class="dv">100</span>, <span class="dv">10</span>)
 
 <span class="kw">hist</span>(

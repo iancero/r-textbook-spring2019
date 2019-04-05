@@ -1,0 +1,35 @@
+---
+title: "CSP 518 - Exercises: 9 - SEM"
+author: "YOUR NAME HERE"
+date: "Due: 2019-04-12 @ 11:59pm"
+output: html_document
+---
+
+## Instructions
+
+1. Make a .Rmd file to complete these exercises.
+
+  - Title it "CSP 518 - Exercises: Intro to R" (in quotes)
+  - Add your name(s) in the author slot (in quotes)
+  - The output can be either be `pdf_document` or `html_document` (no quotes)
+
+2. Turn in just your .Rmd file on Blackboard. Note, I will need to be able to `knit` it myself, so make sure everything runs the way you intend, before you turn it in.
+
+3. For clarity, write "## Question <number>" befor each question to signal which one you are answering.
+
+## Exercises
+
+1. Load the `PoliticalDemocracy` and `HolzingerSwineford1939` datasets from the `lavaan` package. If you want, give them new variable names.
+
+2. Run and summarize a CFA using the `PoliticalDemocracy` dataset. Include two factors:
+
+- *ind60*, whose indicators are x1, x2, x3
+- *dem60*, whose indicators are y1, y2, y3
+
+3. Run and summarize a full SEM model, like the one in the textbook. But this time, have *dem60* cause *ind60*. Is the fit any different?
+
+4. Run the same model as you did for #3, but now use a robust estimator (MLR).
+
+5. Run the same model as you did for #3, but this time set some of the observed indicator values equal to `NA`.
+
+6. With the dataset you made for #5, re-run your model using full-information maximum likelihood to account for the missing data.

@@ -161,6 +161,9 @@ ss <- fit %>%
 residual_df <- fit$df.residual
 residual_ms <- ss['<none>', 'RSS']/residual_df
 
+ss['<none>', 'Df'] <- fit$df.residual
+ss['<none>', 'Sum of Sq'] <- sum(fit$residuals^2)
+
 ss %>%
   mutate(
     mean_squares = `Sum of Sq`/Df,

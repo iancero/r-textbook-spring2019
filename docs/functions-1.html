@@ -232,6 +232,16 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="11.3.5" data-path="anova-and-other-tests.html"><a href="anova-and-other-tests.html#plots"><i class="fa fa-check"></i><b>11.3.5</b> Plots</a></li>
 </ul></li>
 </ul></li>
+<li class="chapter" data-level="12" data-path="structural-equation-modeling.html"><a href="structural-equation-modeling.html"><i class="fa fa-check"></i><b>12</b> Structural Equation Modeling</a><ul>
+<li class="chapter" data-level="12.1" data-path="structural-equation-modeling.html"><a href="structural-equation-modeling.html#confirmatory-factor-analysis"><i class="fa fa-check"></i><b>12.1</b> Confirmatory Factor Analysis</a><ul>
+<li class="chapter" data-level="12.1.1" data-path="structural-equation-modeling.html"><a href="structural-equation-modeling.html#cfa-syntax"><i class="fa fa-check"></i><b>12.1.1</b> CFA syntax</a></li>
+</ul></li>
+<li class="chapter" data-level="12.2" data-path="structural-equation-modeling.html"><a href="structural-equation-modeling.html#full-structural-equation-models"><i class="fa fa-check"></i><b>12.2</b> Full Structural Equation Models</a></li>
+<li class="chapter" data-level="12.3" data-path="structural-equation-modeling.html"><a href="structural-equation-modeling.html#additional-tricks"><i class="fa fa-check"></i><b>12.3</b> Additional tricks</a><ul>
+<li class="chapter" data-level="12.3.1" data-path="structural-equation-modeling.html"><a href="structural-equation-modeling.html#missing-data"><i class="fa fa-check"></i><b>12.3.1</b> Missing data</a></li>
+<li class="chapter" data-level="12.3.2" data-path="structural-equation-modeling.html"><a href="structural-equation-modeling.html#robus-estimators"><i class="fa fa-check"></i><b>12.3.2</b> Robus estimators</a></li>
+</ul></li>
+</ul></li>
 </ul>
 
       </nav>
@@ -323,9 +333,9 @@ w &lt;-<span class="st"> </span><span class="dv">1</span><span class="op">:</spa
 u &lt;-<span class="st"> </span><span class="kw">runif</span>(<span class="dt">n =</span> <span class="dv">20</span>)
 
 <span class="kw">cor</span>(x, y)</code></pre></div>
-<pre><code>## [1] 0.9342257</code></pre>
+<pre><code>## [1] 0.7871337</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">cov</span>(x, y)<span class="op">/</span>(<span class="kw">sd</span>(x)<span class="op">*</span><span class="kw">sd</span>(y))</code></pre></div>
-<pre><code>## [1] 0.9342257</code></pre>
+<pre><code>## [1] 0.7871337</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">print</span>(<span class="st">&#39;---&#39;</span>)</code></pre></div>
 <pre><code>## [1] &quot;---&quot;</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">correlation &lt;-<span class="st"> </span><span class="cf">function</span>(a, b) {
@@ -333,9 +343,9 @@ u &lt;-<span class="st"> </span><span class="kw">runif</span>(<span class="dt">n
 }
 
 <span class="kw">cor</span>(w, u)</code></pre></div>
-<pre><code>## [1] -0.5143874</code></pre>
+<pre><code>## [1] -0.04037588</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">correlation</span>(w, u)</code></pre></div>
-<pre><code>## [1] -0.5143874</code></pre>
+<pre><code>## [1] -0.04037588</code></pre>
 </div>
 <div id="base-r-functions" class="section level2">
 <h2><span class="header-section-number">4.3</span> Base R functions</h2>
@@ -431,9 +441,16 @@ x &lt;-<span class="st"> </span><span class="dv">1</span><span class="op">:</spa
 <pre><code>##  [1] 1 1 1 1 2 2 2 2 2 2</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">reviewer_transformation_pipe</span>(x)</code></pre></div>
 <pre><code>##  [1] 1 1 1 1 2 2 2 2 2 2</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(magrittr)
-
-fun1 &lt;-<span class="st"> </span><span class="cf">function</span>(x){
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(magrittr)</code></pre></div>
+<pre><code>## 
+## Attaching package: &#39;magrittr&#39;</code></pre>
+<pre><code>## The following object is masked from &#39;package:purrr&#39;:
+## 
+##     set_names</code></pre>
+<pre><code>## The following object is masked from &#39;package:tidyr&#39;:
+## 
+##     extract</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">fun1 &lt;-<span class="st"> </span><span class="cf">function</span>(x){
   x <span class="op">*</span><span class="dv">2</span>
 }
 

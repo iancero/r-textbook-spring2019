@@ -1,0 +1,171 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+# Structural Equation Modeling
+
+Here we discuss one of the most versatile methods commonly used by social scientists: Structural Equation Modeling (SEM). If you're new to SEM, you can think of it as a series of regressions that are all estimated at the same time. Because the variables in each of your regressions are usually correlated, this allows the estimation procedure to "borrow" information from one part of your model and use it to inform the results for another.
+
+Our agenda in this chapter focuses on two major cases of SEM:
+
+1. Confirmatory Factor Analysis (CFA)
+1. Full Structural Equation Models (regression on latent factors)
+
+## Confirmatory Factor Analysis
+
+The first step is to install the most popular (and easy to use!) package for SEM in R: `lavaan`. Use the usual process for installation.
+
+```{r, eval=FALSE}
+install.packages('lavaan')
+```
+
+
+This package provides many convenient datasets for practice analysis. The on we will use today is the `HolzingerSwineford1939` dataset, which includes scores on a test of scholastic aptitude. Here there are three supposed "factors" that should be influencing those scores:
+
+- x1, x2, x3 = visual 
+- x4, x5, x6 = textual
+- x7, x8, x9 = speed
+
+To load the dataset, we execute the code below
+
+```{r}
+library(lavaan)
+
+data(HolzingerSwineford1939)
+cfa_df <- HolzingerSwineford1939
+
+head(cfa_df)
+```
+
+### CFA syntax
+
+To build a model, we will need a way to communicate to R what we think the relationship between our observed variables are. In this case, we can specify that a latent factor is driving the correlation between our observed variables with a string in the following format (note the `=~` is different than just the `~` that we are used to).
+
+```{r}
+# Example command for a single factor
+fac_syntax <- 'latent variable =~ indicator1 + indicator2 + indicator3'
+```
+
+To translate this structure to our situation, we simply make a multi-line string. For those of you who have used MPlus before, this should feel relatively familiar
+
+```{r}
+cfa_model <- 'visual  =~ x1 + x2 + x3 
+              textual =~ x4 + x5 + x6
+              speed   =~ x7 + x8 + x9 '
+```
+
+We now fit and summarize the model in much the same way that we would if we were running a regression.
+
+```{r}
+fit <- cfa(cfa_model, data = cfa_df)
+summary(fit)
+```
+
+If we wanted additional information on the fit statistics for the model. We can set `fit.measures=T` in our `summary()` call.
+
+```{r}
+summary(fit, fit.measures=T)
+```
+
+## Full Structural Equation Models
+
+For a more complex example, let's consider the case where we have several latent variables, but we expect there to be causal (regression) relationships between them. For that, we will use the `PoliticalDemocracy` dataset from the `lavaan` package. This dataset (which you can see more of by running `?PoliticalDemocracy`), includes variables related to industrialization in 1960, democratic freedom in 1960, and democratic freedom in 1965. Let's load the dataset and test a model of these relationships.
+
+```{r}
+data(PoliticalDemocracy)
+sem_df <- PoliticalDemocracy
+```
+
+To specify the factors, we will again use the `=~` operator.
+
+```{r}
+cfa_model <- '
+  # measurement model
+    ind60 =~ x1 + x2 + x3
+    dem60 =~ y1 + y2 + y3 + y4
+    dem65 =~ y5 + y6 + y7 + y8'
+```
+
+However, when we have regression relationships (prediction, causation), we use the `~` operator instead.
+
+```{r}
+path_model <- '
+  # regressions
+    dem60 ~ ind60
+    dem65 ~ ind60 + dem60'
+```
+
+Sometimes, we also want error terms to be correlated. Whenever specifying a variance, covariance, or correlation, we use the `~~` operator.
+
+```{r}
+residual_correlations <- '
+  # residual correlations
+    y1 ~~ y5
+    y2 ~~ y4 + y6
+    y3 ~~ y7
+    y4 ~~ y8
+    y6 ~~ y8'
+```
+
+To put the whole model together, we use `paste()`. We will set `sep = '\n'` inside `paste()`, which means we want a new line between each of our input strings.
+
+```{r}
+full_model <- paste(cfa_model, path_model, residual_correlations, sep = '\n')
+```
+
+Now let's run and summarize that model, in the same way we did with our CFA. The only difference is we use the `sem()` function instead.
+
+```{r}
+fit <- sem(full_model, data = sem_df)
+summary(fit, fit.measures = T)
+```
+
+## Additional tricks
+
+### Missing data
+
+Often, we have missing data. Let's simulate what that might be like.
+
+```{r, warning=FALSE, message=FALSE}
+library(tidyverse)
+
+set.seed(314159)
+
+sem_df2 <- sem_df %>%
+  mutate(x1 = ifelse(
+    test = x2/max(x2) < runif(n()),
+    yes = NA,
+    no = x1))
+
+
+# What proportion of cases are now missing?
+mean(is.na(sem_df2$x1))
+```
+
+Now we'll re_run our model, but with our new dataframe that includes missing data. 
+
+```{r}
+fit <- sem(full_model, data = sem_df2)
+summary(fit)
+```
+
+Wow! Our results are really different. Our systematically missing data have really biased the results. To fix that, we need Full Information Maximum Likelihood estimation, which we can achieve by setting `missing = 'ML'` in our `sem()` call.
+
+
+```{r}
+fit <- sem(full_model, data = sem_df2, missing = 'ML')
+summary(fit)
+```
+
+Our results are much improved! Although they are not exactly the same as the full data, they are much closer than before.
+
+### Robus estimators
+
+The `lavaan` package includes a few robust estimators. To change which one you are using - say to Robust Maximum Likelihood - we just need to change the `estimator` parameter.
+
+```{r}
+fit <- sem(full_model, data = sem_df2, estimator = 'MLR', missing = 'ML')
+summary(fit)
+```
+

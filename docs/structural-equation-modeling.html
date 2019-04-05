@@ -1,0 +1,958 @@
+<!DOCTYPE html>
+<html >
+
+<head>
+
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>12 Structural Equation Modeling | R Textbook</title>
+  <meta name="description" content="This is the ‘organic’ textbook created by our class discussions and exercises.">
+  <meta name="generator" content="bookdown  and GitBook 2.6.7">
+
+  <meta property="og:title" content="12 Structural Equation Modeling | R Textbook" />
+  <meta property="og:type" content="book" />
+  
+  
+  <meta property="og:description" content="This is the ‘organic’ textbook created by our class discussions and exercises." />
+  <meta name="github-repo" content="iancero/r-textbook-spring2019" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="12 Structural Equation Modeling | R Textbook" />
+  
+  <meta name="twitter:description" content="This is the ‘organic’ textbook created by our class discussions and exercises." />
+  
+
+<meta name="author" content="Ian Cero’s CSP 518 Class">
+
+
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  
+  
+<link rel="prev" href="anova-and-other-tests.html">
+
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+<style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+</style>
+
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Preface</a></li>
+<li class="chapter" data-level="2" data-path="basic-r.html"><a href="basic-r.html"><i class="fa fa-check"></i><b>2</b> Basic R</a><ul>
+<li class="chapter" data-level="2.1" data-path="basic-r.html"><a href="basic-r.html#writing-in-r-and-rmarkdown"><i class="fa fa-check"></i><b>2.1</b> Writing in R and Rmarkdown</a><ul>
+<li class="chapter" data-level="2.1.1" data-path="basic-r.html"><a href="basic-r.html#chatting-with-r"><i class="fa fa-check"></i><b>2.1.1</b> Chatting with R</a></li>
+<li class="chapter" data-level="2.1.2" data-path="basic-r.html"><a href="basic-r.html#rmarkdown-tricks"><i class="fa fa-check"></i><b>2.1.2</b> Rmarkdown tricks</a></li>
+<li class="chapter" data-level="2.1.3" data-path="basic-r.html"><a href="basic-r.html#code-blocks"><i class="fa fa-check"></i><b>2.1.3</b> Code blocks</a></li>
+</ul></li>
+<li class="chapter" data-level="2.2" data-path="basic-r.html"><a href="basic-r.html#variables"><i class="fa fa-check"></i><b>2.2</b> Variables</a><ul>
+<li class="chapter" data-level="2.2.1" data-path="basic-r.html"><a href="basic-r.html#the-assignment-operator"><i class="fa fa-check"></i><b>2.2.1</b> The assignment operator</a></li>
+<li class="chapter" data-level="2.2.2" data-path="basic-r.html"><a href="basic-r.html#numerics"><i class="fa fa-check"></i><b>2.2.2</b> Numerics</a></li>
+<li class="chapter" data-level="2.2.3" data-path="basic-r.html"><a href="basic-r.html#characters"><i class="fa fa-check"></i><b>2.2.3</b> Characters</a></li>
+<li class="chapter" data-level="2.2.4" data-path="basic-r.html"><a href="basic-r.html#booleans"><i class="fa fa-check"></i><b>2.2.4</b> Booleans</a></li>
+<li class="chapter" data-level="2.2.5" data-path="basic-r.html"><a href="basic-r.html#special-types"><i class="fa fa-check"></i><b>2.2.5</b> Special types</a></li>
+</ul></li>
+<li class="chapter" data-level="2.3" data-path="basic-r.html"><a href="basic-r.html#vectors"><i class="fa fa-check"></i><b>2.3</b> Vectors</a></li>
+<li class="chapter" data-level="2.4" data-path="basic-r.html"><a href="basic-r.html#lists"><i class="fa fa-check"></i><b>2.4</b> Lists</a></li>
+<li class="chapter" data-level="2.5" data-path="basic-r.html"><a href="basic-r.html#dataframes"><i class="fa fa-check"></i><b>2.5</b> Dataframes</a><ul>
+<li class="chapter" data-level="2.5.1" data-path="basic-r.html"><a href="basic-r.html#construction"><i class="fa fa-check"></i><b>2.5.1</b> Construction</a></li>
+<li class="chapter" data-level="2.5.2" data-path="basic-r.html"><a href="basic-r.html#built-in-dataframes"><i class="fa fa-check"></i><b>2.5.2</b> Built-in dataframes</a></li>
+</ul></li>
+<li class="chapter" data-level="2.6" data-path="basic-r.html"><a href="basic-r.html#functions"><i class="fa fa-check"></i><b>2.6</b> Functions</a><ul>
+<li class="chapter" data-level="2.6.1" data-path="basic-r.html"><a href="basic-r.html#getting-help"><i class="fa fa-check"></i><b>2.6.1</b> Getting help</a></li>
+<li class="chapter" data-level="2.6.2" data-path="basic-r.html"><a href="basic-r.html#function-parameters"><i class="fa fa-check"></i><b>2.6.2</b> Function parameters</a></li>
+</ul></li>
+<li class="chapter" data-level="2.7" data-path="basic-r.html"><a href="basic-r.html#packages"><i class="fa fa-check"></i><b>2.7</b> Packages</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="visualization.html"><a href="visualization.html"><i class="fa fa-check"></i><b>3</b> Visualization</a><ul>
+<li class="chapter" data-level="3.1" data-path="visualization.html"><a href="visualization.html#base-r"><i class="fa fa-check"></i><b>3.1</b> Base R</a></li>
+<li class="chapter" data-level="3.2" data-path="visualization.html"><a href="visualization.html#ggplot"><i class="fa fa-check"></i><b>3.2</b> <code>ggplot</code></a><ul>
+<li class="chapter" data-level="3.2.1" data-path="visualization.html"><a href="visualization.html#blank-ggplot-plot"><i class="fa fa-check"></i><b>3.2.1</b> Blank ggplot plot</a></li>
+<li class="chapter" data-level="3.2.2" data-path="visualization.html"><a href="visualization.html#geoms"><i class="fa fa-check"></i><b>3.2.2</b> Geoms</a></li>
+<li class="chapter" data-level="3.2.3" data-path="visualization.html"><a href="visualization.html#stat-functions"><i class="fa fa-check"></i><b>3.2.3</b> Stat Functions</a></li>
+<li class="chapter" data-level="3.2.4" data-path="visualization.html"><a href="visualization.html#themes"><i class="fa fa-check"></i><b>3.2.4</b> Themes</a></li>
+<li class="chapter" data-level="3.2.5" data-path="visualization.html"><a href="visualization.html#labels"><i class="fa fa-check"></i><b>3.2.5</b> Labels</a></li>
+<li class="chapter" data-level="3.2.6" data-path="visualization.html"><a href="visualization.html#scales"><i class="fa fa-check"></i><b>3.2.6</b> Scales</a></li>
+<li class="chapter" data-level="3.2.7" data-path="visualization.html"><a href="visualization.html#saving-your-plot"><i class="fa fa-check"></i><b>3.2.7</b> Saving your plot**</a></li>
+<li class="chapter" data-level="3.2.8" data-path="visualization.html"><a href="visualization.html#facets"><i class="fa fa-check"></i><b>3.2.8</b> Facets</a></li>
+<li class="chapter" data-level="3.2.9" data-path="visualization.html"><a href="visualization.html#where-to-learn-more"><i class="fa fa-check"></i><b>3.2.9</b> Where to learn more</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="functions-1.html"><a href="functions-1.html"><i class="fa fa-check"></i><b>4</b> Functions</a><ul>
+<li class="chapter" data-level="4.1" data-path="functions-1.html"><a href="functions-1.html#basic-example"><i class="fa fa-check"></i><b>4.1</b> Basic Example</a></li>
+<li class="chapter" data-level="4.2" data-path="functions-1.html"><a href="functions-1.html#anatomy-of-an-r-function"><i class="fa fa-check"></i><b>4.2</b> Anatomy of an R function</a></li>
+<li class="chapter" data-level="4.3" data-path="functions-1.html"><a href="functions-1.html#base-r-functions"><i class="fa fa-check"></i><b>4.3</b> Base R functions</a><ul>
+<li class="chapter" data-level="4.3.1" data-path="functions-1.html"><a href="functions-1.html#scoping"><i class="fa fa-check"></i><b>4.3.1</b> Scoping</a></li>
+<li class="chapter" data-level="4.3.2" data-path="functions-1.html"><a href="functions-1.html#conditional-execution"><i class="fa fa-check"></i><b>4.3.2</b> Conditional execution</a></li>
+<li class="chapter" data-level="4.3.3" data-path="functions-1.html"><a href="functions-1.html#the-return-command"><i class="fa fa-check"></i><b>4.3.3</b> the <code>return()</code> command</a></li>
+</ul></li>
+<li class="chapter" data-level="4.4" data-path="functions-1.html"><a href="functions-1.html#pipes"><i class="fa fa-check"></i><b>4.4</b> Pipes</a><ul>
+<li class="chapter" data-level="4.4.1" data-path="functions-1.html"><a href="functions-1.html#basic-usage"><i class="fa fa-check"></i><b>4.4.1</b> Basic usage</a></li>
+<li class="chapter" data-level="4.4.2" data-path="functions-1.html"><a href="functions-1.html#sending-the-lhs-to-another-parameter"><i class="fa fa-check"></i><b>4.4.2</b> Sending the LHS to another parameter</a></li>
+<li class="chapter" data-level="4.4.3" data-path="functions-1.html"><a href="functions-1.html#convenient-magrittr-functions"><i class="fa fa-check"></i><b>4.4.3</b> Convenient magrittr functions</a></li>
+</ul></li>
+<li class="chapter" data-level="4.5" data-path="functions-1.html"><a href="functions-1.html#more-talk-about-the-help-files"><i class="fa fa-check"></i><b>4.5</b> More talk about the help files</a></li>
+<li class="chapter" data-level="4.6" data-path="functions-1.html"><a href="functions-1.html#functions-from-other-packages"><i class="fa fa-check"></i><b>4.6</b> Functions from other packages</a></li>
+<li class="chapter" data-level="4.7" data-path="functions-1.html"><a href="functions-1.html#section"><i class="fa fa-check"></i><b>4.7</b> </a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="dataframes-1.html"><a href="dataframes-1.html"><i class="fa fa-check"></i><b>5</b> Dataframes</a><ul>
+<li class="chapter" data-level="5.1" data-path="dataframes-1.html"><a href="dataframes-1.html#storing-rectangular-data"><i class="fa fa-check"></i><b>5.1</b> Storing rectangular data</a><ul>
+<li class="chapter" data-level="5.1.1" data-path="dataframes-1.html"><a href="dataframes-1.html#making-dataframes"><i class="fa fa-check"></i><b>5.1.1</b> Making dataframes</a></li>
+<li class="chapter" data-level="5.1.2" data-path="dataframes-1.html"><a href="dataframes-1.html#strings-as-factors"><i class="fa fa-check"></i><b>5.1.2</b> Strings as factors</a></li>
+</ul></li>
+<li class="chapter" data-level="5.2" data-path="dataframes-1.html"><a href="dataframes-1.html#accessing-data-from-a-dataframe"><i class="fa fa-check"></i><b>5.2</b> Accessing data from a dataframe</a><ul>
+<li class="chapter" data-level="5.2.1" data-path="dataframes-1.html"><a href="dataframes-1.html#basic-framework"><i class="fa fa-check"></i><b>5.2.1</b> Basic framework</a></li>
+<li class="chapter" data-level="5.2.2" data-path="dataframes-1.html"><a href="dataframes-1.html#using-string-column-names"><i class="fa fa-check"></i><b>5.2.2</b> Using string column names</a></li>
+<li class="chapter" data-level="5.2.3" data-path="dataframes-1.html"><a href="dataframes-1.html#using-the-operator"><i class="fa fa-check"></i><b>5.2.3</b> Using the <code>$</code> operator</a></li>
+<li class="chapter" data-level="5.2.4" data-path="dataframes-1.html"><a href="dataframes-1.html#using-booleans"><i class="fa fa-check"></i><b>5.2.4</b> Using booleans</a></li>
+</ul></li>
+<li class="chapter" data-level="5.3" data-path="dataframes-1.html"><a href="dataframes-1.html#manupilating-data"><i class="fa fa-check"></i><b>5.3</b> Manupilating data</a></li>
+<li class="chapter" data-level="5.4" data-path="dataframes-1.html"><a href="dataframes-1.html#using-dplyr-pipelines"><i class="fa fa-check"></i><b>5.4</b> Using <code>dplyr</code> pipelines</a><ul>
+<li class="chapter" data-level="5.4.1" data-path="dataframes-1.html"><a href="dataframes-1.html#how-do-these-functions-work"><i class="fa fa-check"></i><b>5.4.1</b> How do these functions work?</a></li>
+<li class="chapter" data-level="5.4.2" data-path="dataframes-1.html"><a href="dataframes-1.html#group_by"><i class="fa fa-check"></i><b>5.4.2</b> <code>group_by()</code></a></li>
+</ul></li>
+<li class="chapter" data-level="5.5" data-path="dataframes-1.html"><a href="dataframes-1.html#dplyr-pipelines-with-the-magrittr"><i class="fa fa-check"></i><b>5.5</b> <code>dplyr</code> pipelines with the <code>magrittr</code> <code>%&gt;%</code></a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="local-data-import-and-export.html"><a href="local-data-import-and-export.html"><i class="fa fa-check"></i><b>6</b> Local Data Import and Export</a><ul>
+<li class="chapter" data-level="6.1" data-path="local-data-import-and-export.html"><a href="local-data-import-and-export.html#basic-exportation-to-a-.csv-file"><i class="fa fa-check"></i><b>6.1</b> Basic exportation to a <code>.csv</code> file</a><ul>
+<li class="chapter" data-level="6.1.1" data-path="local-data-import-and-export.html"><a href="local-data-import-and-export.html#other-options"><i class="fa fa-check"></i><b>6.1.1</b> Other options</a></li>
+</ul></li>
+<li class="chapter" data-level="6.2" data-path="local-data-import-and-export.html"><a href="local-data-import-and-export.html#reading-in-rectangular-data"><i class="fa fa-check"></i><b>6.2</b> Reading in rectangular data</a><ul>
+<li class="chapter" data-level="6.2.1" data-path="local-data-import-and-export.html"><a href="local-data-import-and-export.html#traditional-importation"><i class="fa fa-check"></i><b>6.2.1</b> Traditional importation</a></li>
+<li class="chapter" data-level="6.2.2" data-path="local-data-import-and-export.html"><a href="local-data-import-and-export.html#importation-options-to-know-about"><i class="fa fa-check"></i><b>6.2.2</b> Importation options to know about</a></li>
+<li class="chapter" data-level="6.2.3" data-path="local-data-import-and-export.html"><a href="local-data-import-and-export.html#consider-the-readr-package"><i class="fa fa-check"></i><b>6.2.3</b> Consider the <code>readr</code> package</a></li>
+</ul></li>
+<li class="chapter" data-level="6.3" data-path="local-data-import-and-export.html"><a href="local-data-import-and-export.html#importing-data-from-other-programs"><i class="fa fa-check"></i><b>6.3</b> Importing data from other programs</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="data-joins.html"><a href="data-joins.html"><i class="fa fa-check"></i><b>7</b> Data joins</a><ul>
+<li class="chapter" data-level="7.1" data-path="data-joins.html"><a href="data-joins.html#left-joins"><i class="fa fa-check"></i><b>7.1</b> Left joins</a></li>
+<li class="chapter" data-level="7.2" data-path="data-joins.html"><a href="data-joins.html#inner-joins"><i class="fa fa-check"></i><b>7.2</b> Inner joins</a></li>
+<li class="chapter" data-level="7.3" data-path="data-joins.html"><a href="data-joins.html#full-joins"><i class="fa fa-check"></i><b>7.3</b> Full joins</a></li>
+<li class="chapter" data-level="7.4" data-path="data-joins.html"><a href="data-joins.html#anti-joins"><i class="fa fa-check"></i><b>7.4</b> Anti joins</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="reshaping-data-with-tidyr.html"><a href="reshaping-data-with-tidyr.html"><i class="fa fa-check"></i><b>8</b> Reshaping data with <code>tidyr</code></a><ul>
+<li class="chapter" data-level="8.1" data-path="reshaping-data-with-tidyr.html"><a href="reshaping-data-with-tidyr.html#turning-long-data-into-wide"><i class="fa fa-check"></i><b>8.1</b> Turning long data into wide</a></li>
+<li class="chapter" data-level="8.2" data-path="reshaping-data-with-tidyr.html"><a href="reshaping-data-with-tidyr.html#turning-wide-data-into-long"><i class="fa fa-check"></i><b>8.2</b> Turning wide data into long</a></li>
+<li class="chapter" data-level="8.3" data-path="reshaping-data-with-tidyr.html"><a href="reshaping-data-with-tidyr.html#other-examples-we-talked-about"><i class="fa fa-check"></i><b>8.3</b> Other examples we talked about</a></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="regression-models.html"><a href="regression-models.html"><i class="fa fa-check"></i><b>9</b> Regression Models</a><ul>
+<li class="chapter" data-level="9.1" data-path="regression-models.html"><a href="regression-models.html#simulating-fake-data"><i class="fa fa-check"></i><b>9.1</b> Simulating fake data</a></li>
+<li class="chapter" data-level="9.2" data-path="regression-models.html"><a href="regression-models.html#fitting-regression-models"><i class="fa fa-check"></i><b>9.2</b> Fitting regression models</a><ul>
+<li class="chapter" data-level="9.2.1" data-path="regression-models.html"><a href="regression-models.html#linear-regression"><i class="fa fa-check"></i><b>9.2.1</b> Linear regression</a></li>
+<li class="chapter" data-level="9.2.2" data-path="regression-models.html"><a href="regression-models.html#logistic-regression"><i class="fa fa-check"></i><b>9.2.2</b> Logistic regression</a></li>
+</ul></li>
+<li class="chapter" data-level="9.3" data-path="regression-models.html"><a href="regression-models.html#other-ways-of-viewing-the-output"><i class="fa fa-check"></i><b>9.3</b> Other ways of viewing the output</a><ul>
+<li class="chapter" data-level="9.3.1" data-path="regression-models.html"><a href="regression-models.html#glance"><i class="fa fa-check"></i><b>9.3.1</b> <code>glance()</code></a></li>
+</ul></li>
+<li class="chapter" data-level="9.4" data-path="regression-models.html"><a href="regression-models.html#fitting-multiple-regressions-simultaneously"><i class="fa fa-check"></i><b>9.4</b> Fitting multiple regressions simultaneously</a></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="regression-models-1.html"><a href="regression-models-1.html"><i class="fa fa-check"></i><b>10</b> Regression Models</a><ul>
+<li class="chapter" data-level="10.1" data-path="regression-models-1.html"><a href="regression-models-1.html#simulating-fake-data-1"><i class="fa fa-check"></i><b>10.1</b> Simulating fake data</a></li>
+<li class="chapter" data-level="10.2" data-path="regression-models-1.html"><a href="regression-models-1.html#fitting-regression-models-1"><i class="fa fa-check"></i><b>10.2</b> Fitting regression models</a><ul>
+<li class="chapter" data-level="10.2.1" data-path="regression-models-1.html"><a href="regression-models-1.html#linear-regression-1"><i class="fa fa-check"></i><b>10.2.1</b> Linear regression</a></li>
+<li class="chapter" data-level="10.2.2" data-path="regression-models-1.html"><a href="regression-models-1.html#logistic-regression-1"><i class="fa fa-check"></i><b>10.2.2</b> Logistic regression</a></li>
+</ul></li>
+<li class="chapter" data-level="10.3" data-path="regression-models-1.html"><a href="regression-models-1.html#other-ways-of-viewing-the-output-1"><i class="fa fa-check"></i><b>10.3</b> Other ways of viewing the output</a><ul>
+<li class="chapter" data-level="10.3.1" data-path="regression-models-1.html"><a href="regression-models-1.html#glance-1"><i class="fa fa-check"></i><b>10.3.1</b> <code>glance()</code></a></li>
+</ul></li>
+<li class="chapter" data-level="10.4" data-path="regression-models-1.html"><a href="regression-models-1.html#fitting-multiple-regressions-simultaneously-1"><i class="fa fa-check"></i><b>10.4</b> Fitting multiple regressions simultaneously</a></li>
+</ul></li>
+<li class="chapter" data-level="11" data-path="anova-and-other-tests.html"><a href="anova-and-other-tests.html"><i class="fa fa-check"></i><b>11</b> ANOVA and other tests</a><ul>
+<li class="chapter" data-level="11.1" data-path="anova-and-other-tests.html"><a href="anova-and-other-tests.html#t-tests"><i class="fa fa-check"></i><b>11.1</b> <em>t</em>-Tests</a></li>
+<li class="chapter" data-level="11.2" data-path="anova-and-other-tests.html"><a href="anova-and-other-tests.html#correlation"><i class="fa fa-check"></i><b>11.2</b> Correlation</a><ul>
+<li class="chapter" data-level="11.2.1" data-path="anova-and-other-tests.html"><a href="anova-and-other-tests.html#rank-correlations"><i class="fa fa-check"></i><b>11.2.1</b> Rank correlations</a></li>
+<li class="chapter" data-level="11.2.2" data-path="anova-and-other-tests.html"><a href="anova-and-other-tests.html#significance-testing"><i class="fa fa-check"></i><b>11.2.2</b> Significance testing</a></li>
+</ul></li>
+<li class="chapter" data-level="11.3" data-path="anova-and-other-tests.html"><a href="anova-and-other-tests.html#anova"><i class="fa fa-check"></i><b>11.3</b> ANOVA</a><ul>
+<li class="chapter" data-level="11.3.1" data-path="anova-and-other-tests.html"><a href="anova-and-other-tests.html#post-hoc-testing"><i class="fa fa-check"></i><b>11.3.1</b> Post hoc testing</a></li>
+<li class="chapter" data-level="11.3.2" data-path="anova-and-other-tests.html"><a href="anova-and-other-tests.html#two-factors"><i class="fa fa-check"></i><b>11.3.2</b> Two-factors</a></li>
+<li class="chapter" data-level="11.3.3" data-path="anova-and-other-tests.html"><a href="anova-and-other-tests.html#p-values"><i class="fa fa-check"></i><b>11.3.3</b> P-values</a></li>
+<li class="chapter" data-level="11.3.4" data-path="anova-and-other-tests.html"><a href="anova-and-other-tests.html#interactions"><i class="fa fa-check"></i><b>11.3.4</b> Interactions</a></li>
+<li class="chapter" data-level="11.3.5" data-path="anova-and-other-tests.html"><a href="anova-and-other-tests.html#plots"><i class="fa fa-check"></i><b>11.3.5</b> Plots</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="12" data-path="structural-equation-modeling.html"><a href="structural-equation-modeling.html"><i class="fa fa-check"></i><b>12</b> Structural Equation Modeling</a><ul>
+<li class="chapter" data-level="12.1" data-path="structural-equation-modeling.html"><a href="structural-equation-modeling.html#confirmatory-factor-analysis"><i class="fa fa-check"></i><b>12.1</b> Confirmatory Factor Analysis</a><ul>
+<li class="chapter" data-level="12.1.1" data-path="structural-equation-modeling.html"><a href="structural-equation-modeling.html#cfa-syntax"><i class="fa fa-check"></i><b>12.1.1</b> CFA syntax</a></li>
+</ul></li>
+<li class="chapter" data-level="12.2" data-path="structural-equation-modeling.html"><a href="structural-equation-modeling.html#full-structural-equation-models"><i class="fa fa-check"></i><b>12.2</b> Full Structural Equation Models</a></li>
+<li class="chapter" data-level="12.3" data-path="structural-equation-modeling.html"><a href="structural-equation-modeling.html#additional-tricks"><i class="fa fa-check"></i><b>12.3</b> Additional tricks</a><ul>
+<li class="chapter" data-level="12.3.1" data-path="structural-equation-modeling.html"><a href="structural-equation-modeling.html#missing-data"><i class="fa fa-check"></i><b>12.3.1</b> Missing data</a></li>
+<li class="chapter" data-level="12.3.2" data-path="structural-equation-modeling.html"><a href="structural-equation-modeling.html#robus-estimators"><i class="fa fa-check"></i><b>12.3.2</b> Robus estimators</a></li>
+</ul></li>
+</ul></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">R Textbook</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="structural-equation-modeling" class="section level1">
+<h1><span class="header-section-number">12</span> Structural Equation Modeling</h1>
+<p>Here we discuss one of the most versatile methods commonly used by social scientists: Structural Equation Modeling (SEM). If you’re new to SEM, you can think of it as a series of regressions that are all estimated at the same time. Because the variables in each of your regressions are usually correlated, this allows the estimation procedure to “borrow” information from one part of your model and use it to inform the results for another.</p>
+<p>Our agenda in this chapter focuses on two major cases of SEM:</p>
+<ol style="list-style-type: decimal">
+<li>Confirmatory Factor Analysis (CFA)</li>
+<li>Full Structural Equation Models (regression on latent factors)</li>
+</ol>
+<div id="confirmatory-factor-analysis" class="section level2">
+<h2><span class="header-section-number">12.1</span> Confirmatory Factor Analysis</h2>
+<p>The first step is to install the most popular (and easy to use!) package for SEM in R: <code>lavaan</code>. Use the usual process for installation.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">install.packages</span>(<span class="st">&#39;lavaan&#39;</span>)</code></pre></div>
+<p>This package provides many convenient datasets for practice analysis. The on we will use today is the <code>HolzingerSwineford1939</code> dataset, which includes scores on a test of scholastic aptitude. Here there are three supposed “factors” that should be influencing those scores:</p>
+<ul>
+<li>x1, x2, x3 = visual</li>
+<li>x4, x5, x6 = textual</li>
+<li>x7, x8, x9 = speed</li>
+</ul>
+<p>To load the dataset, we execute the code below</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(lavaan)
+
+<span class="kw">data</span>(HolzingerSwineford1939)
+cfa_df &lt;-<span class="st"> </span>HolzingerSwineford1939
+
+<span class="kw">head</span>(cfa_df)</code></pre></div>
+<pre><code>##   id sex ageyr agemo  school grade       x1   x2    x3       x4   x5
+## 1  1   1    13     1 Pasteur     7 3.333333 7.75 0.375 2.333333 5.75
+## 2  2   2    13     7 Pasteur     7 5.333333 5.25 2.125 1.666667 3.00
+## 3  3   2    13     1 Pasteur     7 4.500000 5.25 1.875 1.000000 1.75
+## 4  4   1    13     2 Pasteur     7 5.333333 7.75 3.000 2.666667 4.50
+## 5  5   2    12     2 Pasteur     7 4.833333 4.75 0.875 2.666667 4.00
+## 6  6   2    14     1 Pasteur     7 5.333333 5.00 2.250 1.000000 3.00
+##          x6       x7   x8       x9
+## 1 1.2857143 3.391304 5.75 6.361111
+## 2 1.2857143 3.782609 6.25 7.916667
+## 3 0.4285714 3.260870 3.90 4.416667
+## 4 2.4285714 3.000000 5.30 4.861111
+## 5 2.5714286 3.695652 6.30 5.916667
+## 6 0.8571429 4.347826 6.65 7.500000</code></pre>
+<div id="cfa-syntax" class="section level3">
+<h3><span class="header-section-number">12.1.1</span> CFA syntax</h3>
+<p>To build a model, we will need a way to communicate to R what we think the relationship between our observed variables are. In this case, we can specify that a latent factor is driving the correlation between our observed variables with a string in the following format (note the <code>=~</code> is different than just the <code>~</code> that we are used to).</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Example command for a single factor</span>
+fac_syntax &lt;-<span class="st"> &#39;latent variable =~ indicator1 + indicator2 + indicator3&#39;</span></code></pre></div>
+<p>To translate this structure to our situation, we simply make a multi-line string. For those of you who have used MPlus before, this should feel relatively familiar</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">cfa_model &lt;-<span class="st"> &#39;visual  =~ x1 + x2 + x3 </span>
+<span class="st">              textual =~ x4 + x5 + x6</span>
+<span class="st">              speed   =~ x7 + x8 + x9 &#39;</span></code></pre></div>
+<p>We now fit and summarize the model in much the same way that we would if we were running a regression.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">fit &lt;-<span class="st"> </span><span class="kw">cfa</span>(cfa_model, <span class="dt">data =</span> cfa_df)
+<span class="kw">summary</span>(fit)</code></pre></div>
+<pre><code>## lavaan 0.6-3 ended normally after 35 iterations
+## 
+##   Optimization method                           NLMINB
+##   Number of free parameters                         21
+## 
+##   Number of observations                           301
+## 
+##   Estimator                                         ML
+##   Model Fit Test Statistic                      85.306
+##   Degrees of freedom                                24
+##   P-value (Chi-square)                           0.000
+## 
+## Parameter Estimates:
+## 
+##   Information                                 Expected
+##   Information saturated (h1) model          Structured
+##   Standard Errors                             Standard
+## 
+## Latent Variables:
+##                    Estimate  Std.Err  z-value  P(&gt;|z|)
+##   visual =~                                           
+##     x1                1.000                           
+##     x2                0.554    0.100    5.554    0.000
+##     x3                0.729    0.109    6.685    0.000
+##   textual =~                                          
+##     x4                1.000                           
+##     x5                1.113    0.065   17.014    0.000
+##     x6                0.926    0.055   16.703    0.000
+##   speed =~                                            
+##     x7                1.000                           
+##     x8                1.180    0.165    7.152    0.000
+##     x9                1.082    0.151    7.155    0.000
+## 
+## Covariances:
+##                    Estimate  Std.Err  z-value  P(&gt;|z|)
+##   visual ~~                                           
+##     textual           0.408    0.074    5.552    0.000
+##     speed             0.262    0.056    4.660    0.000
+##   textual ~~                                          
+##     speed             0.173    0.049    3.518    0.000
+## 
+## Variances:
+##                    Estimate  Std.Err  z-value  P(&gt;|z|)
+##    .x1                0.549    0.114    4.833    0.000
+##    .x2                1.134    0.102   11.146    0.000
+##    .x3                0.844    0.091    9.317    0.000
+##    .x4                0.371    0.048    7.779    0.000
+##    .x5                0.446    0.058    7.642    0.000
+##    .x6                0.356    0.043    8.277    0.000
+##    .x7                0.799    0.081    9.823    0.000
+##    .x8                0.488    0.074    6.573    0.000
+##    .x9                0.566    0.071    8.003    0.000
+##     visual            0.809    0.145    5.564    0.000
+##     textual           0.979    0.112    8.737    0.000
+##     speed             0.384    0.086    4.451    0.000</code></pre>
+<p>If we wanted additional information on the fit statistics for the model. We can set <code>fit.measures=T</code> in our <code>summary()</code> call.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">summary</span>(fit, <span class="dt">fit.measures=</span>T)</code></pre></div>
+<pre><code>## lavaan 0.6-3 ended normally after 35 iterations
+## 
+##   Optimization method                           NLMINB
+##   Number of free parameters                         21
+## 
+##   Number of observations                           301
+## 
+##   Estimator                                         ML
+##   Model Fit Test Statistic                      85.306
+##   Degrees of freedom                                24
+##   P-value (Chi-square)                           0.000
+## 
+## Model test baseline model:
+## 
+##   Minimum Function Test Statistic              918.852
+##   Degrees of freedom                                36
+##   P-value                                        0.000
+## 
+## User model versus baseline model:
+## 
+##   Comparative Fit Index (CFI)                    0.931
+##   Tucker-Lewis Index (TLI)                       0.896
+## 
+## Loglikelihood and Information Criteria:
+## 
+##   Loglikelihood user model (H0)              -3737.745
+##   Loglikelihood unrestricted model (H1)      -3695.092
+## 
+##   Number of free parameters                         21
+##   Akaike (AIC)                                7517.490
+##   Bayesian (BIC)                              7595.339
+##   Sample-size adjusted Bayesian (BIC)         7528.739
+## 
+## Root Mean Square Error of Approximation:
+## 
+##   RMSEA                                          0.092
+##   90 Percent Confidence Interval          0.071  0.114
+##   P-value RMSEA &lt;= 0.05                          0.001
+## 
+## Standardized Root Mean Square Residual:
+## 
+##   SRMR                                           0.065
+## 
+## Parameter Estimates:
+## 
+##   Information                                 Expected
+##   Information saturated (h1) model          Structured
+##   Standard Errors                             Standard
+## 
+## Latent Variables:
+##                    Estimate  Std.Err  z-value  P(&gt;|z|)
+##   visual =~                                           
+##     x1                1.000                           
+##     x2                0.554    0.100    5.554    0.000
+##     x3                0.729    0.109    6.685    0.000
+##   textual =~                                          
+##     x4                1.000                           
+##     x5                1.113    0.065   17.014    0.000
+##     x6                0.926    0.055   16.703    0.000
+##   speed =~                                            
+##     x7                1.000                           
+##     x8                1.180    0.165    7.152    0.000
+##     x9                1.082    0.151    7.155    0.000
+## 
+## Covariances:
+##                    Estimate  Std.Err  z-value  P(&gt;|z|)
+##   visual ~~                                           
+##     textual           0.408    0.074    5.552    0.000
+##     speed             0.262    0.056    4.660    0.000
+##   textual ~~                                          
+##     speed             0.173    0.049    3.518    0.000
+## 
+## Variances:
+##                    Estimate  Std.Err  z-value  P(&gt;|z|)
+##    .x1                0.549    0.114    4.833    0.000
+##    .x2                1.134    0.102   11.146    0.000
+##    .x3                0.844    0.091    9.317    0.000
+##    .x4                0.371    0.048    7.779    0.000
+##    .x5                0.446    0.058    7.642    0.000
+##    .x6                0.356    0.043    8.277    0.000
+##    .x7                0.799    0.081    9.823    0.000
+##    .x8                0.488    0.074    6.573    0.000
+##    .x9                0.566    0.071    8.003    0.000
+##     visual            0.809    0.145    5.564    0.000
+##     textual           0.979    0.112    8.737    0.000
+##     speed             0.384    0.086    4.451    0.000</code></pre>
+</div>
+</div>
+<div id="full-structural-equation-models" class="section level2">
+<h2><span class="header-section-number">12.2</span> Full Structural Equation Models</h2>
+<p>For a more complex example, let’s consider the case where we have several latent variables, but we expect there to be causal (regression) relationships between them. For that, we will use the <code>PoliticalDemocracy</code> dataset from the <code>lavaan</code> package. This dataset (which you can see more of by running <code>?PoliticalDemocracy</code>), includes variables related to industrialization in 1960, democratic freedom in 1960, and democratic freedom in 1965. Let’s load the dataset and test a model of these relationships.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">data</span>(PoliticalDemocracy)
+sem_df &lt;-<span class="st"> </span>PoliticalDemocracy</code></pre></div>
+<p>To specify the factors, we will again use the <code>=~</code> operator.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">cfa_model &lt;-<span class="st"> &#39;</span>
+<span class="st">  # measurement model</span>
+<span class="st">    ind60 =~ x1 + x2 + x3</span>
+<span class="st">    dem60 =~ y1 + y2 + y3 + y4</span>
+<span class="st">    dem65 =~ y5 + y6 + y7 + y8&#39;</span></code></pre></div>
+<p>However, when we have regression relationships (prediction, causation), we use the <code>~</code> operator instead.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">path_model &lt;-<span class="st"> &#39;</span>
+<span class="st">  # regressions</span>
+<span class="st">    dem60 ~ ind60</span>
+<span class="st">    dem65 ~ ind60 + dem60&#39;</span></code></pre></div>
+<p>Sometimes, we also want error terms to be correlated. Whenever specifying a variance, covariance, or correlation, we use the <code>~~</code> operator.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">residual_correlations &lt;-<span class="st"> &#39;</span>
+<span class="st">  # residual correlations</span>
+<span class="st">    y1 ~~ y5</span>
+<span class="st">    y2 ~~ y4 + y6</span>
+<span class="st">    y3 ~~ y7</span>
+<span class="st">    y4 ~~ y8</span>
+<span class="st">    y6 ~~ y8&#39;</span></code></pre></div>
+<p>To put the whole model together, we use <code>paste()</code>. We will set <code>sep = '\n'</code> inside <code>paste()</code>, which means we want a new line between each of our input strings.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">full_model &lt;-<span class="st"> </span><span class="kw">paste</span>(cfa_model, path_model, residual_correlations, <span class="dt">sep =</span> <span class="st">&#39;</span><span class="ch">\n</span><span class="st">&#39;</span>)</code></pre></div>
+<p>Now let’s run and summarize that model, in the same way we did with our CFA. The only difference is we use the <code>sem()</code> function instead.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">fit &lt;-<span class="st"> </span><span class="kw">sem</span>(full_model, <span class="dt">data =</span> sem_df)
+<span class="kw">summary</span>(fit, <span class="dt">fit.measures =</span> T)</code></pre></div>
+<pre><code>## lavaan 0.6-3 ended normally after 68 iterations
+## 
+##   Optimization method                           NLMINB
+##   Number of free parameters                         31
+## 
+##   Number of observations                            75
+## 
+##   Estimator                                         ML
+##   Model Fit Test Statistic                      38.125
+##   Degrees of freedom                                35
+##   P-value (Chi-square)                           0.329
+## 
+## Model test baseline model:
+## 
+##   Minimum Function Test Statistic              730.654
+##   Degrees of freedom                                55
+##   P-value                                        0.000
+## 
+## User model versus baseline model:
+## 
+##   Comparative Fit Index (CFI)                    0.995
+##   Tucker-Lewis Index (TLI)                       0.993
+## 
+## Loglikelihood and Information Criteria:
+## 
+##   Loglikelihood user model (H0)              -1547.791
+##   Loglikelihood unrestricted model (H1)      -1528.728
+## 
+##   Number of free parameters                         31
+##   Akaike (AIC)                                3157.582
+##   Bayesian (BIC)                              3229.424
+##   Sample-size adjusted Bayesian (BIC)         3131.720
+## 
+## Root Mean Square Error of Approximation:
+## 
+##   RMSEA                                          0.035
+##   90 Percent Confidence Interval          0.000  0.092
+##   P-value RMSEA &lt;= 0.05                          0.611
+## 
+## Standardized Root Mean Square Residual:
+## 
+##   SRMR                                           0.044
+## 
+## Parameter Estimates:
+## 
+##   Information                                 Expected
+##   Information saturated (h1) model          Structured
+##   Standard Errors                             Standard
+## 
+## Latent Variables:
+##                    Estimate  Std.Err  z-value  P(&gt;|z|)
+##   ind60 =~                                            
+##     x1                1.000                           
+##     x2                2.180    0.139   15.742    0.000
+##     x3                1.819    0.152   11.967    0.000
+##   dem60 =~                                            
+##     y1                1.000                           
+##     y2                1.257    0.182    6.889    0.000
+##     y3                1.058    0.151    6.987    0.000
+##     y4                1.265    0.145    8.722    0.000
+##   dem65 =~                                            
+##     y5                1.000                           
+##     y6                1.186    0.169    7.024    0.000
+##     y7                1.280    0.160    8.002    0.000
+##     y8                1.266    0.158    8.007    0.000
+## 
+## Regressions:
+##                    Estimate  Std.Err  z-value  P(&gt;|z|)
+##   dem60 ~                                             
+##     ind60             1.483    0.399    3.715    0.000
+##   dem65 ~                                             
+##     ind60             0.572    0.221    2.586    0.010
+##     dem60             0.837    0.098    8.514    0.000
+## 
+## Covariances:
+##                    Estimate  Std.Err  z-value  P(&gt;|z|)
+##  .y1 ~~                                               
+##    .y5                0.624    0.358    1.741    0.082
+##  .y2 ~~                                               
+##    .y4                1.313    0.702    1.871    0.061
+##    .y6                2.153    0.734    2.934    0.003
+##  .y3 ~~                                               
+##    .y7                0.795    0.608    1.308    0.191
+##  .y4 ~~                                               
+##    .y8                0.348    0.442    0.787    0.431
+##  .y6 ~~                                               
+##    .y8                1.356    0.568    2.386    0.017
+## 
+## Variances:
+##                    Estimate  Std.Err  z-value  P(&gt;|z|)
+##    .x1                0.082    0.019    4.184    0.000
+##    .x2                0.120    0.070    1.718    0.086
+##    .x3                0.467    0.090    5.177    0.000
+##    .y1                1.891    0.444    4.256    0.000
+##    .y2                7.373    1.374    5.366    0.000
+##    .y3                5.067    0.952    5.324    0.000
+##    .y4                3.148    0.739    4.261    0.000
+##    .y5                2.351    0.480    4.895    0.000
+##    .y6                4.954    0.914    5.419    0.000
+##    .y7                3.431    0.713    4.814    0.000
+##    .y8                3.254    0.695    4.685    0.000
+##     ind60             0.448    0.087    5.173    0.000
+##    .dem60             3.956    0.921    4.295    0.000
+##    .dem65             0.172    0.215    0.803    0.422</code></pre>
+</div>
+<div id="additional-tricks" class="section level2">
+<h2><span class="header-section-number">12.3</span> Additional tricks</h2>
+<div id="missing-data" class="section level3">
+<h3><span class="header-section-number">12.3.1</span> Missing data</h3>
+<p>Often, we have missing data. Let’s simulate what that might be like.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(tidyverse)
+
+<span class="kw">set.seed</span>(<span class="dv">314159</span>)
+
+sem_df2 &lt;-<span class="st"> </span>sem_df <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">x1 =</span> <span class="kw">ifelse</span>(
+    <span class="dt">test =</span> x2<span class="op">/</span><span class="kw">max</span>(x2) <span class="op">&lt;</span><span class="st"> </span><span class="kw">runif</span>(<span class="kw">n</span>()),
+    <span class="dt">yes =</span> <span class="ot">NA</span>,
+    <span class="dt">no =</span> x1))
+
+
+<span class="co"># What proportion of cases are now missing?</span>
+<span class="kw">mean</span>(<span class="kw">is.na</span>(sem_df2<span class="op">$</span>x1))</code></pre></div>
+<pre><code>## [1] 0.4133333</code></pre>
+<p>Now we’ll re_run our model, but with our new dataframe that includes missing data.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">fit &lt;-<span class="st"> </span><span class="kw">sem</span>(full_model, <span class="dt">data =</span> sem_df2)
+<span class="kw">summary</span>(fit)</code></pre></div>
+<pre><code>## lavaan 0.6-3 ended normally after 62 iterations
+## 
+##   Optimization method                           NLMINB
+##   Number of free parameters                         31
+## 
+##                                                   Used       Total
+##   Number of observations                            44          75
+## 
+##   Estimator                                         ML
+##   Model Fit Test Statistic                      43.176
+##   Degrees of freedom                                35
+##   P-value (Chi-square)                           0.161
+## 
+## Parameter Estimates:
+## 
+##   Information                                 Expected
+##   Information saturated (h1) model          Structured
+##   Standard Errors                             Standard
+## 
+## Latent Variables:
+##                    Estimate  Std.Err  z-value  P(&gt;|z|)
+##   ind60 =~                                            
+##     x1                1.000                           
+##     x2                1.833    0.182   10.054    0.000
+##     x3                1.712    0.208    8.238    0.000
+##   dem60 =~                                            
+##     y1                1.000                           
+##     y2                1.085    0.191    5.681    0.000
+##     y3                0.929    0.158    5.889    0.000
+##     y4                1.272    0.153    8.315    0.000
+##   dem65 =~                                            
+##     y5                1.000                           
+##     y6                1.178    0.179    6.582    0.000
+##     y7                1.136    0.148    7.666    0.000
+##     y8                1.243    0.173    7.178    0.000
+## 
+## Regressions:
+##                    Estimate  Std.Err  z-value  P(&gt;|z|)
+##   dem60 ~                                             
+##     ind60             2.270    0.556    4.080    0.000
+##   dem65 ~                                             
+##     ind60            -0.262    0.353   -0.743    0.457
+##     dem60             0.979    0.131    7.480    0.000
+## 
+## Covariances:
+##                    Estimate  Std.Err  z-value  P(&gt;|z|)
+##  .y1 ~~                                               
+##    .y5                0.088    0.338    0.262    0.793
+##  .y2 ~~                                               
+##    .y4                0.803    0.780    1.030    0.303
+##    .y6                2.365    0.902    2.622    0.009
+##  .y3 ~~                                               
+##    .y7                1.430    0.654    2.187    0.029
+##  .y4 ~~                                               
+##    .y8                0.376    0.579    0.649    0.516
+##  .y6 ~~                                               
+##    .y8                1.430    0.701    2.041    0.041
+## 
+## Variances:
+##                    Estimate  Std.Err  z-value  P(&gt;|z|)
+##    .x1                0.091    0.029    3.183    0.001
+##    .x2                0.135    0.075    1.789    0.074
+##    .x3                0.414    0.109    3.810    0.000
+##    .y1                1.099    0.404    2.719    0.007
+##    .y2                7.071    1.614    4.380    0.000
+##    .y3                4.752    1.097    4.330    0.000
+##    .y4                3.282    0.896    3.662    0.000
+##    .y5                1.611    0.493    3.270    0.001
+##    .y6                4.392    1.042    4.215    0.000
+##    .y7                2.346    0.647    3.625    0.000
+##    .y8                3.562    0.935    3.810    0.000
+##     ind60             0.393    0.104    3.795    0.000
+##    .dem60             3.765    1.039    3.623    0.000
+##    .dem65             0.225    0.285    0.787    0.431</code></pre>
+<p>Wow! Our results are really different. Our systematically missing data have really biased the results. To fix that, we need Full Information Maximum Likelihood estimation, which we can achieve by setting <code>missing = 'ML'</code> in our <code>sem()</code> call.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">fit &lt;-<span class="st"> </span><span class="kw">sem</span>(full_model, <span class="dt">data =</span> sem_df2, <span class="dt">missing =</span> <span class="st">&#39;ML&#39;</span>)
+<span class="kw">summary</span>(fit)</code></pre></div>
+<pre><code>## lavaan 0.6-3 ended normally after 78 iterations
+## 
+##   Optimization method                           NLMINB
+##   Number of free parameters                         42
+## 
+##   Number of observations                            75
+##   Number of missing patterns                         2
+## 
+##   Estimator                                         ML
+##   Model Fit Test Statistic                      33.361
+##   Degrees of freedom                                35
+##   P-value (Chi-square)                           0.547
+## 
+## Parameter Estimates:
+## 
+##   Information                                 Observed
+##   Observed information based on                Hessian
+##   Standard Errors                             Standard
+## 
+## Latent Variables:
+##                    Estimate  Std.Err  z-value  P(&gt;|z|)
+##   ind60 =~                                            
+##     x1                1.000                           
+##     x2                1.938    0.175   11.059    0.000
+##     x3                1.606    0.174    9.211    0.000
+##   dem60 =~                                            
+##     y1                1.000                           
+##     y2                1.256    0.186    6.769    0.000
+##     y3                1.058    0.148    7.133    0.000
+##     y4                1.265    0.151    8.385    0.000
+##   dem65 =~                                            
+##     y5                1.000                           
+##     y6                1.187    0.172    6.911    0.000
+##     y7                1.283    0.161    7.986    0.000
+##     y8                1.268    0.164    7.753    0.000
+## 
+## Regressions:
+##                    Estimate  Std.Err  z-value  P(&gt;|z|)
+##   dem60 ~                                             
+##     ind60             1.307    0.364    3.591    0.000
+##   dem65 ~                                             
+##     ind60             0.505    0.209    2.418    0.016
+##     dem60             0.837    0.099    8.464    0.000
+## 
+## Covariances:
+##                    Estimate  Std.Err  z-value  P(&gt;|z|)
+##  .y1 ~~                                               
+##    .y5                0.631    0.369    1.711    0.087
+##  .y2 ~~                                               
+##    .y4                1.317    0.700    1.881    0.060
+##    .y6                2.144    0.726    2.954    0.003
+##  .y3 ~~                                               
+##    .y7                0.792    0.620    1.277    0.202
+##  .y4 ~~                                               
+##    .y8                0.350    0.457    0.765    0.444
+##  .y6 ~~                                               
+##    .y8                1.356    0.572    2.371    0.018
+## 
+## Intercepts:
+##                    Estimate  Std.Err  z-value  P(&gt;|z|)
+##    .x1                5.012    0.103   48.594    0.000
+##    .x2                4.792    0.173   27.657    0.000
+##    .x3                3.558    0.161   22.066    0.000
+##    .y1                5.465    0.302   18.106    0.000
+##    .y2                4.256    0.450    9.463    0.000
+##    .y3                6.563    0.376   17.458    0.000
+##    .y4                4.453    0.384   11.598    0.000
+##    .y5                5.136    0.301   17.088    0.000
+##    .y6                2.978    0.386    7.719    0.000
+##    .y7                6.196    0.377   16.427    0.000
+##    .y8                4.043    0.371   10.889    0.000
+##     ind60             0.000                           
+##    .dem60             0.000                           
+##    .dem65             0.000                           
+## 
+## Variances:
+##                    Estimate  Std.Err  z-value  P(&gt;|z|)
+##    .x1                0.098    0.030    3.217    0.001
+##    .x2                0.106    0.081    1.298    0.194
+##    .x3                0.476    0.095    5.019    0.000
+##    .y1                1.891    0.469    4.034    0.000
+##    .y2                7.376    1.346    5.479    0.000
+##    .y3                5.066    0.968    5.231    0.000
+##    .y4                3.150    0.757    4.162    0.000
+##    .y5                2.365    0.490    4.828    0.000
+##    .y6                4.952    0.896    5.525    0.000
+##    .y7                3.410    0.724    4.707    0.000
+##    .y8                3.251    0.706    4.606    0.000
+##     ind60             0.571    0.134    4.270    0.000
+##    .dem60             3.964    0.948    4.182    0.000
+##    .dem65             0.175    0.220    0.795    0.427</code></pre>
+<p>Our results are much improved! Although they are not exactly the same as the full data, they are much closer than before.</p>
+</div>
+<div id="robus-estimators" class="section level3">
+<h3><span class="header-section-number">12.3.2</span> Robus estimators</h3>
+<p>The <code>lavaan</code> package includes a few robust estimators. To change which one you are using - say to Robust Maximum Likelihood - we just need to change the <code>estimator</code> parameter.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">fit &lt;-<span class="st"> </span><span class="kw">sem</span>(full_model, <span class="dt">data =</span> sem_df2, <span class="dt">estimator =</span> <span class="st">&#39;MLR&#39;</span>, <span class="dt">missing =</span> <span class="st">&#39;ML&#39;</span>)
+<span class="kw">summary</span>(fit)</code></pre></div>
+<pre><code>## lavaan 0.6-3 ended normally after 78 iterations
+## 
+##   Optimization method                           NLMINB
+##   Number of free parameters                         42
+## 
+##   Number of observations                            75
+##   Number of missing patterns                         2
+## 
+##   Estimator                                         ML      Robust
+##   Model Fit Test Statistic                      33.361      34.793
+##   Degrees of freedom                                35          35
+##   P-value (Chi-square)                           0.547       0.478
+##   Scaling correction factor                                  0.959
+##     for the Yuan-Bentler correction (Mplus variant)
+## 
+## Parameter Estimates:
+## 
+##   Information                                 Observed
+##   Observed information based on                Hessian
+##   Standard Errors                   Robust.huber.white
+## 
+## Latent Variables:
+##                    Estimate  Std.Err  z-value  P(&gt;|z|)
+##   ind60 =~                                            
+##     x1                1.000                           
+##     x2                1.938    0.146   13.268    0.000
+##     x3                1.606    0.151   10.644    0.000
+##   dem60 =~                                            
+##     y1                1.000                           
+##     y2                1.256    0.150    8.398    0.000
+##     y3                1.058    0.131    8.104    0.000
+##     y4                1.265    0.146    8.657    0.000
+##   dem65 =~                                            
+##     y5                1.000                           
+##     y6                1.187    0.181    6.544    0.000
+##     y7                1.283    0.172    7.449    0.000
+##     y8                1.268    0.189    6.712    0.000
+## 
+## Regressions:
+##                    Estimate  Std.Err  z-value  P(&gt;|z|)
+##   dem60 ~                                             
+##     ind60             1.307    0.317    4.126    0.000
+##   dem65 ~                                             
+##     ind60             0.505    0.194    2.603    0.009
+##     dem60             0.837    0.088    9.549    0.000
+## 
+## Covariances:
+##                    Estimate  Std.Err  z-value  P(&gt;|z|)
+##  .y1 ~~                                               
+##    .y5                0.631    0.453    1.395    0.163
+##  .y2 ~~                                               
+##    .y4                1.317    0.728    1.808    0.071
+##    .y6                2.144    0.862    2.487    0.013
+##  .y3 ~~                                               
+##    .y7                0.792    0.614    1.290    0.197
+##  .y4 ~~                                               
+##    .y8                0.350    0.433    0.807    0.420
+##  .y6 ~~                                               
+##    .y8                1.356    0.737    1.840    0.066
+## 
+## Intercepts:
+##                    Estimate  Std.Err  z-value  P(&gt;|z|)
+##    .x1                5.012    0.099   50.843    0.000
+##    .x2                4.792    0.173   27.657    0.000
+##    .x3                3.558    0.161   22.066    0.000
+##    .y1                5.465    0.301   18.166    0.000
+##    .y2                4.256    0.453    9.402    0.000
+##    .y3                6.563    0.376   17.441    0.000
+##    .y4                4.453    0.384   11.590    0.000
+##    .y5                5.136    0.300   17.140    0.000
+##    .y6                2.978    0.387    7.698    0.000
+##    .y7                6.196    0.377   16.439    0.000
+##    .y8                4.043    0.372   10.862    0.000
+##     ind60             0.000                           
+##    .dem60             0.000                           
+##    .dem65             0.000                           
+## 
+## Variances:
+##                    Estimate  Std.Err  z-value  P(&gt;|z|)
+##    .x1                0.098    0.025    3.864    0.000
+##    .x2                0.106    0.082    1.289    0.197
+##    .x3                0.476    0.092    5.154    0.000
+##    .y1                1.891    0.476    3.975    0.000
+##    .y2                7.376    1.295    5.696    0.000
+##    .y3                5.066    1.086    4.664    0.000
+##    .y4                3.150    0.795    3.964    0.000
+##    .y5                2.365    0.602    3.929    0.000
+##    .y6                4.952    0.898    5.515    0.000
+##    .y7                3.410    0.617    5.528    0.000
+##    .y8                3.251    0.898    3.620    0.000
+##     ind60             0.571    0.113    5.066    0.000
+##    .dem60             3.964    0.912    4.347    0.000
+##    .dem65             0.175    0.225    0.777    0.437</code></pre>
+
+</div>
+</div>
+</div>
+
+
+
+
+
+
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="anova-and-other-tests.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"google": false,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"all": ["facebook", "google", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"download": null,
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:" && /^https?:/.test(src))
+      src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>
