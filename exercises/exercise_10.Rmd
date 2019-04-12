@@ -1,0 +1,26 @@
+---
+title: "CSP 518 - Exercises: 10 - Functionals and Simulation"
+author: "YOUR NAME HERE"
+date: "Due: 2019-04-12 @ 11:59pm"
+output: html_document
+---
+
+## Instructions
+
+1. Make a .Rmd file to complete these exercises.
+
+  - Title it "CSP 518 - Exercises: Intro to R" (in quotes)
+  - Add your name(s) in the author slot (in quotes)
+  - The output can be either be `pdf_document` or `html_document` (no quotes)
+
+2. Turn in just your .Rmd file on Blackboard. Note, I will need to be able to `knit` it myself, so make sure everything runs the way you intend, before you turn it in.
+
+3. For clarity, write "## Question <number>" befor each question to signal which one you are answering.
+
+## Exercises
+
+1. Create a numeric vector (with any numbers you like). Use a for loop to calculate the cumulative sums of values in that vector. Your results should deliver the same output as `cumsum()`, that's how you will know you have done it correctly.
+
+2. Now create your own function (it can be whatever you like) and apply it to every element of your vector using `map()`. Make sure to use the `~ .x` notation.
+
+3. Run a simulation study testing the power of a regression model to detect significant effects when the predictors are skewed (i.e., heavy tails on the left or the right). What happens as sample size increases? HINT: `rexp()` and `rpois()` will probably be helpful here, but they are not the only way to achieve this goal.

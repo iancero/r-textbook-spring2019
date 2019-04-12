@@ -242,6 +242,19 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="12.3.2" data-path="structural-equation-modeling.html"><a href="structural-equation-modeling.html#robus-estimators"><i class="fa fa-check"></i><b>12.3.2</b> Robus estimators</a></li>
 </ul></li>
 </ul></li>
+<li class="chapter" data-level="13" data-path="loops-functionals-and-simulation.html"><a href="loops-functionals-and-simulation.html"><i class="fa fa-check"></i><b>13</b> Loops, Functionals, and Simulation</a><ul>
+<li class="chapter" data-level="13.1" data-path="loops-functionals-and-simulation.html"><a href="loops-functionals-and-simulation.html#loops"><i class="fa fa-check"></i><b>13.1</b> Loops</a><ul>
+<li class="chapter" data-level="13.1.1" data-path="loops-functionals-and-simulation.html"><a href="loops-functionals-and-simulation.html#when-should-i-use-for-loops"><i class="fa fa-check"></i><b>13.1.1</b> When should I use for loops?</a></li>
+</ul></li>
+<li class="chapter" data-level="13.2" data-path="loops-functionals-and-simulation.html"><a href="loops-functionals-and-simulation.html#functionals"><i class="fa fa-check"></i><b>13.2</b> Functionals</a><ul>
+<li class="chapter" data-level="13.2.1" data-path="loops-functionals-and-simulation.html"><a href="loops-functionals-and-simulation.html#the-base-r-way"><i class="fa fa-check"></i><b>13.2.1</b> The base R way</a></li>
+<li class="chapter" data-level="13.2.2" data-path="loops-functionals-and-simulation.html"><a href="loops-functionals-and-simulation.html#sapply-and-unlisting"><i class="fa fa-check"></i><b>13.2.2</b> <code>sapply()</code> and Unlisting</a></li>
+</ul></li>
+<li class="chapter" data-level="13.3" data-path="loops-functionals-and-simulation.html"><a href="loops-functionals-and-simulation.html#the-tidyverse-functionals"><i class="fa fa-check"></i><b>13.3</b> The tidyverse functionals</a></li>
+<li class="chapter" data-level="13.4" data-path="loops-functionals-and-simulation.html"><a href="loops-functionals-and-simulation.html#simulation"><i class="fa fa-check"></i><b>13.4</b> Simulation</a><ul>
+<li class="chapter" data-level="13.4.1" data-path="loops-functionals-and-simulation.html"><a href="loops-functionals-and-simulation.html#a-worked-example"><i class="fa fa-check"></i><b>13.4.1</b> A worked example</a></li>
+</ul></li>
+</ul></li>
 </ul>
 
       </nav>
@@ -267,9 +280,9 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <p>The term “Base R” refers to the set of packages and functions that R loads into each session by default. These packages include several statistical and plotting functions you will probably use a lot. Some of the most common plotting functions are given below.</p>
 <p><strong>hist()</strong></p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">rpois</span>(<span class="dv">100</span>, <span class="dt">lambda =</span> <span class="dv">3</span>)</code></pre></div>
-<pre><code>##   [1] 2 1 1 3 4 1 6 2 5 3 3 2 0 2 3 2 4 3 3 5 8 3 3 3 3 3 3 2 4 5 1 2 4 4 1
-##  [36] 4 2 7 4 1 4 1 3 6 2 3 3 1 4 6 5 3 1 1 6 3 4 3 0 3 3 1 1 3 1 3 6 3 4 0
-##  [71] 2 7 3 2 2 3 4 4 4 7 1 5 1 2 3 2 0 4 1 3 2 1 5 4 1 2 1 4 1 2</code></pre>
+<pre><code>##   [1] 5 3 1 3 0 4 5 5 3 5 1 3 5 1 5 2 2 4 2 3 2 1 5 2 1 3 3 5 0 3 2 6 4 4 1
+##  [36] 2 1 4 3 3 6 1 0 1 2 4 3 3 3 5 4 1 1 5 3 2 2 3 1 2 3 7 3 4 2 3 5 2 4 1
+##  [71] 3 2 5 4 4 6 4 7 6 4 3 5 2 2 2 5 0 1 2 4 3 7 0 2 4 3 3 6 4 3</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">my_vals &lt;-<span class="st"> </span><span class="kw">rexp</span>(<span class="dv">100</span>, <span class="dv">10</span>)
 
 <span class="kw">hist</span>(

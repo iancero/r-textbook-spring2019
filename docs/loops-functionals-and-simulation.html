@@ -5,11 +5,11 @@
 
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>9 Regression Models | R Textbook</title>
+  <title>13 Loops, Functionals, and Simulation | R Textbook</title>
   <meta name="description" content="This is the ‘organic’ textbook created by our class discussions and exercises.">
   <meta name="generator" content="bookdown  and GitBook 2.6.7">
 
-  <meta property="og:title" content="9 Regression Models | R Textbook" />
+  <meta property="og:title" content="13 Loops, Functionals, and Simulation | R Textbook" />
   <meta property="og:type" content="book" />
   
   
@@ -17,7 +17,7 @@
   <meta name="github-repo" content="iancero/r-textbook-spring2019" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="9 Regression Models | R Textbook" />
+  <meta name="twitter:title" content="13 Loops, Functionals, and Simulation | R Textbook" />
   
   <meta name="twitter:description" content="This is the ‘organic’ textbook created by our class discussions and exercises." />
   
@@ -31,8 +31,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
   
   
-<link rel="prev" href="reshaping-data-with-tidyr.html">
-<link rel="next" href="regression-models-1.html">
+<link rel="prev" href="structural-equation-modeling.html">
+
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -272,249 +272,360 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="regression-models" class="section level1">
-<h1><span class="header-section-number">9</span> Regression Models</h1>
-<p>Now that we have a grasp on data manipulation, it’s time to turn to data analysis. In this chapter, we focus on some of the most common statistical models in use today: linear regression and logistic regression. To get a sense for how to estimate these models, we will…</p>
+<div id="loops-functionals-and-simulation" class="section level1">
+<h1><span class="header-section-number">13</span> Loops, Functionals, and Simulation</h1>
+<p>In this chapter, we cover three seperate topics: loops, functionals, and simulation. Although they are distinct from one another, we’ll cover them together because they are quite useful in combination. The chapter outline is as follows.</p>
 <ol style="list-style-type: decimal">
-<li>Simulate fake data to analyze</li>
-<li>Fit (estimate) both linear and logistic regression models</li>
-<li>Look at different ways to view the results, using <code>base R</code> and <code>broom</code></li>
-<li>Using the tidyverse to fit several models simultaneously</li>
+<li>Loops</li>
+<li>Functionals</li>
+<li>Simulation</li>
 </ol>
-<div id="simulating-fake-data" class="section level2">
-<h2><span class="header-section-number">9.1</span> Simulating fake data</h2>
-<p>Before we fit our first regression model, lets simulate some data to analyze. We’ll do that by first simulating two normally distributed predictors. Then, we’ll choose some slopes for those predictors and make an outcome variable equal to the predictors times their slopes, plus some random error. To give us a binary outcome, we will also make a seperate variable in which our original <em>y</em> is dichotomized at the median with a little bit of error(<em>y_dichot</em>).</p>
+<div id="loops" class="section level2">
+<h2><span class="header-section-number">13.1</span> Loops</h2>
+<p>As you may have anticipated from your data manipulation tasks so far, performing the same task over and over again on new pieces of data is a common problem. R makes a lot of this easy for us by assuming that whenever we are working with a vector of items that we want to repeat operations for all of those items. For example,</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">my_vec &lt;-<span class="st"> </span><span class="dv">10</span><span class="op">:</span><span class="dv">15</span>
+
+my_vec<span class="op">^</span><span class="dv">2</span></code></pre></div>
+<pre><code>## [1] 100 121 144 169 196 225</code></pre>
+<p>Sometimes, though, we want more control than to do <em>exactly</em> the same thing to each item. Maybe we want to get cumulative sums, which require us to know what the other values in the vector are. For example, consider a vector of monthly profits.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">set.seed</span>(<span class="dv">314159</span>)
+
+monthly_profits &lt;-<span class="st"> </span><span class="kw">rpois</span>(<span class="dv">12</span>, <span class="dt">lambda =</span> <span class="dv">100</span>) <span class="co"># 12 months with $100 average</span>
+
+monthly_profits</code></pre></div>
+<pre><code>##  [1]  92  97 103  96  96  92  84  83  94  83  95 111</code></pre>
+<p>I can do that with a <strong>for loop</strong>.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">cumulative_profits &lt;-<span class="st"> </span><span class="dv">0</span>
+<span class="cf">for</span>(m <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="dv">12</span>){
+  cumulative_profits &lt;-<span class="st"> </span>cumulative_profits <span class="op">+</span><span class="st"> </span>monthly_profits[m]
+  
+  <span class="kw">print</span>(cumulative_profits)
+}</code></pre></div>
+<pre><code>## [1] 92
+## [1] 189
+## [1] 292
+## [1] 388
+## [1] 484
+## [1] 576
+## [1] 660
+## [1] 743
+## [1] 837
+## [1] 920
+## [1] 1015
+## [1] 1126</code></pre>
+<p>This type of loop consists of three parts:</p>
+<ol style="list-style-type: decimal">
+<li>The index variable, <code>m</code> (you can name it whatever you want)</li>
+<li>The vector <code>m</code> grabs its values from (here, <code>1:12</code>, but can be whatever you want)</li>
+<li>The commands to perform for each increment of <code>m</code> (everything between the <code>{}</code>)</li>
+</ol>
+<p>In this case, our #3 is a little trickier because we created a variable outside the loop (<code>cumulative_profits</code>), which we then modified inside the loop. We did that here to demonstrate the power of for loops - they give a lot of control.</p>
+<div id="when-should-i-use-for-loops" class="section level3">
+<h3><span class="header-section-number">13.1.1</span> When should I use for loops?</h3>
+<p>Generally, you should avoid them in R. The reason is that they require several lines of code to perform the same task that specialized R functions already perform in one. For example, in our cumulative profits case above, R has a special function <code>cumsum()</code> that can already to this same task for us.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">cumsum</span>(monthly_profits)</code></pre></div>
+<pre><code>##  [1]   92  189  292  388  484  576  660  743  837  920 1015 1126</code></pre>
+<p>That’s much easier to read - and we don’t have to worry about recoding it every time. There are other reasons to try to avoid for loops if you can, including the fact that <em>sometimes</em> (though not all the time) they can be memory inefficient. This used to be a bigger deal a few decades ago, but with modern computers will only matter if you are working on something that has millions of cases (i.e., “big” data).</p>
+<p>HOWEVER! There is one case when you will <em>need</em> to use a for loop, when you need to modify something <em>in place</em>. For those special cases, [see this resource]((<a href="http://adv-r.had.co.nz/Functionals.html#functionals-not" class="uri">http://adv-r.had.co.nz/Functionals.html#functionals-not</a>).</p>
+</div>
+</div>
+<div id="functionals" class="section level2">
+<h2><span class="header-section-number">13.2</span> Functionals</h2>
+<p>Functionals are functions that apply other functions for you - essentially, they are automated loops. With a functional, you don’t have to think about your indexing variable or the vector it draws its values from, you just need to keep track of the function you want applied to everything. Functionals existed in base R, but there is also now a tidyverse version of them. We’ll cover both!</p>
+<div id="the-base-r-way" class="section level3">
+<h3><span class="header-section-number">13.2.1</span> The base R way</h3>
+<p>Functionals in R come from the “apply” family, so they all have names that end in “-apply.” The most commonly used is <code>lapply()</code> (pronounced “ell-apply”). This functional takes a list or vector as its first argument and a function to apply to each element of the list as its second argument.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">double_n_square &lt;-<span class="st"> </span><span class="cf">function</span>(x){
+  (<span class="dv">2</span><span class="op">*</span>x)<span class="op">^</span><span class="dv">2</span>
+}
+
+my_vals &lt;-<span class="st"> </span><span class="dv">20</span><span class="op">:</span><span class="dv">25</span>
+
+<span class="kw">lapply</span>(my_vals, double_n_square) <span class="co"># note I don&#39;t need () for the function name</span></code></pre></div>
+<pre><code>## [[1]]
+## [1] 1600
+## 
+## [[2]]
+## [1] 1764
+## 
+## [[3]]
+## [1] 1936
+## 
+## [[4]]
+## [1] 2116
+## 
+## [[5]]
+## [1] 2304
+## 
+## [[6]]
+## [1] 2500</code></pre>
+<p>Above, we used a custom function, but you can also use a built-in R function.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">lapply</span>(my_vals, sqrt)</code></pre></div>
+<pre><code>## [[1]]
+## [1] 4.472136
+## 
+## [[2]]
+## [1] 4.582576
+## 
+## [[3]]
+## [1] 4.690416
+## 
+## [[4]]
+## [1] 4.795832
+## 
+## [[5]]
+## [1] 4.898979
+## 
+## [[6]]
+## [1] 5</code></pre>
+<p>Also, we can use an “anonymous” function. This is a function without a name that we feed to <code>lapply()</code>. Once the <code>lapply()</code> operation is over, our function disappears.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">lapply</span>(my_vals, <span class="cf">function</span>(val){
+  val<span class="op">/</span><span class="dv">3</span>
+})</code></pre></div>
+<pre><code>## [[1]]
+## [1] 6.666667
+## 
+## [[2]]
+## [1] 7
+## 
+## [[3]]
+## [1] 7.333333
+## 
+## [[4]]
+## [1] 7.666667
+## 
+## [[5]]
+## [1] 8
+## 
+## [[6]]
+## [1] 8.333333</code></pre>
+<p>Here, we used a simply case where an anonymous function probably wasn’t necessary. But you can imagine more complicated situations where it would be helpful. For example, if I wanted to square all the odd values and take the square root of all the even ones.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">lapply</span>(my_vals, <span class="cf">function</span>(val){
+  is_odd &lt;-<span class="st"> </span>val <span class="op">%%</span><span class="st"> </span><span class="dv">2</span> <span class="op">!=</span><span class="st"> </span><span class="dv">0</span>
+  
+  <span class="cf">if</span>(is_odd){
+    val &lt;-<span class="st"> </span>val<span class="op">^</span><span class="dv">2</span>
+  } <span class="cf">else</span> {
+    val &lt;-<span class="st"> </span><span class="kw">sqrt</span>(val)
+  }
+  
+  val
+})</code></pre></div>
+<pre><code>## [[1]]
+## [1] 4.472136
+## 
+## [[2]]
+## [1] 441
+## 
+## [[3]]
+## [1] 4.690416
+## 
+## [[4]]
+## [1] 529
+## 
+## [[5]]
+## [1] 4.898979
+## 
+## [[6]]
+## [1] 625</code></pre>
+</div>
+<div id="sapply-and-unlisting" class="section level3">
+<h3><span class="header-section-number">13.2.2</span> <code>sapply()</code> and Unlisting</h3>
+<p>Note that what <code>lapply()</code> gives us is actually a list, no a vector. If we want our output to go back to a simple vector, we can either use <code>sapply()</code> (“simple apply”) or <code>unlist()</code> after a <code>lapply()</code></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">sapply</span>(my_vals, <span class="cf">function</span>(val){
+  is_odd &lt;-<span class="st"> </span>val <span class="op">%%</span><span class="st"> </span><span class="dv">2</span> <span class="op">!=</span><span class="st"> </span><span class="dv">0</span>
+  
+  <span class="cf">if</span>(is_odd){
+    val &lt;-<span class="st"> </span>val<span class="op">^</span><span class="dv">2</span>
+  } <span class="cf">else</span> {
+    val &lt;-<span class="st"> </span><span class="kw">sqrt</span>(val)
+  }
+  
+  val
+})</code></pre></div>
+<pre><code>## [1]   4.472136 441.000000   4.690416 529.000000   4.898979 625.000000</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">output &lt;-<span class="st"> </span><span class="kw">lapply</span>(my_vals, <span class="cf">function</span>(val){
+  is_odd &lt;-<span class="st"> </span>val <span class="op">%%</span><span class="st"> </span><span class="dv">2</span> <span class="op">!=</span><span class="st"> </span><span class="dv">0</span>
+  
+  <span class="cf">if</span>(is_odd){
+    val &lt;-<span class="st"> </span>val<span class="op">^</span><span class="dv">2</span>
+  } <span class="cf">else</span> {
+    val &lt;-<span class="st"> </span><span class="kw">sqrt</span>(val)
+  }
+  
+  val
+})
+
+<span class="kw">unlist</span>(output)</code></pre></div>
+<pre><code>## [1]   4.472136 441.000000   4.690416 529.000000   4.898979 625.000000</code></pre>
+</div>
+</div>
+<div id="the-tidyverse-functionals" class="section level2">
+<h2><span class="header-section-number">13.3</span> The tidyverse functionals</h2>
+<p>The tidyverse also includes its own set of functionals, which are all some version of <code>map()</code>. These are nice because they use a special notation that allows you to refer to each element of your vector with a <code>~ .x</code>. The <code>~</code> says “look for the <code>.x</code>”, the <code>.x</code> says “this is value I am currently working on”.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(tidyverse)
-<span class="kw">set.seed</span>(<span class="dv">314159</span>)
-n_cases &lt;-<span class="st"> </span><span class="dv">1000</span>
-df &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">id =</span> <span class="dv">1</span><span class="op">:</span>n_cases) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">mutate</span>(
-    <span class="dt">x1 =</span> <span class="kw">rnorm</span>(n_cases, <span class="dt">mean =</span> <span class="dv">10</span>, <span class="dt">sd =</span> <span class="dv">1</span>),
-    <span class="dt">x2 =</span> <span class="kw">rnorm</span>(n_cases, <span class="dt">mean =</span> <span class="dv">20</span>, <span class="dt">sd =</span> <span class="dv">2</span>),
-    <span class="dt">y =</span> <span class="fl">5.00</span> <span class="op">+</span><span class="st"> </span>.<span class="dv">30</span><span class="op">*</span>x1 <span class="op">+</span><span class="st"> </span>.<span class="dv">60</span><span class="op">*</span>x2 <span class="op">+</span><span class="st"> </span><span class="kw">rnorm</span>(n_cases, <span class="dt">mean =</span> <span class="dv">0</span>, <span class="dt">sd =</span> <span class="dv">1</span>),
-    <span class="dt">y_dichot =</span> <span class="kw">as.numeric</span>(y <span class="op">&gt;</span><span class="st"> </span><span class="kw">median</span>(y) <span class="op">+</span><span class="st"> </span><span class="kw">rnorm</span>(n_cases)))</code></pre></div>
-<p>Here, we have an intercept of <span class="math inline">\(5.00\)</span>, a slope of <span class="math inline">\(.30\)</span> for <span class="math inline">\(x_1\)</span>, slope of <span class="math inline">\(.60\)</span> for <span class="math inline">\(x_2\)</span>. Our outcome <span class="math inline">\(y\)</span> has an error variance of <span class="math inline">\(1.0\)</span>. Note that there is nothing special about these numbers, I just made them up because we needed some. If our linear regression model does a good job, it should find an intercept and slopes close (though not exactly equal) to these. When we use our <em>y_dichot</em> outcome in a logistic regression, note that the numbers won’t be exactly the same because the slopes will be on a logrithmic scale.</p>
-<p>Our resulting data look like this.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">head</span>(df)</code></pre></div>
-<pre><code>##   id        x1       x2        y y_dichot
-## 1  1  9.200711 23.56806 21.54965        1
-## 2  2  9.269903 21.93050 22.15515        1
-## 3  3 11.436877 21.96769 21.18828        1
-## 4  4 10.305023 21.97102 21.87011        1
-## 5  5  9.602716 21.86214 20.25078        0
-## 6  6 10.088890 17.72826 18.98869        0</code></pre>
+
+my_vals &lt;-<span class="st"> </span><span class="dv">100</span><span class="op">:</span><span class="dv">105</span>
+
+<span class="kw">map</span>(my_vals, <span class="op">~</span><span class="st"> </span>.x<span class="op">/</span><span class="dv">2</span>)</code></pre></div>
+<pre><code>## [[1]]
+## [1] 50
+## 
+## [[2]]
+## [1] 50.5
+## 
+## [[3]]
+## [1] 51
+## 
+## [[4]]
+## [1] 51.5
+## 
+## [[5]]
+## [1] 52
+## 
+## [[6]]
+## [1] 52.5</code></pre>
+<p>If I know all of my outputs are going to be a particular type (e.g., logical, character, or double), then I can use the special <code>map_lgl()</code>, <code>map_chr()</code>, and <code>map_dbl()</code> functions to return a vector right away.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">map_dbl</span>(my_vals, <span class="op">~</span><span class="st"> </span>.x<span class="op">/</span><span class="dv">2</span>)</code></pre></div>
+<pre><code>## [1] 50.0 50.5 51.0 51.5 52.0 52.5</code></pre>
+<p>I can also use <code>map()</code> like <code>lapply()</code> if I want, I just remove the <code>~ .x</code> notation and replace it with a function name, like above.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">map_dbl</span>(my_vals, sqrt)</code></pre></div>
+<pre><code>## [1] 10.00000 10.04988 10.09950 10.14889 10.19804 10.24695</code></pre>
 </div>
-<div id="fitting-regression-models" class="section level2">
-<h2><span class="header-section-number">9.2</span> Fitting regression models</h2>
-<div id="linear-regression" class="section level3">
-<h3><span class="header-section-number">9.2.1</span> Linear regression</h3>
-<p>Now that we’ve got our data, we can fit our first regression model. In R, we fit linear regression models that using the <code>lm()</code> function (“lm” for “linear model”). This function takes two main parameters: a regression formula and the data to which you want that formula applied.</p>
-<p>The formula is specified using the <code>&lt;outcome&gt; ~ &lt;predictor1&gt; + &lt;predictor2&gt; + ...</code> format. Your outcome goes on the left side of the formula, followed by a squiggle (<code>~</code>), followed by each of your predictors seperated by a <code>+</code>. The data is just your dataframe of interest.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">lm</span>(<span class="dt">formula =</span> y <span class="op">~</span><span class="st"> </span>x1 <span class="op">+</span><span class="st"> </span>x2, <span class="dt">data =</span> df)</code></pre></div>
-<pre><code>## 
-## Call:
-## lm(formula = y ~ x1 + x2, data = df)
-## 
-## Coefficients:
-## (Intercept)           x1           x2  
-##      4.5117       0.3334       0.6096</code></pre>
-<p>Notice that our output is pretty close to what we would have predicted, especially for the two slope coefficients for <em>x1</em> and <em>x2</em>. But where are our standard errors and p-values? To get them, we need to use the <code>summary()</code> command. To make sure we can call summary again without needing to re-estimate the model, we’ll first save it in a variable called <code>fit</code>.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">fit &lt;-<span class="st"> </span><span class="kw">lm</span>(<span class="dt">formula =</span> y <span class="op">~</span><span class="st"> </span>x1 <span class="op">+</span><span class="st"> </span>x2, <span class="dt">data =</span> df)
-<span class="kw">summary</span>(fit)</code></pre></div>
-<pre><code>## 
-## Call:
-## lm(formula = y ~ x1 + x2, data = df)
-## 
-## Residuals:
-##     Min      1Q  Median      3Q     Max 
-## -3.7600 -0.6472 -0.0365  0.6566  2.9302 
-## 
-## Coefficients:
-##             Estimate Std. Error t value Pr(&gt;|t|)    
-## (Intercept)  4.51175    0.42996   10.49   &lt;2e-16 ***
-## x1           0.33342    0.03065   10.88   &lt;2e-16 ***
-## x2           0.60961    0.01524   40.00   &lt;2e-16 ***
-## ---
-## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
-## 
-## Residual standard error: 0.9812 on 997 degrees of freedom
-## Multiple R-squared:  0.6342, Adjusted R-squared:  0.6335 
-## F-statistic: 864.4 on 2 and 997 DF,  p-value: &lt; 2.2e-16</code></pre>
-<p>There we go! Now I have all the usual information I would need for a regression table. Note that in this case, our p-values (in the column labelled “Pr(&gt;|t|)”) are so small that they need to be given in scientific notation - that’s because our simulated data have very little error in them. Under more normal circumstances, your p-values will likely be much larger.</p>
-</div>
-<div id="logistic-regression" class="section level3">
-<h3><span class="header-section-number">9.2.2</span> Logistic regression</h3>
-<p>Fitting a logistic regression model is <em>almost</em> exactly the same, except for a few important differences. First, we will use our dichotomized variable (<em>y_dichot</em>) as the outcome in our regression formula. Additionally, we will use the <code>glm()</code> function (“glm” for “generalized linear model”) and we need to specify what family of generalized linear model we are using in that function. For a logistic regression that <code>family = 'binomial'</code>.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">glm</span>(y_dichot <span class="op">~</span><span class="st"> </span>x1 <span class="op">+</span><span class="st"> </span>x2, <span class="dt">data =</span> df, <span class="dt">family =</span> <span class="st">&#39;binomial&#39;</span>)</code></pre></div>
-<pre><code>## 
-## Call:  glm(formula = y_dichot ~ x1 + x2, family = &quot;binomial&quot;, data = df)
-## 
-## Coefficients:
-## (Intercept)           x1           x2  
-##    -20.4650       0.4857       0.7832  
-## 
-## Degrees of Freedom: 999 Total (i.e. Null);  997 Residual
-## Null Deviance:       1386 
-## Residual Deviance: 999.3     AIC: 1005</code></pre>
-<p>Once again, calling the model function alone gives us <em>some</em> important information, but not very much. So, we’ll follow the same trick above and use the summary function.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">fit2 &lt;-<span class="st"> </span><span class="kw">glm</span>(y_dichot <span class="op">~</span><span class="st"> </span>x1 <span class="op">+</span><span class="st"> </span>x2, <span class="dt">data =</span> df, <span class="dt">family =</span> <span class="st">&#39;binomial&#39;</span>)
-<span class="kw">summary</span>(fit2)</code></pre></div>
-<pre><code>## 
-## Call:
-## glm(formula = y_dichot ~ x1 + x2, family = &quot;binomial&quot;, data = df)
-## 
-## Deviance Residuals: 
-##     Min       1Q   Median       3Q      Max  
-## -2.2937  -0.7904   0.1182   0.8190   2.4370  
-## 
-## Coefficients:
-##              Estimate Std. Error z value Pr(&gt;|z|)    
-## (Intercept) -20.46501    1.43852 -14.226  &lt; 2e-16 ***
-## x1            0.48566    0.07961   6.101 1.06e-09 ***
-## x2            0.78319    0.05252  14.912  &lt; 2e-16 ***
-## ---
-## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
-## 
-## (Dispersion parameter for binomial family taken to be 1)
-## 
-##     Null deviance: 1386.29  on 999  degrees of freedom
-## Residual deviance:  999.32  on 997  degrees of freedom
-## AIC: 1005.3
-## 
-## Number of Fisher Scoring iterations: 5</code></pre>
-<p>That’s once again much better! Now we have all of the information we would normally need to report in a regression table.</p>
-</div>
-</div>
-<div id="other-ways-of-viewing-the-output" class="section level2">
-<h2><span class="header-section-number">9.3</span> Other ways of viewing the output</h2>
-<p>The <code>summary()</code> function from R is nice for looking at our results in real time, but it can be a real pain if I want to modify or export the output. For example, what if I wanted to test whether my results were still significant after Bonferroni correction? For a small number of variables, we could just eyeball it. But for any reasonably large regression, we should be using code to do it instead.</p>
-<p>To get your output in a more code-friendly format, you can install and use the <code>broom</code> package.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">install.packages</span>(<span class="st">&#39;broom&#39;</span>)</code></pre></div>
-<p>This package has 3 major functions designed to help you out with standard regression models: <code>glance()</code>, <code>tidy()</code>, and <code>augment()</code>.</p>
-<div id="glance" class="section level3">
-<h3><span class="header-section-number">9.3.1</span> <code>glance()</code></h3>
-<p>If I want to see some basic model information (e.g., model sum of squares, <span class="math inline">\(R^2\)</span>), I call <code>glance()</code> on my <code>fit</code> object. This function takes my <code>fit</code> object and gives me model summary information in a one-row dataframe.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(broom)
-<span class="kw">glance</span>(fit)</code></pre></div>
-<pre><code>## # A tibble: 1 x 11
-##   r.squared adj.r.squared sigma statistic   p.value    df logLik   AIC
-##       &lt;dbl&gt;         &lt;dbl&gt; &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt; &lt;int&gt;  &lt;dbl&gt; &lt;dbl&gt;
-## 1     0.634         0.634 0.981      864. 1.77e-218     3 -1398. 2805.
-## # … with 3 more variables: BIC &lt;dbl&gt;, deviance &lt;dbl&gt;, df.residual &lt;int&gt;</code></pre>
-<p>If I want to see some more specific information about the coefficients in my model, I call <code>tidy()</code>.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">tidy</span>(fit)</code></pre></div>
-<pre><code>## # A tibble: 3 x 5
-##   term        estimate std.error statistic   p.value
-##   &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;
-## 1 (Intercept)    4.51     0.430       10.5 1.66e- 24
-## 2 x1             0.333    0.0306      10.9 3.95e- 26
-## 3 x2             0.610    0.0152      40.0 1.63e-209</code></pre>
-<p>Now if I want to adjust my p-values, I can easily do so with the <code>tidyverse</code></p>
+<div id="simulation" class="section level2">
+<h2><span class="header-section-number">13.4</span> Simulation</h2>
+<p>The field of statistics is premised on one primary insight: even in a world of randomness, I generally know more than nothing. With that insight in mind, the field is dedicated to quantifying what kinds of things are knowable, and to what degree, when there is significant uncertainty at play. Sometimes, this relatively easy to do with a known distribution. For example, if we know a distribution is Normal, then we also know that values near the mean will be much more common than values farther away from the mean - and we can quantify <em>how much</em> more common.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">curve</span>(<span class="kw">dnorm</span>(x), <span class="dt">from =</span> <span class="op">-</span><span class="dv">3</span>, <span class="dt">to =</span> <span class="dv">3</span>)</code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-201-1.png" width="672" /></p>
+<p>Other times, quantifying how likely something is to happen can be so complicated that a closed-form formula simply does not exist - or if it did exist, it would be too difficult to work with. In those cases, we run a simulation.</p>
+<div id="a-worked-example" class="section level3">
+<h3><span class="header-section-number">13.4.1</span> A worked example</h3>
+<p>In what follows, we will explore what happens when there are true quadratic effects in the population, but we mistakenly model an interaction instead (when no true interaction exists). Will we accidentally get a significant interaction effect? How often? Does it matter how correlated the predictors are?</p>
+<p>To begin, when running a simulation, we generally need a few pieces of information: the different correlations we want to test, the number of samples we want (often, people just choose 1,000), the number of cases per sample, and the number of total cases we’ll need overall. We’ll put these together ahead of time so they are easily available later.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">obs_per_sample &lt;-<span class="st"> </span><span class="dv">100</span>
+samps_per_cor &lt;-<span class="st"> </span><span class="dv">1000</span>
+cor_levels &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="dt">from =</span> <span class="dv">0</span>, <span class="dt">to =</span> .<span class="dv">80</span>, <span class="dt">length.out =</span> <span class="dv">5</span>)
+total_obs &lt;-<span class="st"> </span><span class="kw">length</span>(cor_levels)<span class="op">*</span>samps_per_cor<span class="op">*</span>obs_per_sample</code></pre></div>
+<p>To create correlated variables, we will need the <code>mvtnorm</code> package, which can create multivariate normal predictors for us. All we need to do is make the covariance matrix it wants to sample from. Because we are going to be doing this once for each correlation level, we’ll wrap it in a function called <code>gen_sample()</code>.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(tidyverse)
-fit <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">tidy</span>() <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">adj_p =</span> <span class="kw">p.adjust</span>(p.value, <span class="dt">method =</span> <span class="st">&#39;bonferroni&#39;</span>))</code></pre></div>
-<pre><code>## # A tibble: 3 x 6
-##   term        estimate std.error statistic   p.value     adj_p
-##   &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;
-## 1 (Intercept)    4.51     0.430       10.5 1.66e- 24 4.98e- 24
-## 2 x1             0.333    0.0306      10.9 3.95e- 26 1.18e- 25
-## 3 x2             0.610    0.0152      40.0 1.63e-209 4.90e-209</code></pre>
-<p>Lastly, if I want to see some participant-level information about my model (e.g., predicted values), I can use <code>augment()</code>. This gives me a ton of useful information, including predicted values and standardized residuals.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">augment</span>(fit)</code></pre></div>
-<pre><code>## # A tibble: 1,000 x 10
-##        y    x1    x2 .fitted .se.fit  .resid    .hat .sigma .cooksd
-##    &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt;
-##  1  21.5  9.20  23.6    21.9  0.0679 -0.397  0.00478  0.982 2.64e-4
-##  2  22.2  9.27  21.9    21.0  0.0486  1.18   0.00246  0.981 1.20e-3
-##  3  21.2 11.4   22.0    21.7  0.0621 -0.528  0.00401  0.982 3.91e-4
-##  4  21.9 10.3   22.0    21.3  0.0447  0.529  0.00208  0.982 2.02e-4
-##  5  20.3  9.60  21.9    21.0  0.0442 -0.790  0.00203  0.981 4.40e-4
-##  6  19.0 10.1   17.7    18.7  0.0461  0.306  0.00221  0.982 7.18e-5
-##  7  20.1 11.2   20.1    20.5  0.0478 -0.384  0.00237  0.982 1.22e-4
-##  8  20.5  9.22  19.4    19.4  0.0395  1.10   0.00162  0.981 6.77e-4
-##  9  24.3  8.24  23.2    21.4  0.0791  2.93   0.00649  0.977 1.96e-2
-## 10  20.0  7.70  21.0    19.9  0.0784  0.0792 0.00638  0.982 1.40e-5
-## # … with 990 more rows, and 1 more variable: .std.resid &lt;dbl&gt;</code></pre>
-</div>
-</div>
-<div id="fitting-multiple-regressions-simultaneously" class="section level2">
-<h2><span class="header-section-number">9.4</span> Fitting multiple regressions simultaneously</h2>
-<p>Sometimes, we’ll have a bunch of groups that we want to analyze seperately. For one or two groups, this isn’t so bad to do individually. However, for larger numbers of groups, we’ll need something more advanced. For example, let’s assign people to some groups in our existing dataset.</p>
+<span class="kw">library</span>(mvtnorm)
+
+gen_sample &lt;-<span class="st"> </span><span class="cf">function</span>(n, cor_level){
+  cov_matrix &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="dt">data =</span> <span class="kw">c</span>(<span class="dv">1</span>, cor_level, cor_level, <span class="dv">1</span>), <span class="dt">nrow =</span> <span class="dv">2</span>)
+  
+  <span class="kw">rmvnorm</span>(n, <span class="dt">sigma =</span> cov_matrix) <span class="op">%&gt;%</span>
+<span class="st">    </span><span class="kw">as.data.frame</span>() <span class="op">%&gt;%</span>
+<span class="st">    </span><span class="kw">set_names</span>(<span class="kw">c</span>(<span class="st">&#39;x&#39;</span>, <span class="st">&#39;z&#39;</span>))
+}
+
+<span class="co"># a preview</span>
+x &lt;-<span class="st"> </span><span class="kw">gen_sample</span>(<span class="dt">n =</span> <span class="dv">1000</span>, <span class="dt">cor_level =</span> .<span class="dv">30</span>)
+
+<span class="kw">head</span>(x)</code></pre></div>
+<pre><code>##            x          z
+## 1  0.9147473 -0.9707036
+## 2 -1.1417592 -0.1430907
+## 3  1.0704854  0.2567575
+## 4  1.0015961  0.9372988
+## 5  0.9864337  0.7464072
+## 6 -1.5673610 -0.1426067</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">cor</span>(x)</code></pre></div>
+<pre><code>##           x         z
+## x 1.0000000 0.2866281
+## z 0.2866281 1.0000000</code></pre>
+<p>Now that we have our predictors, we’ll need a place to put them. The <code>expand.grid()</code> function is especially useful here. I creates a dataframe out of the vectors we give it, but with every possible combination of every vector element. See here…</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">df &lt;-<span class="st"> </span><span class="kw">expand.grid</span>(<span class="dt">r =</span> cor_levels, <span class="dt">samp =</span> <span class="dv">1</span><span class="op">:</span>samps_per_cor, <span class="dt">obs =</span> <span class="dv">1</span><span class="op">:</span>obs_per_sample)
+
+<span class="kw">head</span>(df, <span class="dt">n =</span> <span class="dv">10</span>)</code></pre></div>
+<pre><code>##      r samp obs
+## 1  0.0    1   1
+## 2  0.2    1   1
+## 3  0.4    1   1
+## 4  0.6    1   1
+## 5  0.8    1   1
+## 6  0.0    2   1
+## 7  0.2    2   1
+## 8  0.4    2   1
+## 9  0.6    2   1
+## 10 0.8    2   1</code></pre>
+<p>Note that the order you enter your vectors will change the ordering of the elements. Because we will be entering our predictors blocked by correlation, we’ll want to sort by correlation to make sure they go to the right place later on.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">df &lt;-<span class="st"> </span>df <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">grp =</span> <span class="kw">sample</span>(letters, <span class="dt">size =</span> <span class="kw">nrow</span>(.), <span class="dt">replace =</span> T))
+<span class="st">  </span><span class="kw">arrange</span>(r, samp, obs)
+
+<span class="kw">head</span>(df, <span class="dt">n =</span> <span class="dv">10</span>)</code></pre></div>
+<pre><code>##    r samp obs
+## 1  0    1   1
+## 2  0    1   2
+## 3  0    1   3
+## 4  0    1   4
+## 5  0    1   5
+## 6  0    1   6
+## 7  0    1   7
+## 8  0    1   8
+## 9  0    1   9
+## 10 0    1  10</code></pre>
+<p>Now, let’s use the <code>map()</code> function to generate correlated predictors, with varying levels of correlation. We’ll bind the results, then store the result in two new columns in our dataframe.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">df[, <span class="kw">c</span>(<span class="st">&#39;x&#39;</span>, <span class="st">&#39;z&#39;</span>)] &lt;-<span class="st"> </span><span class="kw">map</span>(cor_levels, <span class="op">~</span><span class="st"> </span><span class="kw">gen_sample</span>(samps_per_cor<span class="op">*</span>obs_per_sample, .x)) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">bind_rows</span>()
+
 <span class="kw">head</span>(df)</code></pre></div>
-<pre><code>##   id        x1       x2        y y_dichot grp
-## 1  1  9.200711 23.56806 21.54965        1   c
-## 2  2  9.269903 21.93050 22.15515        1   v
-## 3  3 11.436877 21.96769 21.18828        1   l
-## 4  4 10.305023 21.97102 21.87011        1   y
-## 5  5  9.602716 21.86214 20.25078        0   i
-## 6  6 10.088890 17.72826 18.98869        0   t</code></pre>
-<p>Here, we’ve assigned people to one of 26 groups (a group for each letter of the alphabet). How can we fit all these regressions separately? With the <code>tidyverse</code>’s <code>group_by()</code> and <code>do()</code> functions.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">model_df &lt;-<span class="st"> </span>df <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">group_by</span>(grp) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">do</span>(<span class="dt">model =</span> <span class="kw">lm</span>(y <span class="op">~</span><span class="st"> </span>x1 <span class="op">+</span><span class="st"> </span>x2, <span class="dt">data =</span> .))
-<span class="kw">head</span>(model_df)</code></pre></div>
-<pre><code>## Source: local data frame [6 x 2]
-## Groups: &lt;by row&gt;
-## 
-## # A tibble: 6 x 2
-##   grp   model   
-##   &lt;chr&gt; &lt;list&gt;  
-## 1 a     &lt;S3: lm&gt;
-## 2 b     &lt;S3: lm&gt;
-## 3 c     &lt;S3: lm&gt;
-## 4 d     &lt;S3: lm&gt;
-## 5 e     &lt;S3: lm&gt;
-## 6 f     &lt;S3: lm&gt;</code></pre>
-<p>If we want to unpack those models, we can once again use <code>broom</code>’s functions. We just need to make sure to specify the column where our models are, which in this case is “<em>model</em>”.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">coef_table &lt;-<span class="st"> </span>model_df <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">tidy</span>(model)
-<span class="kw">head</span>(coef_table, <span class="dt">n =</span> <span class="dv">10</span>)</code></pre></div>
-<pre><code>## # A tibble: 10 x 6
-## # Groups:   grp [4]
-##    grp   term        estimate std.error statistic  p.value
-##    &lt;chr&gt; &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
-##  1 a     (Intercept)    8.16     2.52        3.24 2.94e- 3
-##  2 a     x1             0.231    0.164       1.41 1.69e- 1
-##  3 a     x2             0.486    0.0793      6.13 9.80e- 7
-##  4 b     (Intercept)    4.72     2.35        2.00 5.17e- 2
-##  5 b     x1             0.209    0.141       1.48 1.48e- 1
-##  6 b     x2             0.682    0.0789      8.64 9.05e-11
-##  7 c     (Intercept)    5.05     2.43        2.08 4.31e- 2
-##  8 c     x1             0.425    0.149       2.86 6.53e- 3
-##  9 c     x2             0.539    0.0978      5.52 1.72e- 6
-## 10 d     (Intercept)    6.56     2.10        3.12 3.16e- 3</code></pre>
-<p>We can do the same thing for summary model information with the <code>glance()</code> function.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">model_table &lt;-<span class="st"> </span>model_df <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">glance</span>(model)
-<span class="kw">head</span>(model_table)</code></pre></div>
-<pre><code>## # A tibble: 6 x 12
-## # Groups:   grp [6]
-##   grp   r.squared adj.r.squared sigma statistic  p.value    df logLik   AIC
-##   &lt;chr&gt;     &lt;dbl&gt;         &lt;dbl&gt; &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt; &lt;int&gt;  &lt;dbl&gt; &lt;dbl&gt;
-## 1 a         0.556         0.526 0.883      18.8 5.18e- 6     3  -41.1  90.3
-## 2 b         0.646         0.629 0.983      37.4 5.72e-10     3  -60.1 128. 
-## 3 c         0.464         0.440 1.03       19.1 1.09e- 6     3  -66.4 141. 
-## 4 d         0.551         0.531 1.01       27.6 1.48e- 8     3  -67.1 142. 
-## 5 e         0.814         0.801 0.763      63.3 2.63e-11     3  -35.2  78.4
-## 6 f         0.693         0.677 0.900      41.8 3.20e-10     3  -51.0 110. 
-## # … with 3 more variables: BIC &lt;dbl&gt;, deviance &lt;dbl&gt;, df.residual &lt;int&gt;</code></pre>
-<p>If we want, we can even see the distribution of things we care about, like <span class="math inline">\(R^2\)</span>.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(model_table, <span class="kw">aes</span>(r.squared)) <span class="op">+</span>
-<span class="st">  </span><span class="kw">geom_density</span>(<span class="dt">fill =</span> <span class="st">&#39;grey&#39;</span>, <span class="dt">alpha =</span> .<span class="dv">50</span>)</code></pre></div>
-<p><img src="_main_files/figure-html/unnamed-chunk-137-1.png" width="672" /></p>
+<pre><code>##   r samp obs           x          z
+## 1 0    1   1  2.36393421 -0.2187102
+## 2 0    1   2 -0.90268064 -0.7749229
+## 3 0    1   3 -0.09644070  2.0483899
+## 4 0    1   4  0.25223212  2.3856130
+## 5 0    1   5 -0.66729581 -0.9352575
+## 6 0    1   6  0.02098636 -0.1190282</code></pre>
+<p>With out predictors, let’s make some variables, including out outcome Y.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">df &lt;-<span class="st"> </span>df <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">mutate</span>(
+    <span class="dt">x_sq =</span> x<span class="op">^</span><span class="dv">2</span>,
+    <span class="dt">z_sq =</span> z<span class="op">^</span><span class="dv">2</span>,
+    <span class="dt">int =</span> x<span class="op">*</span>z,
+    <span class="dt">y =</span> <span class="dv">2</span><span class="op">*</span>x_sq <span class="op">+</span><span class="st"> </span><span class="kw">rnorm</span>(<span class="kw">n</span>()))</code></pre></div>
+<p>Now, we’re ready to collect some results. We’ll grab two sets: one where we run a regression including an interaction, but no quadratic terms, then another where we run a regression with both an interaction and quadratic terms. This often takes a while…</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">int_only_results &lt;-<span class="st"> </span>df <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">group_by</span>(r, samp) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">do</span>(broom<span class="op">::</span><span class="kw">tidy</span>(<span class="kw">lm</span>(y <span class="op">~</span><span class="st"> </span>x <span class="op">+</span><span class="st"> </span>z <span class="op">+</span><span class="st"> </span>int, <span class="dt">data =</span> .))) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">filter</span>(term <span class="op">==</span><span class="st"> &#39;int&#39;</span>) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">group_by</span>(r) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">summarise</span>(<span class="dt">false_pos =</span> <span class="kw">sum</span>(p.value <span class="op">&lt;</span><span class="st"> </span>.<span class="dv">05</span>)<span class="op">/</span><span class="kw">n</span>())</code></pre></div>
+<p>Still taking a while…</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">int_and_quad_results &lt;-<span class="st"> </span>df <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">group_by</span>(r, samp) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">do</span>(broom<span class="op">::</span><span class="kw">tidy</span>(<span class="kw">lm</span>(y <span class="op">~</span><span class="st"> </span>x <span class="op">+</span><span class="st"> </span>z <span class="op">+</span><span class="st"> </span>int <span class="op">+</span><span class="st"> </span>x_sq <span class="op">+</span><span class="st"> </span>z_sq, <span class="dt">data =</span> .))) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">filter</span>(term <span class="op">==</span><span class="st"> &#39;int&#39;</span>) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">group_by</span>(r) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">summarise</span>(<span class="dt">false_pos =</span> <span class="kw">sum</span>(p.value <span class="op">&lt;</span><span class="st"> </span>.<span class="dv">05</span>)<span class="op">/</span><span class="kw">n</span>())</code></pre></div>
+<p>Now let’s compare results!</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">bind_rows</span>(int_only_results, int_and_quad_results, <span class="dt">.id =</span> <span class="st">&#39;model&#39;</span>) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">model =</span> <span class="kw">ifelse</span>(model <span class="op">==</span><span class="st"> </span><span class="dv">1</span>, <span class="st">&#39;int_only&#39;</span>, <span class="st">&#39;quads_too&#39;</span>)) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">spread</span>(model, false_pos)</code></pre></div>
+<pre><code>## # A tibble: 5 x 3
+##       r int_only quads_too
+##   &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;
+## 1   0      0.299     0.037
+## 2   0.2    0.626     0.05 
+## 3   0.4    0.961     0.042
+## 4   0.6    0.999     0.057
+## 5   0.8    1         0.045</code></pre>
 
 </div>
 </div>
+</div>
+
+
+
+
+
+
             </section>
 
           </div>
         </div>
       </div>
-<a href="reshaping-data-with-tidyr.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="regression-models-1.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="structural-equation-modeling.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>

@@ -1,0 +1,89 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+
+```{r, eval=FALSE}
+install.packages('lavaan')
+```
+
+```{r}
+library(lavaan)
+
+data(HolzingerSwineford1939)
+cfa_df <- HolzingerSwineford1939
+
+head(cfa_df)
+
+c <- 3
+d <- c
+c + 1
+```
+
+```{r}
+# EXAMPLE REGRESSION
+# fit <- lm(y ~ x + z, data = df)
+
+cfa_model <- '
+  visual =~ x1 + x2 + x3
+  text =~ x4 + x5 + x6
+' 
+
+fit <- cfa(cfa_model, data = cfa_df)
+summary(fit, standardize = T, fit.measures = T)
+```
+
+```{r}
+data(PoliticalDemocracy)
+sem_df <- PoliticalDemocracy
+
+
+sem_model <- '
+  # Measurement model
+  ind60 =~ x1 + x2 + x3
+  dem60 =~ y1 + y2 + y3 + y4
+  dem65 =~ y5 + y6 + y7 + y8
+
+  # Path model
+  dem60 ~ ind60
+  dem65 ~ ind60 + dem60
+
+  # Error covariances
+  y1 ~~ y5
+  y2 ~~ y6
+  y3 ~~ y7
+  y4 ~~ y8
+'
+
+fit <- sem(sem_model, data = sem_df)
+summary(fit, fit.measures = T)
+```
+
+
+
+```{r}
+library(tidyverse)
+
+set.seed(314159)
+
+sem_df2 <- sem_df %>%
+  mutate(x1 = ifelse(
+    test = x2/max(x2) < runif(n = n()),
+    yes = NA,
+    no = x1))
+
+head(sem_df2)
+
+mean(is.na(sem_df2$x1))
+```
+
+```{r}
+fit <- sem(
+  model = sem_model, 
+  data = sem_df, 
+  missing = 'ML', 
+  estimator = 'MLR')
+summary(fit)
+```
+
