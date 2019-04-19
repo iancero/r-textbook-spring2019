@@ -1,0 +1,159 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+# Strings and text
+
+One of the greatest advantages of working with R (indeed, with any programming language) over a traditional GUI-based program (e.g., SPSS) is the ability to work with text. Although a sentiment analysis might be possible with SPSS, you're limited to whatever functions are built in to those programs. In R, you have much more control.
+
+There are a lot of aspects of text manipulation and analysis, so we will focus on the basics today:
+
+1. String matching and substitution
+2. String interpolation
+3. Basic sentiment analysis
+
+## String matching and substitution
+
+This is the bread and butter of working with character strings. If you use R, you will likely be doing it all the time. **String matching** is when I test whether some target string of interest is inside my text. For that, we use the `grepl()` function.
+
+```{r}
+target_hashtag <- '#footwear'
+some_tweet <- 'I wish I had better shoes #footwear'
+
+# is the target hashtag in the tweet?
+grepl(pattern = target_hashtag, x = some_tweet)
+```
+
+**String subtitution** is when I replace all cases of a target string inside my text. For that, we use `gsub()`.
+
+```{r}
+new_hashtag <- '#betterHashtag'
+
+gsub(pattern = target_hashtag, replacement = new_hashtag, some_tweet)
+```
+
+### `fixed = TRUE`
+
+Sometimes, your `grepl()` and `gsub()` commands will produce odd results. The reason for that is they are actually searching for what are called **Regular Expressions** (ways of defining more abstract patterns of text). Those are unfortunately beyond the scope of what we are doing here, but you can ensure regular expressions are not being used by setting `fixed = T`.
+
+```{r}
+new_hashtag <- '#betterHashtag'
+
+gsub(pattern = target_hashtag, replacement = new_hashtag, some_tweet, fixed = T)
+```
+
+This will also have the advantage of making your code faster, when you are working with many pieces of text.
+
+```{r}
+my_tweets <- c(
+  'Here is the first tweet #tweet',
+  'Another case of tweeting #tweet',
+  'Im just lurking')
+
+grepl('#tweet', my_tweets, fixed = T)
+```
+
+## String interpolation
+
+The base R functions like `gsub()` are great for basic string modification tasks. But what if I need a function to write several pieces of text, changing the same thing each time? For example, what if I need to write a series of emails, reminding people to show up to their appointments?
+
+```{r}
+appointment_df <- data.frame(
+  name = c('Alice', 'Bob', 'Chantal'),
+  date = c('Jan 1', 'Feb 2', 'Mar 3'),
+  time = c('1:00', '2:00', '3:00')
+)
+
+appointment_df
+```
+
+For that, I can use the `glue` package. 
+
+```{r, eval = FALSE}
+install.packages('glue')
+```
+
+This package allows you to format a string to be ready for **interpolation** - it is ready for something else to be injected into it. Just add squiggle brackets (`{}`) and a variable name for whatever you want to replace.
+
+```{r}
+library(glue)
+
+template <- 'Hello, my name is {name} and Im feeling {mood}'
+glue(template, name = 'Ian', mood = 'exuberant')
+```
+
+This package also has a special function called `glue_data()`, which will apply your template to every row of your dataframe, using the existing columns as its input. We can use that to write out our appointment reminders all at once. This reduces the work burden and the likelihood of a mistake.
+
+```{r}
+email_template <- 'Hello {name}, you have an appointment on {date} at {time}.'
+
+glue_data(appointment_df, email_template)
+```
+
+## Sentiment analysis
+
+This is the branch of Natural Language Processing that tries to determine the tone or attitude of a set of text. There are a few basic steps. First we need a **lexicon**, which is kind of like a dictionary, but instead of definitions for words, it provides their numeric sentiment (usually produced by having people rate the words for how "positive" or "negative" they are). Let's imagine a basic lexicon that might be applied to cats.
+
+```{r}
+lexicon_df <- data.frame(
+  word = c('fluffy', 'cute', 'grumpy'),
+  sentiment = c(.51, .76, -.28),
+  stringsAsFactors = F)
+
+lexicon_df
+```
+
+Most lexicons have several thousand words in them, at least. However, this will work for our example.
+
+After a lexicon is built, we need a **corpus** - a body of text - to analyze. Often, this is actually a collection of bodies of text (e.g., many tweets or books, maybe newspapers). Let's imagine we have a few tweets from some cat owners.
+
+```{r}
+tweet_corpus <- data.frame(
+  person = 1:3,
+  tweet = c(
+    'Today, my fluffy cat was acting so cute!',
+    'My cat is always grumpy',
+    'I think all kinds of cats are cute.'),
+  stringsAsFactors = F)
+
+tweet_corpus
+```
+
+There are many ways to proceed from here, but the easiest (and frankly one of the safest) includes using the `tidytext` package. This package has several text analysis functions designed to play nice with the `tidyverse` functions we know and love.
+
+```{r, eval=FALSE}
+install.packages('tidytext')
+```
+
+This package makes it easy to break our text into seperate words, then use a `left_join()` to get each word's sentiment score into our dataframe. We'll do this in two steps to make it clearer what is happening.
+
+```{r}
+library(tidyverse)
+library(tidytext)
+
+df <- tweet_corpus %>%
+  unnest_tokens(output = word, input = tweet)
+
+head(df, n = 10)
+```
+
+Now let's use a left_join to make a sentiment column.
+
+```{r}
+df <- df %>%
+  left_join(lexicon_df, by = 'word')
+
+head(df, n = 10)
+```
+
+Of course, we are using a small lexicon that doesn't have values for most of these words, so they end up missing. That's just fine here, not all words need to have a value to guess the sentiment of the overall text. To finish our analysis, lets group up our text by tweet, then take the mean sentiments.
+
+```{r}
+df %>%
+  group_by(person) %>%
+  summarise(
+    tweet = paste(word, collapse = ' '), # put tweet back together
+    sentiment = mean(sentiment, na.rm = T))
+```
+

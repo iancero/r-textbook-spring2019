@@ -5,11 +5,11 @@
 
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>8 Reshaping data with tidyr | R Textbook</title>
+  <title>15 Strings and text | R Textbook</title>
   <meta name="description" content="This is the ‘organic’ textbook created by our class discussions and exercises.">
   <meta name="generator" content="bookdown  and GitBook 2.6.7">
 
-  <meta property="og:title" content="8 Reshaping data with tidyr | R Textbook" />
+  <meta property="og:title" content="15 Strings and text | R Textbook" />
   <meta property="og:type" content="book" />
   
   
@@ -17,7 +17,7 @@
   <meta name="github-repo" content="iancero/r-textbook-spring2019" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="8 Reshaping data with tidyr | R Textbook" />
+  <meta name="twitter:title" content="15 Strings and text | R Textbook" />
   
   <meta name="twitter:description" content="This is the ‘organic’ textbook created by our class discussions and exercises." />
   
@@ -31,8 +31,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
   
   
-<link rel="prev" href="data-joins.html">
-<link rel="next" href="regression-models.html">
+<link rel="prev" href="loops-functionals-and-simulation.html">
+
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -280,146 +280,169 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="reshaping-data-with-tidyr" class="section level1">
-<h1><span class="header-section-number">8</span> Reshaping data with <code>tidyr</code></h1>
-<p>One of the most common problems in data management that lies just beyond most people’s grasp is reshaping data. In this chapter, we will cover two basic issues.</p>
+<div id="strings-and-text" class="section level1">
+<h1><span class="header-section-number">15</span> Strings and text</h1>
+<p>One of the greatest advantages of working with R (indeed, with any programming language) over a traditional GUI-based program (e.g., SPSS) is the ability to work with text. Although a sentiment analysis might be possible with SPSS, you’re limited to whatever functions are built in to those programs. In R, you have much more control.</p>
+<p>There are a lot of aspects of text manipulation and analysis, so we will focus on the basics today:</p>
 <ol style="list-style-type: decimal">
-<li>Turning “long” data into “wide” data</li>
-<li>Turning “wide” data into “long” data</li>
+<li>String matching and substitution</li>
+<li>String interpolation</li>
+<li>Basic sentiment analysis</li>
 </ol>
-<p>If you are interested in a deeper understanding of how the shape of your data can improve the way you think about your analysis, <a href="https://vita.had.co.nz/papers/tidy-data.pdf">Hadley Wickam’s paper on the subject</a> is an excellent read.</p>
-<div id="turning-long-data-into-wide" class="section level2">
-<h2><span class="header-section-number">8.1</span> Turning long data into wide</h2>
-<p>Imagine you have an undergraduate research assistant who is trying to make life easy in a longitudinal study. In that study, participants return for a total of 3 times to retake the same test. You will eventually need each participant to have four columns - one for their name and three for each of their scores. However, the assistant has simply added a new row each time a participant returns, resulting in a dataset that looks like this:</p>
+<div id="string-matching-and-substitution" class="section level2">
+<h2><span class="header-section-number">15.1</span> String matching and substitution</h2>
+<p>This is the bread and butter of working with character strings. If you use R, you will likely be doing it all the time. <strong>String matching</strong> is when I test whether some target string of interest is inside my text. For that, we use the <code>grepl()</code> function.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">target_hashtag &lt;-<span class="st"> &#39;#footwear&#39;</span>
+some_tweet &lt;-<span class="st"> &#39;I wish I had better shoes #footwear&#39;</span>
+
+<span class="co"># is the target hashtag in the tweet?</span>
+<span class="kw">grepl</span>(<span class="dt">pattern =</span> target_hashtag, <span class="dt">x =</span> some_tweet)</code></pre></div>
+<pre><code>## [1] TRUE</code></pre>
+<p><strong>String subtitution</strong> is when I replace all cases of a target string inside my text. For that, we use <code>gsub()</code>.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">new_hashtag &lt;-<span class="st"> &#39;#betterHashtag&#39;</span>
+
+<span class="kw">gsub</span>(<span class="dt">pattern =</span> target_hashtag, <span class="dt">replacement =</span> new_hashtag, some_tweet)</code></pre></div>
+<pre><code>## [1] &quot;I wish I had better shoes #betterHashtag&quot;</code></pre>
+<div id="fixed-true" class="section level3">
+<h3><span class="header-section-number">15.1.1</span> <code>fixed = TRUE</code></h3>
+<p>Sometimes, your <code>grepl()</code> and <code>gsub()</code> commands will produce odd results. The reason for that is they are actually searching for what are called <strong>Regular Expressions</strong> (ways of defining more abstract patterns of text). Those are unfortunately beyond the scope of what we are doing here, but you can ensure regular expressions are not being used by setting <code>fixed = T</code>.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">new_hashtag &lt;-<span class="st"> &#39;#betterHashtag&#39;</span>
+
+<span class="kw">gsub</span>(<span class="dt">pattern =</span> target_hashtag, <span class="dt">replacement =</span> new_hashtag, some_tweet, <span class="dt">fixed =</span> T)</code></pre></div>
+<pre><code>## [1] &quot;I wish I had better shoes #betterHashtag&quot;</code></pre>
+<p>This will also have the advantage of making your code faster, when you are working with many pieces of text.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">my_tweets &lt;-<span class="st"> </span><span class="kw">c</span>(
+  <span class="st">&#39;Here is the first tweet #tweet&#39;</span>,
+  <span class="st">&#39;Another case of tweeting #tweet&#39;</span>,
+  <span class="st">&#39;Im just lurking&#39;</span>)
+
+<span class="kw">grepl</span>(<span class="st">&#39;#tweet&#39;</span>, my_tweets, <span class="dt">fixed =</span> T)</code></pre></div>
+<pre><code>## [1]  TRUE  TRUE FALSE</code></pre>
+</div>
+</div>
+<div id="string-interpolation" class="section level2">
+<h2><span class="header-section-number">15.2</span> String interpolation</h2>
+<p>The base R functions like <code>gsub()</code> are great for basic string modification tasks. But what if I need a function to write several pieces of text, changing the same thing each time? For example, what if I need to write a series of emails, reminding people to show up to their appointments?</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">appointment_df &lt;-<span class="st"> </span><span class="kw">data.frame</span>(
+  <span class="dt">name =</span> <span class="kw">c</span>(<span class="st">&#39;Alice&#39;</span>, <span class="st">&#39;Bob&#39;</span>, <span class="st">&#39;Chantal&#39;</span>),
+  <span class="dt">date =</span> <span class="kw">c</span>(<span class="st">&#39;Jan 1&#39;</span>, <span class="st">&#39;Feb 2&#39;</span>, <span class="st">&#39;Mar 3&#39;</span>),
+  <span class="dt">time =</span> <span class="kw">c</span>(<span class="st">&#39;1:00&#39;</span>, <span class="st">&#39;2:00&#39;</span>, <span class="st">&#39;3:00&#39;</span>)
+)
+
+appointment_df</code></pre></div>
+<pre><code>##      name  date time
+## 1   Alice Jan 1 1:00
+## 2     Bob Feb 2 2:00
+## 3 Chantal Mar 3 3:00</code></pre>
+<p>For that, I can use the <code>glue</code> package.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">install.packages</span>(<span class="st">&#39;glue&#39;</span>)</code></pre></div>
+<p>This package allows you to format a string to be ready for <strong>interpolation</strong> - it is ready for something else to be injected into it. Just add squiggle brackets (<code>{}</code>) and a variable name for whatever you want to replace.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(glue)
+
+template &lt;-<span class="st"> &#39;Hello, my name is {name} and Im feeling {mood}&#39;</span>
+<span class="kw">glue</span>(template, <span class="dt">name =</span> <span class="st">&#39;Ian&#39;</span>, <span class="dt">mood =</span> <span class="st">&#39;exuberant&#39;</span>)</code></pre></div>
+<pre><code>## Hello, my name is Ian and Im feeling exuberant</code></pre>
+<p>This package also has a special function called <code>glue_data()</code>, which will apply your template to every row of your dataframe, using the existing columns as its input. We can use that to write out our appointment reminders all at once. This reduces the work burden and the likelihood of a mistake.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">email_template &lt;-<span class="st"> &#39;Hello {name}, you have an appointment on {date} at {time}.&#39;</span>
+
+<span class="kw">glue_data</span>(appointment_df, email_template)</code></pre></div>
+<pre><code>## Hello Alice, you have an appointment on Jan 1 at 1:00.
+## Hello Bob, you have an appointment on Feb 2 at 2:00.
+## Hello Chantal, you have an appointment on Mar 3 at 3:00.</code></pre>
+</div>
+<div id="sentiment-analysis" class="section level2">
+<h2><span class="header-section-number">15.3</span> Sentiment analysis</h2>
+<p>This is the branch of Natural Language Processing that tries to determine the tone or attitude of a set of text. There are a few basic steps. First we need a <strong>lexicon</strong>, which is kind of like a dictionary, but instead of definitions for words, it provides their numeric sentiment (usually produced by having people rate the words for how “positive” or “negative” they are). Let’s imagine a basic lexicon that might be applied to cats.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">lexicon_df &lt;-<span class="st"> </span><span class="kw">data.frame</span>(
+  <span class="dt">word =</span> <span class="kw">c</span>(<span class="st">&#39;fluffy&#39;</span>, <span class="st">&#39;cute&#39;</span>, <span class="st">&#39;grumpy&#39;</span>),
+  <span class="dt">sentiment =</span> <span class="kw">c</span>(.<span class="dv">51</span>, .<span class="dv">76</span>, <span class="op">-</span>.<span class="dv">28</span>),
+  <span class="dt">stringsAsFactors =</span> F)
+
+lexicon_df</code></pre></div>
+<pre><code>##     word sentiment
+## 1 fluffy      0.51
+## 2   cute      0.76
+## 3 grumpy     -0.28</code></pre>
+<p>Most lexicons have several thousand words in them, at least. However, this will work for our example.</p>
+<p>After a lexicon is built, we need a <strong>corpus</strong> - a body of text - to analyze. Often, this is actually a collection of bodies of text (e.g., many tweets or books, maybe newspapers). Let’s imagine we have a few tweets from some cat owners.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">tweet_corpus &lt;-<span class="st"> </span><span class="kw">data.frame</span>(
+  <span class="dt">person =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">3</span>,
+  <span class="dt">tweet =</span> <span class="kw">c</span>(
+    <span class="st">&#39;Today, my fluffy cat was acting so cute!&#39;</span>,
+    <span class="st">&#39;My cat is always grumpy&#39;</span>,
+    <span class="st">&#39;I think all kinds of cats are cute.&#39;</span>),
+  <span class="dt">stringsAsFactors =</span> F)
+
+tweet_corpus</code></pre></div>
+<pre><code>##   person                                    tweet
+## 1      1 Today, my fluffy cat was acting so cute!
+## 2      2                  My cat is always grumpy
+## 3      3      I think all kinds of cats are cute.</code></pre>
+<p>There are many ways to proceed from here, but the easiest (and frankly one of the safest) includes using the <code>tidytext</code> package. This package has several text analysis functions designed to play nice with the <code>tidyverse</code> functions we know and love.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">install.packages</span>(<span class="st">&#39;tidytext&#39;</span>)</code></pre></div>
+<p>This package makes it easy to break our text into seperate words, then use a <code>left_join()</code> to get each word’s sentiment score into our dataframe. We’ll do this in two steps to make it clearer what is happening.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(tidyverse)
+<span class="kw">library</span>(tidytext)
 
-df &lt;-<span class="st"> </span><span class="kw">expand.grid</span>(<span class="dt">id =</span> <span class="kw">c</span>(<span class="st">&#39;Alice&#39;</span>, <span class="st">&#39;Bob&#39;</span>, <span class="st">&#39;Chantal&#39;</span>), <span class="dt">time =</span> <span class="kw">c</span>(<span class="st">&#39;a&#39;</span>, <span class="st">&#39;b&#39;</span>, <span class="st">&#39;c&#39;</span>)) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">arrange</span>(id, time)
-df<span class="op">$</span>score &lt;-<span class="st"> </span><span class="kw">sample</span>(<span class="dv">1</span><span class="op">:</span><span class="kw">nrow</span>(df))
+df &lt;-<span class="st"> </span>tweet_corpus <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">unnest_tokens</span>(<span class="dt">output =</span> word, <span class="dt">input =</span> tweet)
 
-df</code></pre></div>
-<pre><code>##        id time score
-## 1   Alice    a     5
-## 2   Alice    b     3
-## 3   Alice    c     7
-## 4     Bob    a     9
-## 5     Bob    b     2
-## 6     Bob    c     4
-## 7 Chantal    a     1
-## 8 Chantal    b     8
-## 9 Chantal    c     6</code></pre>
-<p>To turn them into the format we want, we use the <code>spread()</code> function from the <code>tidyverse</code> sub-package “<code>tidyr</code>”.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">spread_df &lt;-<span class="st"> </span>df <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">spread</span>(time, score)
+<span class="kw">head</span>(df, <span class="dt">n =</span> <span class="dv">10</span>)</code></pre></div>
+<pre><code>##     person   word
+## 1        1  today
+## 1.1      1     my
+## 1.2      1 fluffy
+## 1.3      1    cat
+## 1.4      1    was
+## 1.5      1 acting
+## 1.6      1     so
+## 1.7      1   cute
+## 2        2     my
+## 2.1      2    cat</code></pre>
+<p>Now let’s use a left_join to make a sentiment column.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">df &lt;-<span class="st"> </span>df <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">left_join</span>(lexicon_df, <span class="dt">by =</span> <span class="st">&#39;word&#39;</span>)
 
-spread_df</code></pre></div>
-<pre><code>##        id a b c
-## 1   Alice 5 3 7
-## 2     Bob 9 2 4
-## 3 Chantal 1 8 6</code></pre>
-<p>If I want to add the names of my key variable to my new column variables, I simply set the <code>sep</code> parameter (check the help files) to add the name of my variable to the new columns.</p>
+<span class="kw">head</span>(df, <span class="dt">n =</span> <span class="dv">10</span>)</code></pre></div>
+<pre><code>##    person   word sentiment
+## 1       1  today        NA
+## 2       1     my        NA
+## 3       1 fluffy      0.51
+## 4       1    cat        NA
+## 5       1    was        NA
+## 6       1 acting        NA
+## 7       1     so        NA
+## 8       1   cute      0.76
+## 9       2     my        NA
+## 10      2    cat        NA</code></pre>
+<p>Of course, we are using a small lexicon that doesn’t have values for most of these words, so they end up missing. That’s just fine here, not all words need to have a value to guess the sentiment of the overall text. To finish our analysis, lets group up our text by tweet, then take the mean sentiments.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">df <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">spread</span>(time, score, <span class="dt">sep =</span> <span class="st">&#39;_&#39;</span>)</code></pre></div>
-<pre><code>##        id time_a time_b time_c
-## 1   Alice      5      3      7
-## 2     Bob      9      2      4
-## 3 Chantal      1      8      6</code></pre>
-</div>
-<div id="turning-wide-data-into-long" class="section level2">
-<h2><span class="header-section-number">8.2</span> Turning wide data into long</h2>
-<p>To turn wide data back into long data, we use the <code>gather()</code> function from the same package. Note that <code>gather()</code> and <code>spread()</code> are exact opposites.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">long_df &lt;-<span class="st"> </span>spread_df <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">gather</span>(time, score)</code></pre></div>
-<pre><code>## Warning: attributes are not identical across measure variables;
-## they will be dropped</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">long_df</code></pre></div>
-<pre><code>##    time   score
-## 1    id   Alice
-## 2    id     Bob
-## 3    id Chantal
-## 4     a       5
-## 5     a       9
-## 6     a       1
-## 7     b       3
-## 8     b       2
-## 9     b       8
-## 10    c       7
-## 11    c       4
-## 12    c       6</code></pre>
-<p>Uh oh! We accidentally folded too much information into long format. We lost our id’s into the time and score variables. This is because we forgot to tell <code>gather()</code> whether there were any columns that we <em>didn’t</em> want to be involved in the process. In this case, we want our id’s to stay our of the affair, so we add a <code>-</code> symbol in front of them.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">long_df &lt;-<span class="st"> </span>spread_df <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">gather</span>(time, score, <span class="op">-</span>id)
-
-long_df</code></pre></div>
-<pre><code>##        id time score
-## 1   Alice    a     5
-## 2     Bob    a     9
-## 3 Chantal    a     1
-## 4   Alice    b     3
-## 5     Bob    b     2
-## 6 Chantal    b     8
-## 7   Alice    c     7
-## 8     Bob    c     4
-## 9 Chantal    c     6</code></pre>
-<p>Now, our data are returned to their original form.</p>
-</div>
-<div id="other-examples-we-talked-about" class="section level2">
-<h2><span class="header-section-number">8.3</span> Other examples we talked about</h2>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(tidyverse)
-
-df &lt;-<span class="st"> </span><span class="kw">expand.grid</span>(
-  <span class="dt">id =</span> <span class="kw">c</span>(<span class="st">&#39;Alice&#39;</span>, <span class="st">&#39;Bob&#39;</span>, <span class="st">&#39;Chantal&#39;</span>), 
-  <span class="dt">time =</span> <span class="kw">c</span>(<span class="st">&#39;a&#39;</span>, <span class="st">&#39;b&#39;</span>, <span class="st">&#39;c&#39;</span>)) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">arrange</span>(id, time) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">score =</span> <span class="kw">sample</span>(<span class="dv">1</span><span class="op">:</span><span class="kw">nrow</span>(df)))
-
-df</code></pre></div>
-<pre><code>##        id time score
-## 1   Alice    a     7
-## 2   Alice    b     1
-## 3   Alice    c     9
-## 4     Bob    a     5
-## 5     Bob    b     2
-## 6     Bob    c     8
-## 7 Chantal    a     3
-## 8 Chantal    b     4
-## 9 Chantal    c     6</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">spread_df &lt;-<span class="st"> </span>df <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">spread</span>(time, score, <span class="dt">sep =</span> <span class="st">&#39;_&#39;</span>)
-
-spread_df</code></pre></div>
-<pre><code>##        id time_a time_b time_c
-## 1   Alice      7      1      9
-## 2     Bob      5      2      8
-## 3 Chantal      3      4      6</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">spread_df <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">gather</span>(time, score, <span class="op">-</span>id) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">group_by</span>(id) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">center_score  =</span> score <span class="op">-</span><span class="st"> </span><span class="kw">mean</span>(score)) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">ungroup</span>() <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">arrange</span>(id, time)</code></pre></div>
-<pre><code>## # A tibble: 9 x 4
-##   id      time   score center_score
-##   &lt;fct&gt;   &lt;chr&gt;  &lt;int&gt;        &lt;dbl&gt;
-## 1 Alice   time_a     7        1.33 
-## 2 Alice   time_b     1       -4.67 
-## 3 Alice   time_c     9        3.33 
-## 4 Bob     time_a     5        0    
-## 5 Bob     time_b     2       -3    
-## 6 Bob     time_c     8        3    
-## 7 Chantal time_a     3       -1.33 
-## 8 Chantal time_b     4       -0.333
-## 9 Chantal time_c     6        1.67</code></pre>
+<span class="st">  </span><span class="kw">group_by</span>(person) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">summarise</span>(
+    <span class="dt">tweet =</span> <span class="kw">paste</span>(word, <span class="dt">collapse =</span> <span class="st">&#39; &#39;</span>), <span class="co"># put tweet back together</span>
+    <span class="dt">sentiment =</span> <span class="kw">mean</span>(sentiment, <span class="dt">na.rm =</span> T))</code></pre></div>
+<pre><code>## # A tibble: 3 x 3
+##   person tweet                                  sentiment
+##    &lt;int&gt; &lt;chr&gt;                                      &lt;dbl&gt;
+## 1      1 today my fluffy cat was acting so cute     0.635
+## 2      2 my cat is always grumpy                   -0.28 
+## 3      3 i think all kinds of cats are cute         0.76</code></pre>
 
 </div>
 </div>
+
+
+
+
+
+
             </section>
 
           </div>
         </div>
       </div>
-<a href="data-joins.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="regression-models.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="loops-functionals-and-simulation.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>

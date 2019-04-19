@@ -1,0 +1,45 @@
+---
+title: "CSP 518 - Exercises: 11 - Strings"
+author: "YOUR NAME HERE"
+date: "Due: 2019-04-26 @ 11:59pm"
+output: html_document
+---
+
+## Instructions
+
+1. Make a .Rmd file to complete these exercises.
+
+  - Title it "CSP 518 - Exercises: Intro to R" (in quotes)
+  - Add your name(s) in the author slot (in quotes)
+  - The output can be either be `pdf_document` or `html_document` (no quotes)
+
+2. Turn in just your .Rmd file on Blackboard. Note, I will need to be able to `knit` it myself, so make sure everything runs the way you intend, before you turn it in.
+
+3. For clarity, write "## Question <number>" befor each question to signal which one you are answering.
+
+## Exercises
+
+1. Below is a vector of strings, use `grepl()` to test whether the word "orange" is inside any of them.
+
+```{r}
+a_string <- c(
+  'Today, I had an orange for a snack',
+  'I love apples',
+  'I wish pairs were in season')
+```
+
+2. Use the same string list above, replace all cases of "I" with "we".
+
+3. Write an email template that has at least two variables that will need to be changed for each recipient (e.g., name, date, etc). Then create a dataframe that has these variables for each of three people. Finally, use the `glue_data` function to automatically insert those variables into the email template for each person.
+
+**Note: items 4-8 are bonus material, but you should try to work through them anyway!*
+
+4. Create a lexicon on anything you want. It should be a dataframe with two columns (word, sentiment), like in our examples.
+
+5. Create a corpus to analyze. This should be a dataframe with several sentences and an id for each one.
+
+6. Use `tidytext` and `unnest_tokens()` to turn your corpus into a dataframe with one word per row.
+
+7. Use a `left_join()` to link the words in your corpus to their respective sentiments in your lexicon.
+
+8. Use `group_by()` and `summarize()` to calculate the sentiment of each sentence.

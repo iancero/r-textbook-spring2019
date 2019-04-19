@@ -1,0 +1,54 @@
+
+```{r}
+library(tidyverse)
+
+my_vec <- 1:10
+
+my_vec
+```
+
+```{r}
+(my_vec + 25)*2
+```
+
+```{r}
+money <- rpois(12, 50)
+
+money
+```
+
+```{r}
+profit <- vector(length = 12)
+profit[1] <- money[1]
+
+for(month in 2:12){
+  profit[month] <- profit[month - 1] + money[month]
+}
+```
+
+#Functionals
+
+```{r}
+tax <- function(money){
+  money - .25*money
+}
+
+sapply(money, function(this_months_money) {
+  this_months_money - .25*this_months_money
+})
+
+sapply(money, tax)
+```
+
+```{r, error=TRUE}
+money[3] <- as.character(money[3])
+map_dbl(money, ~ (2 + .x)/3)
+```
+
+
+
+
+
+
+
+
