@@ -1,0 +1,30 @@
+---
+title: "CSP 518 - Exercises: 11 - Strings"
+author: "YOUR NAME HERE"
+date: "Due: 2019-04-26 @ 11:59pm"
+output: html_document
+---
+
+## Instructions
+
+1. Make a .Rmd file to complete these exercises.
+
+  - Title it "CSP 518 - Exercises: Intro to R" (in quotes)
+  - Add your name(s) in the author slot (in quotes)
+  - The output can be either be `pdf_document` or `html_document` (no quotes)
+
+2. Turn in just your .Rmd file on Blackboard. Note, I will need to be able to `knit` it myself, so make sure everything runs the way you intend, before you turn it in.
+
+3. For clarity, write "## Question <number>" befor each question to signal which one you are answering.
+
+## Exercises
+
+The goal of today's exercise is simply to get used to accessing data from the internet. You will need much more practice to make it workable for a study, but I want you to just see that it can be done for now.
+
+1. Make a variable called `my_url` and store the PredictIt.org API link from that chapter in it.
+
+2. Use the code block in the chapter to access that link using `GET()` and save the results in a variable `result`. Is that `status_code` of result equal to 200?
+
+3. Use the code block in the chapter to convert your `result` variable into a workable dataframe. Remember, you might need to install the `jsonlite` package.
+
+4. Choose any market and make a plot of the last trade prices for that market.

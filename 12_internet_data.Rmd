@@ -1,0 +1,110 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+# Internet data
+
+One of the unique advantages that R has over traditional data analysis software is the ability to collect data from the Internet. It has many ways to do this, but we'll focus on the use of APIs because they are especially popular and easy to use.
+
+1. What is an API?
+2. How do I connect to one?
+3. How do I turn the data into an analyzable format?
+
+## API Background
+
+"API" is short for Application-programming interface. In short, it is a framework for using code to interact with some application. Most often, we are talking about RESTful APIs, which are a common kind of API that you can access on the internet. These APIs use web-links to send information to a server, that will then send you special information, depending on the link you gave it. If you have ever used participant-specific links in Qualtrics, this is a lot like that. 
+
+To see how this works, let's look at the PredictIt.org API. PredictIt is a prediction market, where people place bets one political events that will happen in the future (e.g., that the next supreme court justice will leave the court by the end of the year, who will win the 2020 presidential race, etc.). Here, we focus on this API because it is especially easy to use and it doesn't require you to register for anything (many do, but it's often free).
+
+When we go to [PredictIt.org](https://www.predictit.org/), we can see a number of popular betting markets. At the time this chapter was written, the most popular market was the Democratic Nominee market (i.e., who will be the US democratic nominee in 2020?). This market has several different options, as well as prices for each of these options (you can buy "yes" or "no" for any of them). The prices are determined by what people are willing to pay for them, so a higher price means more people believe that event will occurr. For example, Joe Biden is the highest at 28 cents, suggesting that on average the people in the market think he is most likely to win right now. Andrew Yang is also at a shockingly high 9 cents, which I admit I would not have predicted one year ago.
+
+Wouldn't it be nice if we could use code to get all these data into R to analyze? Here's how.
+
+## Connecting to an API
+
+Not all websites have APIs, but PredictIt does and you can [read about it here](https://predictit.freshdesk.com/support/solutions/articles/12000001878-does-predictit-make-market-data-available-via-an-api-). As the website explains, you can get all the data from their markets, but accessing a specific link:
+
++ [https://www.predictit.org/api/marketdata/all/](https://www.predictit.org/api/marketdata/all/)
+
+Conveniently, if you navigate to that link with a webbrowser, you can see all the data. Unfortunately, it is in a really inconvenient format.
+
+To get R to access the data for us, we need to use the `httr` package ("HTTR" for "hyper-text transfer request").
+
+```{r, eval=FALSE}
+install.packages('httr')
+```
+
+Once we load the package, we simply tell R what website to `GET()` for us. In this case, that's the link that PredictIt gave for their data.
+
+```{r}
+library(httr)
+
+api_url <- 'https://www.predictit.org/api/marketdata/all/'
+
+predictit_data <- GET(api_url)
+```
+
+The `predictit_data` object we made is large, so I won't display it here. However, you'll notice that it has several parts that you can explore in the top-right panel of RStudio.
+
+What we care about first is the `status_code`, this should be 200. If it is anything else, the request didn't work right.
+
+```{r}
+predictit_data$status_code
+```
+
+
+## Working with API data
+
+This has all been great so far, but where are the data? Well, they come in binary format, which is not really human readable. For example, this is what the content of the server's response looks like.
+
+```{r}
+head(predictit_data$content, n = 100)
+```
+
+To turn it into a workable dataset, we need to use four steps. 
+
+
+1. Use the `content()` function from `httr`. This will give use our data in JSON format, which you can [read about here](https://javaee.github.io/tutorial/jsonp001.html) (it's popular, so you'll see it again someday). 
+2. We can decode that JSON data using the `jsonlite::fromJSON()` command. The `jsonlite` package should already have come with R, but keep in mind you might need to install it. 
+3. Turn the result into a dataframe, which has one column that contains dataframes in it (take a look at "markets.contracts").
+4. `unnest()` that list column so we have a regular old dataframe.
+
+```{r}
+library(tidyverse)
+
+df <- predictit_data %>%
+  content(as = 'text') %>%
+  jsonlite::fromJSON() %>%
+  as.data.frame() %>%
+  unnest(markets.contracts)
+
+head(df)
+```
+
+Now that we've done all this work, let's make a figure for the democratic nominee prices. Below, we look for the market we want in our `df`. In this case, it's short name is "2020 Democratic nominee?". We then sort rows by the last trade price for each nominee and take the top 5 (using `head()`). Using `ggplot()` we then look at the prices for the top 5 candidates. At the time of this writing, it looks like Biden is in a clear lead. 
+
+```{r}
+nominee_df <- df %>%
+  filter(markets.shortName == '2020 Democratic nominee?') %>%
+  arrange(-lastTradePrice) %>%
+  head(n = 5)
+
+ggplot(nominee_df, aes(name, lastTradePrice)) +
+  geom_bar(stat = 'identity')
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

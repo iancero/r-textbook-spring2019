@@ -263,6 +263,11 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="15.2" data-path="strings-and-text.html"><a href="strings-and-text.html#string-interpolation"><i class="fa fa-check"></i><b>15.2</b> String interpolation</a></li>
 <li class="chapter" data-level="15.3" data-path="strings-and-text.html"><a href="strings-and-text.html#sentiment-analysis"><i class="fa fa-check"></i><b>15.3</b> Sentiment analysis</a></li>
 </ul></li>
+<li class="chapter" data-level="16" data-path="internet-data.html"><a href="internet-data.html"><i class="fa fa-check"></i><b>16</b> Internet data</a><ul>
+<li class="chapter" data-level="16.1" data-path="internet-data.html"><a href="internet-data.html#api-background"><i class="fa fa-check"></i><b>16.1</b> API Background</a></li>
+<li class="chapter" data-level="16.2" data-path="internet-data.html"><a href="internet-data.html#connecting-to-an-api"><i class="fa fa-check"></i><b>16.2</b> Connecting to an API</a></li>
+<li class="chapter" data-level="16.3" data-path="internet-data.html"><a href="internet-data.html#working-with-api-data"><i class="fa fa-check"></i><b>16.3</b> Working with API data</a></li>
+</ul></li>
 </ul>
 
       </nav>
@@ -288,9 +293,9 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <p>The term “Base R” refers to the set of packages and functions that R loads into each session by default. These packages include several statistical and plotting functions you will probably use a lot. Some of the most common plotting functions are given below.</p>
 <p><strong>hist()</strong></p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">rpois</span>(<span class="dv">100</span>, <span class="dt">lambda =</span> <span class="dv">3</span>)</code></pre></div>
-<pre><code>##   [1] 4 5 1 2 4 4 1 4 2 7 4 1 4 1 3 6 2 3 3 1 4 6 5 3 1 1 6 3 4 3 0 3 3 1 1
-##  [36] 3 1 3 6 3 4 0 2 7 3 2 2 3 4 4 4 7 1 5 1 2 3 2 0 4 1 3 2 1 5 4 1 2 1 4
-##  [71] 1 2 3 5 8 3 7 4 4 3 3 2 4 4 1 3 2 1 1 2 3 3 3 4 1 1 2 1 4 1</code></pre>
+<pre><code>##   [1] 5 6 3 3 6 5 2 5 9 9 3 4 3 2 1 1 1 4 1 2 5 2 4 3 1 4 3 5 2 0 0 1 2 3 1
+##  [36] 3 6 5 1 1 0 7 3 4 1 6 4 3 2 3 2 0 4 4 4 4 2 4 3 8 3 4 4 5 3 2 2 2 2 2
+##  [71] 2 5 1 5 3 4 4 5 4 2 5 6 1 2 3 3 2 4 2 2 6 3 3 3 2 1 2 4 5 1</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">my_vals &lt;-<span class="st"> </span><span class="kw">rexp</span>(<span class="dv">100</span>, <span class="dv">10</span>)
 
 <span class="kw">hist</span>(

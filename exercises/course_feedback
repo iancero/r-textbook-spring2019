@@ -1,0 +1,30 @@
+Day 1 - walk through the interface, what are the windows, what is a package, call a library (and JUST that). Where do the files go? (AJ agrees). Emphasis on even more basics than fundamnetals of programming.
+Maybe skip electronics, etc
+More visualization**
+
+Character by character, explain each line. Universally, talk through each line.
+
+Maybe start with 
+  dataframes
+  correlations
+  ttests, etc (R version of SPSS 101)
+  And add stuff about how to sprinkle visualization and results presentation in these
+  
+Glossary of "here are the functions". Compiled in one spot.
+
+Compare SPSS recodes to mutates
+
+Things to keep - 
+  Keep the notes written out ahead of time (textbook thing)
+  Class time to work on exercises is important
+  Exercises could a be little more different from what happens in class
+  
+  Slower typing and correcting of code (maybe talking through each line will do that)
+  
+  Copy/paste/modify - find a way to make that work, even if stuff doesn fit on the screen
+  
+  Annotate code more with #, everything is so new that is worth it
+  
+  List of packages to install in advance of class
+  
+  

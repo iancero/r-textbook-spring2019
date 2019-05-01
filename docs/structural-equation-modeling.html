@@ -263,6 +263,11 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="15.2" data-path="strings-and-text.html"><a href="strings-and-text.html#string-interpolation"><i class="fa fa-check"></i><b>15.2</b> String interpolation</a></li>
 <li class="chapter" data-level="15.3" data-path="strings-and-text.html"><a href="strings-and-text.html#sentiment-analysis"><i class="fa fa-check"></i><b>15.3</b> Sentiment analysis</a></li>
 </ul></li>
+<li class="chapter" data-level="16" data-path="internet-data.html"><a href="internet-data.html"><i class="fa fa-check"></i><b>16</b> Internet data</a><ul>
+<li class="chapter" data-level="16.1" data-path="internet-data.html"><a href="internet-data.html#api-background"><i class="fa fa-check"></i><b>16.1</b> API Background</a></li>
+<li class="chapter" data-level="16.2" data-path="internet-data.html"><a href="internet-data.html#connecting-to-an-api"><i class="fa fa-check"></i><b>16.2</b> Connecting to an API</a></li>
+<li class="chapter" data-level="16.3" data-path="internet-data.html"><a href="internet-data.html#working-with-api-data"><i class="fa fa-check"></i><b>16.3</b> Working with API data</a></li>
+</ul></li>
 </ul>
 
       </nav>
@@ -299,9 +304,10 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li>x7, x8, x9 = speed</li>
 </ul>
 <p>To load the dataset, we execute the code below</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(lavaan)
-
-<span class="kw">data</span>(HolzingerSwineford1939)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(lavaan)</code></pre></div>
+<pre><code>## This is lavaan 0.6-3</code></pre>
+<pre><code>## lavaan is BETA software! Please report any bugs.</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">data</span>(HolzingerSwineford1939)
 cfa_df &lt;-<span class="st"> </span>HolzingerSwineford1939
 
 <span class="kw">head</span>(cfa_df)</code></pre></div>

@@ -5,11 +5,11 @@
 
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>5 Dataframes | R Textbook</title>
+  <title>16 Internet data | R Textbook</title>
   <meta name="description" content="This is the ‘organic’ textbook created by our class discussions and exercises.">
   <meta name="generator" content="bookdown  and GitBook 2.6.7">
 
-  <meta property="og:title" content="5 Dataframes | R Textbook" />
+  <meta property="og:title" content="16 Internet data | R Textbook" />
   <meta property="og:type" content="book" />
   
   
@@ -17,7 +17,7 @@
   <meta name="github-repo" content="iancero/r-textbook-spring2019" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="5 Dataframes | R Textbook" />
+  <meta name="twitter:title" content="16 Internet data | R Textbook" />
   
   <meta name="twitter:description" content="This is the ‘organic’ textbook created by our class discussions and exercises." />
   
@@ -31,8 +31,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
   
   
-<link rel="prev" href="functions-1.html">
-<link rel="next" href="local-data-import-and-export.html">
+<link rel="prev" href="strings-and-text.html">
+
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -285,311 +285,161 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="dataframes-1" class="section level1">
-<h1><span class="header-section-number">5</span> Dataframes</h1>
-<p>In this chapter, we will address four issues:</p>
+<div id="internet-data" class="section level1">
+<h1><span class="header-section-number">16</span> Internet data</h1>
+<p>One of the unique advantages that R has over traditional data analysis software is the ability to collect data from the Internet. It has many ways to do this, but we’ll focus on the use of APIs because they are especially popular and easy to use.</p>
 <ol style="list-style-type: decimal">
-<li>How to store rectanglar data</li>
-<li>How to access the data we have stored</li>
-<li>How to modify an existing dataset</li>
-<li>Using <code>dplyr</code> and <code>magrittr</code> pipes to make these tasks much easier (Praise Hadley Wickam!)</li>
+<li>What is an API?</li>
+<li>How do I connect to one?</li>
+<li>How do I turn the data into an analyzable format?</li>
 </ol>
-<div id="storing-rectangular-data" class="section level2">
-<h2><span class="header-section-number">5.1</span> Storing rectangular data</h2>
-<p>Rectangular or “relational” data are the kind with which you are undoubtedly most familiar. In rectangular datasets, rows represent observations (e.g., people, days, soil samples) and columns represent attributes of those observations (e.g., age, temperature, acidity). Because rectangular datasets are so common and so flexible, R has a special framework for storing and manipulating them: the dataframe.</p>
-<p>There are really only two rules:</p>
-<ol style="list-style-type: decimal">
-<li>Columns can have different kinds of data (e.g., strings, numbers), but within a column everything has to be of the same type.</li>
-<li>All columns have to be of exactly equal length. If I have 10 values (including <code>NA</code>) in my first column, I need exactly 10 in all the other columns.</li>
-</ol>
-<div id="making-dataframes" class="section level3">
-<h3><span class="header-section-number">5.1.1</span> Making dataframes</h3>
-<p>You can make a dataframe with the <code>data.frame()</code> command, just feed it some data and assign it to a variable.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">gender_data &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&#39;Male&#39;</span>, <span class="st">&#39;Female&#39;</span>, <span class="st">&#39;Female&#39;</span>, <span class="st">&#39;Male&#39;</span>, <span class="st">&#39;Female&#39;</span>)
-shoe_data &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&#39;Nikes&#39;</span>, <span class="st">&#39;Reebok&#39;</span>, <span class="st">&#39;Adididas&#39;</span>, <span class="st">&#39;Manolos&#39;</span>, <span class="st">&#39;Nikes&#39;</span>)
-age_data &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">18</span>, <span class="ot">NA</span>, <span class="dv">19</span>, <span class="dv">21</span>, <span class="dv">18</span>)
-
-df &lt;-<span class="st"> </span><span class="kw">data.frame</span>(gender_data, shoe_data, age_data)
-
-df</code></pre></div>
-<pre><code>##   gender_data shoe_data age_data
-## 1        Male     Nikes       18
-## 2      Female    Reebok       NA
-## 3      Female  Adididas       19
-## 4        Male   Manolos       21
-## 5      Female     Nikes       18</code></pre>
-<p>If I want to give specific names to my columns, I can do that too.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">df &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">gender =</span> gender_data, <span class="dt">shoe =</span> shoe_data, <span class="dt">age =</span> age_data)
-
-df</code></pre></div>
-<pre><code>##   gender     shoe age
-## 1   Male    Nikes  18
-## 2 Female   Reebok  NA
-## 3 Female Adididas  19
-## 4   Male  Manolos  21
-## 5 Female    Nikes  18</code></pre>
+<div id="api-background" class="section level2">
+<h2><span class="header-section-number">16.1</span> API Background</h2>
+<p>“API” is short for Application-programming interface. In short, it is a framework for using code to interact with some application. Most often, we are talking about RESTful APIs, which are a common kind of API that you can access on the internet. These APIs use web-links to send information to a server, that will then send you special information, depending on the link you gave it. If you have ever used participant-specific links in Qualtrics, this is a lot like that.</p>
+<p>To see how this works, let’s look at the PredictIt.org API. PredictIt is a prediction market, where people place bets one political events that will happen in the future (e.g., that the next supreme court justice will leave the court by the end of the year, who will win the 2020 presidential race, etc.). Here, we focus on this API because it is especially easy to use and it doesn’t require you to register for anything (many do, but it’s often free).</p>
+<p>When we go to <a href="https://www.predictit.org/">PredictIt.org</a>, we can see a number of popular betting markets. At the time this chapter was written, the most popular market was the Democratic Nominee market (i.e., who will be the US democratic nominee in 2020?). This market has several different options, as well as prices for each of these options (you can buy “yes” or “no” for any of them). The prices are determined by what people are willing to pay for them, so a higher price means more people believe that event will occurr. For example, Joe Biden is the highest at 28 cents, suggesting that on average the people in the market think he is most likely to win right now. Andrew Yang is also at a shockingly high 9 cents, which I admit I would not have predicted one year ago.</p>
+<p>Wouldn’t it be nice if we could use code to get all these data into R to analyze? Here’s how.</p>
 </div>
-<div id="strings-as-factors" class="section level3">
-<h3><span class="header-section-number">5.1.2</span> Strings as factors</h3>
-<p>In chapter 1, we talked about different kinds of data, including numbers, strings, and booleans. There are a few other kinds too, like <em>factors</em>. These are strings that are being used to represent categorical data (which may or may not be ordinal). For <a href="https://simplystatistics.org/2015/07/24/stringsasfactors-an-unauthorized-biography/">historical reasons</a>, R’s <code>data.frame()</code> function defaults to turning any string variable into a factor. Most of the time, this doesn’t matter. However, if you ever need your strings to stay strings, then simply set the <code>stringsAsFactors</code> argument to false when you are making your dataframe.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">df &lt;-<span class="st"> </span><span class="kw">data.frame</span>(
-  <span class="dt">gender =</span> gender_data, 
-  <span class="dt">shoe =</span> shoe_data, 
-  <span class="dt">age =</span> age_data,
-  <span class="dt">stringsAsFactors =</span> <span class="ot">FALSE</span>)
-
-df</code></pre></div>
-<pre><code>##   gender     shoe age
-## 1   Male    Nikes  18
-## 2 Female   Reebok  NA
-## 3 Female Adididas  19
-## 4   Male  Manolos  21
-## 5 Female    Nikes  18</code></pre>
-</div>
-</div>
-<div id="accessing-data-from-a-dataframe" class="section level2">
-<h2><span class="header-section-number">5.2</span> Accessing data from a dataframe</h2>
-<div id="basic-framework" class="section level3">
-<h3><span class="header-section-number">5.2.1</span> Basic framework</h3>
-<p>I can access specific rows and columns using the <code>df[&lt;rows&gt;, &lt;columns&gt;]</code> framework. For example, if I want the 4th row and 3rd column of the dataframe above, I can enter:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">df[<span class="dv">4</span>, <span class="dv">3</span>]</code></pre></div>
-<pre><code>## [1] 21</code></pre>
-<p>If I leave an entry before or after my comma (<code>,</code>) empty, then R will give me all the rows or all the columns, respectively.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">df[<span class="dv">4</span>, ] <span class="co"># give me row 4, with all the columns</span></code></pre></div>
-<pre><code>##   gender    shoe age
-## 4   Male Manolos  21</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">df[, <span class="dv">3</span>] <span class="co"># give me column 3, with all the rows</span></code></pre></div>
-<pre><code>## [1] 18 NA 19 21 18</code></pre>
-<p>Sometimes, I might want more than one row. In that case, I just enter a vector of values I want. Note, I can even ask for them out of order (and they will be delivered out of order).</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">df[<span class="kw">c</span>(<span class="dv">3</span>, <span class="dv">1</span>, <span class="dv">2</span>), <span class="dv">3</span>]</code></pre></div>
-<pre><code>## [1] 19 18 NA</code></pre>
-<p>The same rules apply for requesting multiple columns. I can ask for a vector of columns (in whatever order I want - notice the code below will rearrange them, compared to the first code block above).</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">df[<span class="kw">c</span>(<span class="dv">3</span>, <span class="dv">1</span>, <span class="dv">2</span>), <span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">1</span>)]</code></pre></div>
-<pre><code>##       shoe age gender
-## 3 Adididas  19 Female
-## 1    Nikes  18   Male
-## 2   Reebok  NA Female</code></pre>
-</div>
-<div id="using-string-column-names" class="section level3">
-<h3><span class="header-section-number">5.2.2</span> Using string column names</h3>
-<p>I can also request columns by their “string” names (e.g., ‘shoe’, ‘age’).</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">df[<span class="kw">c</span>(<span class="dv">3</span>, <span class="dv">1</span>, <span class="dv">2</span>), <span class="kw">c</span>(<span class="st">&#39;shoe&#39;</span>, <span class="st">&#39;age&#39;</span>)]</code></pre></div>
-<pre><code>##       shoe age
-## 3 Adididas  19
-## 1    Nikes  18
-## 2   Reebok  NA</code></pre>
-</div>
-<div id="using-the-operator" class="section level3">
-<h3><span class="header-section-number">5.2.3</span> Using the <code>$</code> operator</h3>
-<p>I can also use the <code>$</code> operator to request a specific column.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">df<span class="op">$</span>gender</code></pre></div>
-<pre><code>## [1] &quot;Male&quot;   &quot;Female&quot; &quot;Female&quot; &quot;Male&quot;   &quot;Female&quot;</code></pre>
-</div>
-<div id="using-booleans" class="section level3">
-<h3><span class="header-section-number">5.2.4</span> Using booleans</h3>
-<p>Note that I can also ask for rows (or columns) with <code>T</code>/<code>F</code> (boolean) values. You can think of this as R asking, “tell me true or false for which rows you want.” For example, if I wanted to analyze the female members of the dataset only, I would put <code>T</code> values for each of their rows, like so.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">is_female &lt;-<span class="st"> </span><span class="kw">c</span>(F, T, T, F, T)
-df[is_female, ]</code></pre></div>
-<pre><code>##   gender     shoe age
-## 2 Female   Reebok  NA
-## 3 Female Adididas  19
-## 5 Female    Nikes  18</code></pre>
-<p>This might look pretty tedious - and it is. However, this same system can be greatly sped up by using other dataframe tricks too, like the <code>$</code> operator.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">is_female &lt;-<span class="st"> </span>df<span class="op">$</span>gender <span class="op">==</span><span class="st"> &#39;Female&#39;</span>
-df[is_female, ]</code></pre></div>
-<pre><code>##   gender     shoe age
-## 2 Female   Reebok  NA
-## 3 Female Adididas  19
-## 5 Female    Nikes  18</code></pre>
-<p>If we wanted to make this even shorter, we could simply write this single-line version below. You can read this in English as “give me my dataframe, but with only the rows where the gender is equal to female”.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">df[df<span class="op">$</span>gender <span class="op">==</span><span class="st"> &#39;Female&#39;</span>, ]</code></pre></div>
-<pre><code>##   gender     shoe age
-## 2 Female   Reebok  NA
-## 3 Female Adididas  19
-## 5 Female    Nikes  18</code></pre>
-</div>
-</div>
-<div id="manupilating-data" class="section level2">
-<h2><span class="header-section-number">5.3</span> Manupilating data</h2>
-<p>Much of what we want to do in R is manipulate data that are net yet in a form where they can be analyzed. We can do that by simply assigning values to the dataframe, using the same access convensions (numbered columns, named columns, or the <code>$</code> operator) above. Lets make a column that tells us how long the participants have been legally an adult (i.e., how many years since they turned 18).</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">df[, <span class="dv">4</span>] &lt;-<span class="st"> </span>df<span class="op">$</span>age <span class="op">-</span><span class="st"> </span><span class="dv">18</span>
-
-df</code></pre></div>
-<pre><code>##   gender     shoe age V4
-## 1   Male    Nikes  18  0
-## 2 Female   Reebok  NA NA
-## 3 Female Adididas  19  1
-## 4   Male  Manolos  21  3
-## 5 Female    Nikes  18  0</code></pre>
-<p>This worked, but it failed to give us a convenient name for our variable because we didn’t give R any way to name our variables.</p>
-<p>Let’s try using the named column approach.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">df[, <span class="st">&#39;years_as_adult&#39;</span>] &lt;-<span class="st"> </span>df<span class="op">$</span>age <span class="op">-</span><span class="st"> </span><span class="dv">18</span>
-
-df</code></pre></div>
-<pre><code>##   gender     shoe age V4 years_as_adult
-## 1   Male    Nikes  18  0              0
-## 2 Female   Reebok  NA NA             NA
-## 3 Female Adididas  19  1              1
-## 4   Male  Manolos  21  3              3
-## 5 Female    Nikes  18  0              0</code></pre>
-<p>That gave us exactly what we needed, a new named column. But we still have that pesky old column that go misnamed. To delete a dataframe column, assign it the value of <code>NULL</code>.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">df[, <span class="dv">4</span>] &lt;-<span class="st"> </span><span class="ot">NULL</span>
-
-df</code></pre></div>
-<pre><code>##   gender     shoe age years_as_adult
-## 1   Male    Nikes  18              0
-## 2 Female   Reebok  NA             NA
-## 3 Female Adididas  19              1
-## 4   Male  Manolos  21              3
-## 5 Female    Nikes  18              0</code></pre>
-<p>That’s better. Now lets try one other method for manipulating our data, using the <code>$</code> operator. Let’s make a new column indicating how long it will be until the participants in our dataset are of the legal age to consume alcohol in the United States.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">df<span class="op">$</span>years_unti_alc &lt;-<span class="st"> </span><span class="dv">21</span> <span class="op">-</span><span class="st"> </span>df<span class="op">$</span>age</code></pre></div>
-</div>
-<div id="using-dplyr-pipelines" class="section level2">
-<h2><span class="header-section-number">5.4</span> Using <code>dplyr</code> pipelines</h2>
-<p>Our Lord and Savior, Hadley Wickham has given us the gift of <code>dplyr</code> in 2014. If you’re new to R and trying to understand how important that is, it was a lot like when Promethius gave humanity the gift of fire, only he wasn’t chained to a rock for doing so - that I know of.</p>
-<p>The general motivation for the <code>dplyr</code> package is that there are only a small number of ways you should be working with rectangular data to achieve 99% of the things you care about. That package makes these very easy to do. The main functions provided by <code>dplyr</code> are:</p>
+<div id="connecting-to-an-api" class="section level2">
+<h2><span class="header-section-number">16.2</span> Connecting to an API</h2>
+<p>Not all websites have APIs, but PredictIt does and you can <a href="https://predictit.freshdesk.com/support/solutions/articles/12000001878-does-predictit-make-market-data-available-via-an-api-">read about it here</a>. As the website explains, you can get all the data from their markets, but accessing a specific link:</p>
 <ul>
-<li><code>select()</code> - for selecting columns</li>
-<li><code>mutate()</code> - for changing calumns</li>
-<li><code>filter()</code> - for selecting rows</li>
-<li><code>group_by()</code> - for performing tasks within groups</li>
-<li><code>summarize()</code> - for aggregating data (e.g., group means, variances)</li>
+<li><a href="https://www.predictit.org/api/marketdata/all/" class="uri">https://www.predictit.org/api/marketdata/all/</a></li>
 </ul>
-<p>The <code>dplyr</code> position is generally: if you want to do something other than one of these five things, you are probably behaving irresponsibly. Often this is true, the <code>dplyr</code> framework really has captured the general principles of working with rectangular data well. On the rare instance when you <em>reeeeally</em> need something else, you’ll have to code it yourself with the tools from the first section of this chapter or a custom function with the tools from the previous chapter.</p>
-<div id="how-do-these-functions-work" class="section level3">
-<h3><span class="header-section-number">5.4.1</span> How do these functions work?</h3>
-<p><code>dplyr</code> functions all work by taking at least two inputs: (1) a dataframe and (2) what you want to do to that dataframe. They all return the same thing: another dataframe, with the modifications you requested.</p>
-<div id="select" class="section level4">
-<h4><span class="header-section-number">5.4.1.1</span> <code>select()</code></h4>
-<p>For example, if I use the <code>select()</code> function and list the columns I want, I will get a new dataframe with just those columns. Notice I don’t need to put quotes in <code>dplyr</code> functions. There are some complicated reasons for this that involve black magic from the Tidyverse, which I’ll tell you about when you’re older.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(dplyr)
+<p>Conveniently, if you navigate to that link with a webbrowser, you can see all the data. Unfortunately, it is in a really inconvenient format.</p>
+<p>To get R to access the data for us, we need to use the <code>httr</code> package (“HTTR” for “hyper-text transfer request”).</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">install.packages</span>(<span class="st">&#39;httr&#39;</span>)</code></pre></div>
+<p>Once we load the package, we simply tell R what website to <code>GET()</code> for us. In this case, that’s the link that PredictIt gave for their data.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(httr)
 
-<span class="kw">select</span>(df, shoe)</code></pre></div>
-<pre><code>##       shoe
-## 1    Nikes
-## 2   Reebok
-## 3 Adididas
-## 4  Manolos
-## 5    Nikes</code></pre>
-<p>I can also just keep asking for more columns, by using more commas.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">select</span>(df, shoe, age)</code></pre></div>
-<pre><code>##       shoe age
-## 1    Nikes  18
-## 2   Reebok  NA
-## 3 Adididas  19
-## 4  Manolos  21
-## 5    Nikes  18</code></pre>
-<p>Most often, is a good idea to save my modified dataframe to another dataframe.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">modified_df &lt;-<span class="st"> </span><span class="kw">select</span>(df, shoe, age)
+api_url &lt;-<span class="st"> &#39;https://www.predictit.org/api/marketdata/all/&#39;</span>
 
-modified_df</code></pre></div>
-<pre><code>##       shoe age
-## 1    Nikes  18
-## 2   Reebok  NA
-## 3 Adididas  19
-## 4  Manolos  21
-## 5    Nikes  18</code></pre>
+predictit_data &lt;-<span class="st"> </span><span class="kw">GET</span>(api_url)</code></pre></div>
+<p>The <code>predictit_data</code> object we made is large, so I won’t display it here. However, you’ll notice that it has several parts that you can explore in the top-right panel of RStudio.</p>
+<p>What we care about first is the <code>status_code</code>, this should be 200. If it is anything else, the request didn’t work right.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">predictit_data<span class="op">$</span>status_code</code></pre></div>
+<pre><code>## [1] 200</code></pre>
 </div>
-<div id="mutate" class="section level4">
-<h4><span class="header-section-number">5.4.1.2</span> <code>mutate()</code></h4>
-<p>To make new columns, I can use the <code>mutate()</code> function and specify what my new columns should be equal to.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">df &lt;-<span class="st"> </span><span class="kw">mutate</span>(df, <span class="dt">age_squared =</span> age<span class="op">^</span><span class="dv">2</span>)
+<div id="working-with-api-data" class="section level2">
+<h2><span class="header-section-number">16.3</span> Working with API data</h2>
+<p>This has all been great so far, but where are the data? Well, they come in binary format, which is not really human readable. For example, this is what the content of the server’s response looks like.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">head</span>(predictit_data<span class="op">$</span>content, <span class="dt">n =</span> <span class="dv">100</span>)</code></pre></div>
+<pre><code>##   [1] 7b 0d 0a 20 20 22 6d 61 72 6b 65 74 73 22 3a 20 5b 0d 0a 20 20 20 20
+##  [24] 7b 0d 0a 20 20 20 20 20 20 22 69 64 22 3a 20 32 37 32 31 2c 0d 0a 20
+##  [47] 20 20 20 20 20 22 6e 61 6d 65 22 3a 20 22 57 68 69 63 68 20 70 61 72
+##  [70] 74 79 20 77 69 6c 6c 20 77 69 6e 20 74 68 65 20 32 30 32 30 20 55 2e
+##  [93] 53 2e 20 70 72 65 73 69</code></pre>
+<p>To turn it into a workable dataset, we need to use four steps.</p>
+<ol style="list-style-type: decimal">
+<li>Use the <code>content()</code> function from <code>httr</code>. This will give use our data in JSON format, which you can <a href="https://javaee.github.io/tutorial/jsonp001.html">read about here</a> (it’s popular, so you’ll see it again someday).</li>
+<li>We can decode that JSON data using the <code>jsonlite::fromJSON()</code> command. The <code>jsonlite</code> package should already have come with R, but keep in mind you might need to install it.</li>
+<li>Turn the result into a dataframe, which has one column that contains dataframes in it (take a look at “markets.contracts”).</li>
+<li><code>unnest()</code> that list column so we have a regular old dataframe.</li>
+</ol>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(tidyverse)
 
-df</code></pre></div>
-<pre><code>##   gender     shoe age years_as_adult years_unti_alc age_squared
-## 1   Male    Nikes  18              0              3         324
-## 2 Female   Reebok  NA             NA             NA          NA
-## 3 Female Adididas  19              1              2         361
-## 4   Male  Manolos  21              3              0         441
-## 5 Female    Nikes  18              0              3         324</code></pre>
-</div>
-<div id="filter" class="section level4">
-<h4><span class="header-section-number">5.4.1.3</span> <code>filter()</code></h4>
-<p>To eliminate anyone who <em>doesn’t</em> meet some condition. Use the filter command and give it a condition that results in either <code>TRUE</code> or <code>FALSE</code>.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">under_19_df &lt;-<span class="st"> </span><span class="kw">filter</span>(df, age <span class="op">&lt;</span><span class="st"> </span><span class="dv">19</span>)
+df &lt;-<span class="st"> </span>predictit_data <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">content</span>(<span class="dt">as =</span> <span class="st">&#39;text&#39;</span>) <span class="op">%&gt;%</span>
+<span class="st">  </span>jsonlite<span class="op">::</span><span class="kw">fromJSON</span>() <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">as.data.frame</span>() <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">unnest</span>(markets.contracts)
 
-under_19_df</code></pre></div>
-<pre><code>##   gender  shoe age years_as_adult years_unti_alc age_squared
-## 1   Male Nikes  18              0              3         324
-## 2 Female Nikes  18              0              3         324</code></pre>
-</div>
-</div>
-<div id="group_by" class="section level3">
-<h3><span class="header-section-number">5.4.2</span> <code>group_by()</code></h3>
-<p>This function is best used in combination with other <code>dplyr</code> functions, as it doesn’t do much on it’s own. Technically, it creates a “grouped tibble”, which is special kind of dataframe that knows you want to do all your <code>dplyr</code> operations within each group. Notice, however, you can’t see that anything has changed.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">group_by</span>(df, shoe)</code></pre></div>
-<pre><code>## # A tibble: 5 x 6
-## # Groups:   shoe [4]
-##   gender shoe       age years_as_adult years_unti_alc age_squared
-##   &lt;chr&gt;  &lt;chr&gt;    &lt;dbl&gt;          &lt;dbl&gt;          &lt;dbl&gt;       &lt;dbl&gt;
-## 1 Male   Nikes       18              0              3         324
-## 2 Female Reebok      NA             NA             NA          NA
-## 3 Female Adididas    19              1              2         361
-## 4 Male   Manolos     21              3              0         441
-## 5 Female Nikes       18              0              3         324</code></pre>
-<p>But if we use <code>group_by()</code> is the input for a <code>mutate()</code> command, we can compute the mean age of each gender (see last column of the newly created dataframe).</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">df &lt;-<span class="st"> </span><span class="kw">mutate</span>(<span class="kw">group_by</span>(df, gender), <span class="dt">mean_age =</span> <span class="kw">mean</span>(age, <span class="dt">na.rm =</span> T))</code></pre></div>
-<div id="summarize" class="section level4">
-<h4><span class="header-section-number">5.4.2.1</span> <code>summarize()</code></h4>
-<p>This summarizes some feature of your dataframe by applying an aggregate function to a given column (e.g., mean, max, variance).</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">summarise</span>(df, <span class="dt">age_mean =</span> <span class="kw">mean</span>(age, <span class="dt">na.rm =</span> T))</code></pre></div>
-<pre><code>## # A tibble: 2 x 2
-##   gender age_mean
-##   &lt;chr&gt;     &lt;dbl&gt;
-## 1 Female     18.5
-## 2 Male       19.5</code></pre>
-<p>Most often, it is used in combination with <code>group_by()</code>.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">summarise</span>(<span class="kw">group_by</span>(df, gender), <span class="dt">age_mean =</span> <span class="kw">mean</span>(age, <span class="dt">na.rm =</span> T))</code></pre></div>
-<pre><code>## # A tibble: 2 x 2
-##   gender age_mean
-##   &lt;chr&gt;     &lt;dbl&gt;
-## 1 Female     18.5
-## 2 Male       19.5</code></pre>
-</div>
-</div>
-</div>
-<div id="dplyr-pipelines-with-the-magrittr" class="section level2">
-<h2><span class="header-section-number">5.5</span> <code>dplyr</code> pipelines with the <code>magrittr</code> <code>%&gt;%</code></h2>
-<p>All <code>dplyr</code> functions are designed to be used in combination with the <code>magrittr</code> pipe. This makes using several of them in a row easy to write and easy to read.</p>
-<p>Imagine we start with the same dataframe at the beginning of the chapter. Let’s use a pipeline to filter out any missing age values, assign new variable, <em>years_as_adult</em>, and explore the mean and standard deviation of that new variable.</p>
-<p>First, we reset that dataframe</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">df &lt;-<span class="st"> </span><span class="kw">data.frame</span>(
-  <span class="dt">gender =</span> gender_data, 
-  <span class="dt">shoe =</span> shoe_data, 
-  <span class="dt">age =</span> age_data,
-  <span class="dt">stringsAsFactors =</span> <span class="ot">FALSE</span>)
+<span class="kw">head</span>(df)</code></pre></div>
+<pre><code>##   markets.id                                              markets.name
+## 1       2721 Which party will win the 2020 U.S. presidential election?
+## 2       2721 Which party will win the 2020 U.S. presidential election?
+## 3       2721 Which party will win the 2020 U.S. presidential election?
+## 4       2721 Which party will win the 2020 U.S. presidential election?
+## 5       2747                Will Mark Cuban run for president in 2020?
+## 6       2875              Will Andrew Cuomo run for president in 2020?
+##                          markets.shortName
+## 1 Which party wins the Presidency in 2020?
+## 2 Which party wins the Presidency in 2020?
+## 3 Which party wins the Presidency in 2020?
+## 4 Which party wins the Presidency in 2020?
+## 5                  Will Cuban run in 2020?
+## 6                  Will Cuomo run in 2020?
+##                                                                            markets.image
+## 1 https://az620379.vo.msecnd.net/images/Markets/66c1cd46-cf5d-48a7-82ca-f6b11031e0ed.png
+## 2 https://az620379.vo.msecnd.net/images/Markets/66c1cd46-cf5d-48a7-82ca-f6b11031e0ed.png
+## 3 https://az620379.vo.msecnd.net/images/Markets/66c1cd46-cf5d-48a7-82ca-f6b11031e0ed.png
+## 4 https://az620379.vo.msecnd.net/images/Markets/66c1cd46-cf5d-48a7-82ca-f6b11031e0ed.png
+## 5 https://az620379.vo.msecnd.net/images/Markets/ac8830d9-a557-4fc0-9eab-fd50eefa4d6a.png
+## 6 https://az620379.vo.msecnd.net/images/Markets/b8dc677d-e8a2-4795-8dad-0b9320b5140b.png
+##                                                                                            markets.url
+## 1 https://www.predictit.org/markets/detail/2721/Which-party-will-win-the-2020-US-presidential-election
+## 2 https://www.predictit.org/markets/detail/2721/Which-party-will-win-the-2020-US-presidential-election
+## 3 https://www.predictit.org/markets/detail/2721/Which-party-will-win-the-2020-US-presidential-election
+## 4 https://www.predictit.org/markets/detail/2721/Which-party-will-win-the-2020-US-presidential-election
+## 5              https://www.predictit.org/markets/detail/2747/Will-Mark-Cuban-run-for-president-in-2020
+## 6            https://www.predictit.org/markets/detail/2875/Will-Andrew-Cuomo-run-for-president-in-2020
+##             markets.timeStamp markets.status   id             dateEnd
+## 1 2019-05-01T12:22:28.1560744           Open 4390                 N/A
+## 2 2019-05-01T12:22:28.1560744           Open 4389                 N/A
+## 3 2019-05-01T12:22:28.1560744           Open 4388                 N/A
+## 4 2019-05-01T12:22:28.1560744           Open 4391                 N/A
+## 5 2019-05-01T12:22:28.1560744           Open 4495 2020-11-03T23:59:00
+## 6 2019-05-01T12:22:28.1560744           Open 5121 2020-11-03T00:00:00
+##                                                                                            image
+## 1 https://az620379.vo.msecnd.net/images/Contracts/small_dc2c8290-c5d5-4561-8c1a-31762c3972bb.png
+## 2 https://az620379.vo.msecnd.net/images/Contracts/small_2482e38e-80aa-4ff0-b1e2-9c29a0f100bc.png
+## 3 https://az620379.vo.msecnd.net/images/Contracts/small_9d46f92f-fc2d-406a-ade9-8cf2eb41e64e.png
+## 4 https://az620379.vo.msecnd.net/images/Contracts/small_5a27f11b-6e7e-4dd6-9d6b-48dafd96b436.png
+## 5 https://az620379.vo.msecnd.net/images/Contracts/small_ac8830d9-a557-4fc0-9eab-fd50eefa4d6a.png
+## 6 https://az620379.vo.msecnd.net/images/Contracts/small_b8dc677d-e8a2-4795-8dad-0b9320b5140b.png
+##                                           name
+## 1                                   Democratic
+## 2                                   Republican
+## 3                                  Libertarian
+## 4                                        Green
+## 5   Will Mark Cuban run for president in 2020?
+## 6 Will Andrew Cuomo run for president in 2020?
+##                                                  longName
+## 1  Will the Democratic Party win the White House in 2020?
+## 2  Will the Republican Party win the White House in 2020?
+## 3 Will the Libertarian Party win the White House in 2020?
+## 4       Will the Green Party win the White House in 2020?
+## 5              Will Mark Cuban run for president in 2020?
+## 6            Will Andrew Cuomo run for president in 2020?
+##                 shortName status lastTradePrice bestBuyYesCost
+## 1              Democratic   Open           0.58           0.58
+## 2              Republican   Open           0.44           0.45
+## 3             Libertarian   Open           0.02           0.03
+## 4                   Green   Open           0.02           0.03
+## 5 Will Cuban run in 2020?   Open           0.09           0.12
+## 6 Will Cuomo run in 2020?   Open           0.05           0.07
+##   bestBuyNoCost bestSellYesCost bestSellNoCost lastClosePrice displayOrder
+## 1          0.43            0.57           0.42           0.58            0
+## 2          0.56            0.44           0.55           0.45            0
+## 3          0.98            0.02           0.97           0.02            0
+## 4          0.98            0.02           0.97           0.02            0
+## 5          0.89            0.11           0.88           0.10            0
+## 6          0.95            0.05           0.93           0.05            0</code></pre>
+<p>Now that we’ve done all this work, let’s make a figure for the democratic nominee prices. Below, we look for the market we want in our <code>df</code>. In this case, it’s short name is “2020 Democratic nominee?”. We then sort rows by the last trade price for each nominee and take the top 5 (using <code>head()</code>). Using <code>ggplot()</code> we then look at the prices for the top 5 candidates. At the time of this writing, it looks like Biden is in a clear lead.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">nominee_df &lt;-<span class="st"> </span>df <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">filter</span>(markets.shortName <span class="op">==</span><span class="st"> &#39;2020 Democratic nominee?&#39;</span>) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">arrange</span>(<span class="op">-</span>lastTradePrice) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">head</span>(<span class="dt">n =</span> <span class="dv">5</span>)
 
-df</code></pre></div>
-<pre><code>##   gender     shoe age
-## 1   Male    Nikes  18
-## 2 Female   Reebok  NA
-## 3 Female Adididas  19
-## 4   Male  Manolos  21
-## 5 Female    Nikes  18</code></pre>
-<p>Then we make a pipeline, performing all of the tasks we just described. After each task, we make sure to use a pipe, so that our result gets fed into the next function.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">df <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">filter</span>(<span class="op">!</span><span class="kw">is.na</span>(age)) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">years_as_adult =</span> age <span class="op">-</span><span class="st"> </span><span class="dv">18</span>) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">group_by</span>(gender) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">summarise</span>(
-    <span class="dt">mean =</span> <span class="kw">mean</span>(years_as_adult),
-    <span class="dt">sd =</span> <span class="kw">sd</span>(years_as_adult))</code></pre></div>
-<pre><code>## # A tibble: 2 x 3
-##   gender  mean    sd
-##   &lt;chr&gt;  &lt;dbl&gt; &lt;dbl&gt;
-## 1 Female   0.5 0.707
-## 2 Male     1.5 2.12</code></pre>
+<span class="kw">ggplot</span>(nominee_df, <span class="kw">aes</span>(name, lastTradePrice)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_bar</span>(<span class="dt">stat =</span> <span class="st">&#39;identity&#39;</span>)</code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-236-1.png" width="672" /></p>
 
 </div>
 </div>
+
+
+
+
+
+
             </section>
 
           </div>
         </div>
       </div>
-<a href="functions-1.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="local-data-import-and-export.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="strings-and-text.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>

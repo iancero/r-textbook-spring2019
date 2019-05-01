@@ -263,6 +263,11 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="15.2" data-path="strings-and-text.html"><a href="strings-and-text.html#string-interpolation"><i class="fa fa-check"></i><b>15.2</b> String interpolation</a></li>
 <li class="chapter" data-level="15.3" data-path="strings-and-text.html"><a href="strings-and-text.html#sentiment-analysis"><i class="fa fa-check"></i><b>15.3</b> Sentiment analysis</a></li>
 </ul></li>
+<li class="chapter" data-level="16" data-path="internet-data.html"><a href="internet-data.html"><i class="fa fa-check"></i><b>16</b> Internet data</a><ul>
+<li class="chapter" data-level="16.1" data-path="internet-data.html"><a href="internet-data.html#api-background"><i class="fa fa-check"></i><b>16.1</b> API Background</a></li>
+<li class="chapter" data-level="16.2" data-path="internet-data.html"><a href="internet-data.html#connecting-to-an-api"><i class="fa fa-check"></i><b>16.2</b> Connecting to an API</a></li>
+<li class="chapter" data-level="16.3" data-path="internet-data.html"><a href="internet-data.html#working-with-api-data"><i class="fa fa-check"></i><b>16.3</b> Working with API data</a></li>
+</ul></li>
 </ul>
 
       </nav>
@@ -354,9 +359,9 @@ w &lt;-<span class="st"> </span><span class="dv">1</span><span class="op">:</spa
 u &lt;-<span class="st"> </span><span class="kw">runif</span>(<span class="dt">n =</span> <span class="dv">20</span>)
 
 <span class="kw">cor</span>(x, y)</code></pre></div>
-<pre><code>## [1] 0.5609169</code></pre>
+<pre><code>## [1] 0.7117408</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">cov</span>(x, y)<span class="op">/</span>(<span class="kw">sd</span>(x)<span class="op">*</span><span class="kw">sd</span>(y))</code></pre></div>
-<pre><code>## [1] 0.5609169</code></pre>
+<pre><code>## [1] 0.7117408</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">print</span>(<span class="st">&#39;---&#39;</span>)</code></pre></div>
 <pre><code>## [1] &quot;---&quot;</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">correlation &lt;-<span class="st"> </span><span class="cf">function</span>(a, b) {
@@ -364,9 +369,9 @@ u &lt;-<span class="st"> </span><span class="kw">runif</span>(<span class="dt">n
 }
 
 <span class="kw">cor</span>(w, u)</code></pre></div>
-<pre><code>## [1] 0.1734533</code></pre>
+<pre><code>## [1] -0.007485897</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">correlation</span>(w, u)</code></pre></div>
-<pre><code>## [1] 0.1734533</code></pre>
+<pre><code>## [1] -0.007485897</code></pre>
 </div>
 <div id="base-r-functions" class="section level2">
 <h2><span class="header-section-number">4.3</span> Base R functions</h2>
@@ -462,9 +467,16 @@ x &lt;-<span class="st"> </span><span class="dv">1</span><span class="op">:</spa
 <pre><code>##  [1] 1 1 1 1 2 2 2 2 2 2</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">reviewer_transformation_pipe</span>(x)</code></pre></div>
 <pre><code>##  [1] 1 1 1 1 2 2 2 2 2 2</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(magrittr)
-
-fun1 &lt;-<span class="st"> </span><span class="cf">function</span>(x){
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(magrittr)</code></pre></div>
+<pre><code>## 
+## Attaching package: &#39;magrittr&#39;</code></pre>
+<pre><code>## The following object is masked from &#39;package:purrr&#39;:
+## 
+##     set_names</code></pre>
+<pre><code>## The following object is masked from &#39;package:tidyr&#39;:
+## 
+##     extract</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">fun1 &lt;-<span class="st"> </span><span class="cf">function</span>(x){
   x <span class="op">*</span><span class="dv">2</span>
 }
 
